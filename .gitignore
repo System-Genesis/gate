@@ -7,5 +7,6 @@
 /mochawesome-report
 /logs
 npm-debug.log
+/coverage
 .env
 !example.env
