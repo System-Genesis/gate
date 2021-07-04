@@ -1,0 +1,11 @@
+/node_modules
+/dist
+/.vscode
+/src/models
+/src/pagination
+/mochawesome-reports
+/mochawesome-report
+/logs
+npm-debug.log
+.env
+!example.env
