@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "ES2019",
     "module": "CommonJS",
     "allowJs": false,
     "sourceMap": true,
@@ -18,8 +18,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist/",
-    "lib": ["ES2020.Promise", "es2019.Array"]
+    "lib": ["ES2020.Promise"]
   },
-  // "files": ["custom.d.ts"],
   "include": ["src/**/*"]
 }

@@ -8,7 +8,7 @@ import { Router } from 'express';
 const roleRouter: Router = Router();
 
 roleRouter.post('/', () => {});
-roleRouter.get('/digitalIdentity/:digitalIdentityUniqueId', () => {});
+// roleRouter.get('/digitalIdentity/:digitalIdentityUniqueId', () => {});
 roleRouter.get('/:id', () => {});
 roleRouter.delete('/:id', () => {});
 roleRouter.patch('/:id', () => {});

@@ -1,27 +1,33 @@
+import * as env from "env-var";
+import "./dotenv";
+
 const DATA_SOURCE = [
-  'dataSource1',
-  'dataSource2',
-  'aka',
-  'es_name',
-  'ads_name',
-  'adNN_name',
-  'nvSQL_name',
-  'lmn_name',
-  'mdn_name',
-  'mm_name',
-  'city_name',
+  "dataSource1",
+  "dataSource2",
+  "aka",
+  "es_name",
+  "ads_name",
+  "adNN_name",
+  "nvSQL_name",
+  "lmn_name",
+  "mdn_name",
+  "mm_name",
+  "city_name",
 ];
 
 const sensitiveDataSource = DATA_SOURCE[0];
 const sensitive2DataSource = DATA_SOURCE[1];
 
 const sensitive2HierarchyCondition = {
-  method: 'hierarchyCondition',
-  field: 'hierarchy',
+  method: "hierarchyCondition",
+  field: "hierarchy",
   value: `root/sensitive2`,
 };
 
 const config = {
+  web: {
+    port: env.get("PORT").required().asPortNumber(),
+  },
   // mongo: {
   //     uri: env.get('MONGO_URI').required().asUrlString(),
   //     featureCollectionName: env.get('MONGO_FEATURE_COLLECTION_NAME').required().asString(),
@@ -38,19 +44,72 @@ const config = {
     filters: {
       entity: [
         {
-          name: 'hideSensitivePersons',
-          field: 'hierarchy',
+          name: "hideSensitivePersons",
+          field: "hierarchy",
           values: [`root/sensitive`],
         },
       ],
       group: {},
       digitalIdentity: {},
       role: {},
+      organizationGroup: {},
     },
-    organizationGroup: {},
+    transformers: {
+      entity: [
+        {
+          name: "removeSensitiveDomainUsers",
+          method: "arrayFilter",
+          targetField: "domainUsers",
+          conditions: [
+            {
+              method: "simpleValueCondition",
+              field: "dataSource",
+              value: `${sensitiveDataSource}`,
+            },
+          ],
+        },
+        {
+          name: "removeJob",
+          method: "fieldExclude",
+          targetField: "job",
+        },
+        {
+          name: "removeSensitive2DomainUsersHierarchy",
+          method: "arrayMapper",
+          targetField: "domainUsers",
+          transformer: {
+            method: "fieldExclude",
+            targetField: "hierarchy",
+            conditions: [
+              {
+                method: "simpleValueCondition",
+                field: "dataSource",
+                value: `${sensitive2DataSource}`,
+              },
+            ],
+          },
+        },
+        {
+          name: "removeSensitive2Hierarchy",
+          method: "fieldExclude",
+          targetField: "hierarchy",
+          conditions: [sensitive2HierarchyCondition],
+        },
+        {
+          name: "removeSensitive2DirectGroup",
+          method: "fieldExclude",
+          targetField: "directGroup",
+          conditions: [sensitive2HierarchyCondition],
+        },
+      ],
+      group: {},
+      digitalIdentity: {},
+      role: {},
+      organizationGroup: {},
+    },
   },
   scopes: {
-    externalScope: ['hideSensitivePersons'],
+    externalScope: ["hideSensitivePersons"],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };

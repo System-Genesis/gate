@@ -1,29 +1,12 @@
-import * as express from 'express';
-import helmet = require('helmet');
-import morgan = require('morgan');
-import router from './router/router';
+import Server from './express';
+import config from './config';
 
-const app = express();
+const { web } = config;
 
-app.use(helmet());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+const main = async () => {
+    console.log('hello');
+    await Server(web.port);
+    console.log(`Server started on port: ${web.port}`);
+};
 
-app.use((req, _, next) => {
-    if (req.headers["authorization"] === process.env.AUTH) {
-      next();
-    } else {
-      throw "unauthorized";
-    }
-  });
-  
-  app.use("/api", router);
-  
-  app.use("/isAlive", (_req, res) => {
-    res.status(200).send("alive");
-  });
-  
-  app.use("*", (_req, res) => {
-    res.status(404).send("Invalid Route");
-  });
+main().catch((err) => console.error(err));
