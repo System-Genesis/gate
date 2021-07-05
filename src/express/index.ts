@@ -30,8 +30,8 @@ app.use("*", (_req, res) => {
 });
 
 const start = async (port) => {
-  app.listen(port);
-  await once(app, "listening");
+  const server = app.listen(port);
+  await once(server, "listening");
 };
 
 export default start;
