@@ -1,4 +1,6 @@
-import { Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
+import wrapController from '../../utils/wrapController';
+import Controller from '../controller/controller';
 // import FeatureController from './controller';
 // import FeatureValidator from './validator';
 // import { wrapController, wrapValidator } from '../../utils/express';
@@ -7,9 +9,14 @@ import { Router } from 'express';
 
 const roleRouter: Router = Router();
 
+roleRouter.use((_req: Request, res: Response, next: NextFunction) => {
+  res.locals.entityType = 'role';
+  next();
+});
+
 roleRouter.post('/', () => {});
 // roleRouter.get('/digitalIdentity/:digitalIdentityUniqueId', () => {});
-roleRouter.get('/:id', () => {});
+roleRouter.get('/:id', wrapController(Controller.proxyRequest));
 roleRouter.delete('/:id', () => {});
 roleRouter.patch('/:id', () => {});
 roleRouter.get('/group/:groupId', () => {});

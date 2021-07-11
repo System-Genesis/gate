@@ -1,30 +1,61 @@
-import { Router } from 'express';
-// import FeatureController from './controller';
-// import FeatureValidator from './validator';
-// import { wrapController, wrapValidator } from '../../utils/express';
-// import ValidateRequest from '../../utils/joi';
-// import { getFoldersRequestSchema, createFolderRequestSchema } from './validator.schema';
+import { NextFunction, Request, Response, Router } from 'express';
+import config from '../../config/index';
+import wrapController from '../../utils/wrapController';
+import Controller from '../controller/controller';
+import setService from '../middlewares/setService';
+
+const {
+  web: {
+    services: { db, elastic },
+  },
+} = config;
 
 const groupRouter: Router = Router();
 
-// // OG
-// getByRole (role_name or role_amanldentity)
-// getByhierarchy (hierarchy)
-// getByid (id)
-// getByAkaUnit(akaUnit)
-// getSubtree (root_id, depth?)
-// create (createDTO)
-// changeParent (group_id, parent_id)
-// createHierarchy (hierarchy string)
-// renameGroup(group_id, newName)
+groupRouter.use((_req: Request, res: Response, next: NextFunction) => {
+  res.locals.entityType = 'group';
+  next();
+});
 
-groupRouter.get('/', () => {});
-groupRouter.post('/', () => {});
-groupRouter.get('hierarchy/:hierarchy', () => {});
-groupRouter.get('/:id', () => {});
-groupRouter.delete('/:id', () => {});
-groupRouter.get('/:id/children', () => {});
-groupRouter.patch('changeParent/:id', () => {});
-groupRouter.patch('rename/:id', () => {});
+groupRouter.get(
+  'hierarchy/:hierarchy',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.patch(
+  'changeParent/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.patch(
+  'rename/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.get(
+  '/:id/children',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.get(
+  '/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.delete(
+  '/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.get(
+  '/',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.post(
+  '/',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
 
 export default groupRouter;

@@ -1,24 +1,53 @@
-import { Router } from 'express';
-// import FeatureController from './controller';
-// import FeatureValidator from './validator';
-// import { wrapController, wrapValidator } from '../../utils/express';
-// import ValidateRequest from '../../utils/joi';
-// import { getFoldersRequestSchema, createFolderRequestSchema } from './validator.schema';
+import { NextFunction, Request, Response, Router } from 'express';
+import config from '../../config';
+import wrapController from '../../utils/wrapController';
+import Controller from '../controller/controller';
+import setService from '../middlewares/setService';
 
-const digitalIdentities: Router = Router();
+const {
+  web: {
+    services: { db, elastic },
+  },
+} = config;
 
-// // DU
-// search (uniqueld)
-// getByRole (role_amanidentity or role name)
-// getById (uniqueld)
-// create (createDTO)
-// connectToPerson (du_uniqueld, person id)
+const digitalIdentitiesRouter: Router = Router();
 
-digitalIdentities.post('/', () => {}); // ?uniqueId
-digitalIdentities.post('/search', () => {}); // ?uniqueId
-digitalIdentities.get('role/:roleId', () => {});
-digitalIdentities.get('/:id', () => {}); // ?uniqueId
-digitalIdentities.patch('/:id', () => {}); // ?uniqueId
-digitalIdentities.delete('/:id', () => {}); // ?uniqueId
+digitalIdentitiesRouter.use(
+  (_req: Request, res: Response, next: NextFunction) => {
+    res.locals.entityType = 'digitalIdentity';
+    next();
+  }
+);
 
-export default digitalIdentities;
+digitalIdentitiesRouter.post(
+  '/search',
+  wrapController(setService(elastic)),
+  wrapController(Controller.proxyRequest)
+);
+digitalIdentitiesRouter.get(
+  'role/:roleId',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+digitalIdentitiesRouter.get(
+  '/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+digitalIdentitiesRouter.patch(
+  '/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+digitalIdentitiesRouter.delete(
+  '/:id',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+digitalIdentitiesRouter.post(
+  '/',
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+
+export default digitalIdentitiesRouter;

@@ -1,32 +1,36 @@
-import * as env from "env-var";
-import "./dotenv";
+import * as env from 'env-var';
+import './dotenv';
 
 const DATA_SOURCE = [
-  "dataSource1",
-  "dataSource2",
-  "aka",
-  "es_name",
-  "ads_name",
-  "adNN_name",
-  "nvSQL_name",
-  "lmn_name",
-  "mdn_name",
-  "mm_name",
-  "city_name",
+  'dataSource1',
+  'dataSource2',
+  'aka',
+  'es_name',
+  'ads_name',
+  'adNN_name',
+  'nvSQL_name',
+  'lmn_name',
+  'mdn_name',
+  'mm_name',
+  'city_name',
 ];
 
 const sensitiveDataSource = DATA_SOURCE[0];
 const sensitive2DataSource = DATA_SOURCE[1];
 
 const sensitive2HierarchyCondition = {
-  method: "hierarchyCondition",
-  field: "hierarchy",
+  method: 'hierarchyCondition',
+  field: 'hierarchy',
   value: `root/sensitive2`,
 };
 
 const config = {
   web: {
-    port: env.get("PORT").required().asPortNumber(),
+    port: env.get('PORT').required().asPortNumber(),
+    services: {
+      elastic: env.get('ELASTIC_SERVICE').required().asUrlString(),
+      db: env.get('DB_SERVICE').required().asUrlString(),
+    }
   },
   // mongo: {
   //     uri: env.get('MONGO_URI').required().asUrlString(),
@@ -44,61 +48,66 @@ const config = {
     filters: {
       entity: [
         {
-          name: "hideSensitivePersons",
-          field: "hierarchy",
+          name: 'hideSensitivePersons',
+          field: 'hierarchy',
+          values: [`root/sensitive`, `granpa/son`],
+        },
+        {
+          name: 'jobFilter',
+          field: 'job',
           values: [`root/sensitive`],
         },
       ],
-      group: {},
-      digitalIdentity: {},
-      role: {},
-      organizationGroup: {},
+      group: [],
+      digitalIdentity: [],
+      role: [],
+      organizationGroup: [],
     },
     transformers: {
       entity: [
         {
-          name: "removeSensitiveDomainUsers",
-          method: "arrayFilter",
-          targetField: "domainUsers",
+          name: 'removeSensitiveDomainUsers',
+          method: 'arrayFilter',
+          targetField: 'domainUsers',
           conditions: [
             {
-              method: "simpleValueCondition",
-              field: "dataSource",
+              method: 'simpleValueCondition',
+              field: 'dataSource',
               value: `${sensitiveDataSource}`,
             },
           ],
         },
         {
-          name: "removeJob",
-          method: "fieldExclude",
-          targetField: "job",
+          name: 'removeJob',
+          method: 'fieldExclude',
+          targetField: 'job',
         },
         {
-          name: "removeSensitive2DomainUsersHierarchy",
-          method: "arrayMapper",
-          targetField: "domainUsers",
+          name: 'removeSensitive2DomainUsersHierarchy',
+          method: 'arrayMapper',
+          targetField: 'domainUsers',
           transformer: {
-            method: "fieldExclude",
-            targetField: "hierarchy",
+            method: 'fieldExclude',
+            targetField: 'hierarchy',
             conditions: [
               {
-                method: "simpleValueCondition",
-                field: "dataSource",
+                method: 'simpleValueCondition',
+                field: 'dataSource',
                 value: `${sensitive2DataSource}`,
               },
             ],
           },
         },
         {
-          name: "removeSensitive2Hierarchy",
-          method: "fieldExclude",
-          targetField: "hierarchy",
+          name: 'removeSensitive2Hierarchy',
+          method: 'fieldExclude',
+          targetField: 'hierarchy',
           conditions: [sensitive2HierarchyCondition],
         },
         {
-          name: "removeSensitive2DirectGroup",
-          method: "fieldExclude",
-          targetField: "directGroup",
+          name: 'removeSensitive2DirectGroup',
+          method: 'fieldExclude',
+          targetField: 'directGroup',
           conditions: [sensitive2HierarchyCondition],
         },
       ],
@@ -109,7 +118,7 @@ const config = {
     },
   },
   scopes: {
-    externalScope: ["hideSensitivePersons"],
+    externalScope: ['hideSensitivePersons'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };

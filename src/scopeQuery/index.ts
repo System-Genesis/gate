@@ -13,7 +13,7 @@ const {
   scopes,
 } = config;
 
-const getFilterQueries = (userScopes: string | string[], entityType: string): Omit<QueryRule, 'name'>[] => {
+const getFilterQueries = (userScopes: string | string[], entityType: string): (Omit<QueryRule, 'name'> & { entityType: string })[] => {
   const scopesArr = Array.isArray(userScopes) ? userScopes : [userScopes];
   let rules: string[] = [];
   scopesArr.forEach((scopeName: string) => {
@@ -25,13 +25,13 @@ const getFilterQueries = (userScopes: string | string[], entityType: string): Om
   return combineQueriesFromRules(rules, entityType);
 };
 
-const combineQueriesFromRules = (rules: string[], entityType: string): Omit<QueryRule, 'name'>[] => {
-  const combined: Omit<QueryRule, 'name'>[] = [];
+const combineQueriesFromRules = (rules: string[], entityType: string): (Omit<QueryRule, 'name'> & { entityType: string })[] => {
+  const combined: (Omit<QueryRule, 'name'> & { entityType: string })[] = [];
   rules.forEach((ruleName) => {
     const role = (filters[entityType] as QueryRule[]).find(rule => rule.name === ruleName);
     if (!!role) {
       const { name, ...rest } = role;
-      combined.push(rest)
+      combined.push({ entityType, ...rest })
     }
   });
 

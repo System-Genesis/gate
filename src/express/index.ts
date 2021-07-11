@@ -1,6 +1,6 @@
-import * as express from "express";
-import * as helmet from "helmet";
-import * as morgan from "morgan";
+import express from "express";
+import helmet from "helmet";
+import morgan from "morgan";
 import router from "./router/router";
 import { once } from "events";
 
@@ -11,13 +11,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-app.use((req, _, next) => {
-  if (req.headers["authorization"] === process.env.AUTH) {
-    next();
-  } else {
-    throw "unauthorized";
-  }
-});
+// app.use((req, _, next) => {
+//   if (req.headers["authorization"] === process.env.AUTH) {
+//     next();
+//   } else {
+//     throw "unauthorized";
+//   }
+// });
 
 app.use("/api", router);
 
