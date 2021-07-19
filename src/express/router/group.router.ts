@@ -33,6 +33,11 @@ groupRouter.patch(
   wrapController(Controller.proxyRequest)
 );
 groupRouter.get(
+    'search',
+    wrapController(setService(elastic)),
+    wrapController(Controller.proxyRequest)
+  );
+groupRouter.get(
   '/:id/children',
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)

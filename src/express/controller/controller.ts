@@ -1,41 +1,49 @@
 // import axios from 'axios';
 import { Request, Response } from 'express';
 import getFilterQueries from '../../scopeQuery';
-import querystring from 'querystring';
 // import getFilterQueries from '../../scopeQuery';
 import { applyTransform } from '../../transformService';
+import axios from 'axios';
+import { QueryParams } from '../../types';
+class Controller {
+  static async proxyRequest(req: Request, res: Response, _) {
+    const scopes = extractScopes(req.headers.authorization || '');
 
-function extractScopes(token: string): string[] {
-  const scopes = JSON.parse(
-    Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')
-  ).scope;
-  return Array.isArray(scopes) ? scopes : [scopes];
+    let filterQueries: QueryParams[] = [];
+    if (req.method === 'GET') {
+      filterQueries = getFilterQueries(scopes, res.locals.entityType);
+    }
+    
+    const options = {
+      url: `${res.locals.destServiceUrl}/${req.originalUrl.split('?')[0]}`,
+      config: {
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+        params: { ...req.query, filterQueries},
+        timeout: 1000 * 60 * 60, // 1 hour
+      },
+    };
+
+    const response = await axios(options);
+    let result = response.data;
+
+    if (req.method === 'GET') {
+      result = applyTransform(result, scopes, res.locals.entityType);
+    }
+
+    res.status(response.status).set(response.headers).send(result);
+  }
 }
 
-class Controller {
-  static async something(req: Request, res: Response) {
-    //hello
-    const { scopes, persons } = req.body;
-    const moddedPersons = persons.map((person) =>
-      applyTransform(person, scopes, 'entity')
-    );
-    // const moddedPerson = applyTransform(person, scopes);
-    res.json(moddedPersons);
-  }
-
-  // static async getQueries(_req: Request, res: Response, next: NextFunction) {
-  //     res.locals.filters = getFilterQueries(res.locals.scopes, res.locals.entityType);
-  //     next();
-  // }
-
-  static async proxyRequest(req: Request, res: Response, _) {
-    console.log(req.originalUrl, req.url, req.baseUrl);
-    
-    const scopes = extractScopes(req.headers.authorization || '');
-    const filterQueries = getFilterQueries(scopes, res.locals.entityType);
-    const queryParams = querystring.stringify({ filterQueries: JSON.stringify(filterQueries) });
-    console.log(queryParams);
-    
+function extractScopes(token: string): string[] {
+  try {
+    const scopes = JSON.parse(
+      Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')
+    ).scope;
+    return Array.isArray(scopes) ? scopes : [scopes];
+  } catch (err) {
+    return [];
   }
 }
 
