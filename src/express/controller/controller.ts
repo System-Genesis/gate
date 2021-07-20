@@ -15,17 +15,17 @@ class Controller {
     }
     
     const options = {
-      url: `${res.locals.destServiceUrl}/${req.originalUrl.split('?')[0]}`,
-      config: {
-        method: req.method,
-        headers: req.headers,
-        body: req.body,
-        params: { ...req.query, filterQueries},
-        timeout: 1000 * 60 * 60, // 1 hour
-      },
+      url: `http://${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
+      method: req.method.toLowerCase(),
+      headers: req.headers,
+      data: req.body,
+      params: { ...req.query, filterQueries},
+      timeout: 1000 * 60 * 60, // 1 hour
     };
 
-    const response = await axios(options);
+    console.log(options);
+
+    const response = await axios(options as any);
     let result = response.data;
 
     if (req.method === 'GET') {
