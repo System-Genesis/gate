@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { setEntityType } from '../src/express/middlewares';
+import { setEntityType, setService } from '../src/express/middlewares';
 
 describe('Test server handling scopes', () => {
     let mockRequest: Partial<Request>;
@@ -19,5 +19,12 @@ describe('Test server handling scopes', () => {
         await middleware(mockRequest as Request, mockResponse as Response, nextFunction);
         
         expect((mockResponse.locals as any).entityType).toBe('entity');
+    });
+
+    test('It should set the route for the propper service', async () => {
+        const middleware = setService('https://www.google.com');
+        await middleware(mockRequest as Request, mockResponse as Response, nextFunction);
+        
+        expect((mockResponse.locals as any).destServiceUrl).toBe('https://www.google.com');
     });
 });
