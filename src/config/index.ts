@@ -27,6 +27,8 @@ const sensitive2HierarchyCondition = {
 const config = {
   web: {
     port: env.get('PORT').required().asPortNumber(),
+    isAuth: env.get('IS_AUTH').required().asBool(),
+    requiredScopes: ['write', 'read'],
     services: {
       elastic: env.get('ELASTIC_SERVICE').required().asUrlString(),
       db: env.get('DB_SERVICE').required().asUrlString(),

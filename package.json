@@ -7,7 +7,8 @@
     "start": "node --async-stack-traces ./dist/index.js",
     "startDev": "nodemon --async-stack-traces ./dist/index.js",
     "dev": "npm run build && npm run startDev",
-    "build": "tsc",
+    "build": "tsc && npm run copy-files",
+    "copy-files": "cp -r ./src/assets/ ./dist/",
     "test": "jest --coverage"
   },
   "author": "",
@@ -18,6 +19,7 @@
     "env-var": "^7.0.1",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "@types/jest": "^26.0.14",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.11.2",
+    "copyfiles": "^2.4.1",
     "jest": "^26.4.2",
     "nodemon": "^2.0.9",
     "ts-jest": "^26.4.0",

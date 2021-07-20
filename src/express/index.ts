@@ -2,6 +2,8 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import router from "./router/router";
+import { errorMiddleware } from './middlewares/error';
+
 import { once } from "events";
 
 const app = express();
@@ -28,6 +30,8 @@ app.use("/isAlive", (_req, res) => {
 app.use("*", (_req, res) => {
   res.status(404).send("Invalid Route");
 });
+
+app.use(errorMiddleware);
 
 const start = async (port) => {
   const server = app.listen(port);

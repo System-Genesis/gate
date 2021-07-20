@@ -4,6 +4,7 @@ import Controller from '../controller/controller';
 import wrapController from '../../utils/wrapController';
 import setService from '../middlewares/setService';
 import config from '../../config/index';
+import isAuth from '../middlewares/auth';
 
 const {
   web: {
@@ -24,6 +25,7 @@ entityRouter.get('/identifier/:identifier', (_req, res) => {
 });
 entityRouter.get(
   '/search',
+  isAuth,
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );
