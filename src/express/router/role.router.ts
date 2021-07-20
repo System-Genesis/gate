@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Router } from 'express';
 import wrapController from '../../utils/wrapController';
 import Controller from '../controller/controller';
+import { setEntityType } from '../middlewares';
 // import FeatureController from './controller';
 // import FeatureValidator from './validator';
 // import { wrapController, wrapValidator } from '../../utils/express';
@@ -9,10 +10,7 @@ import Controller from '../controller/controller';
 
 const roleRouter: Router = Router();
 
-roleRouter.use((_req: Request, res: Response, next: NextFunction) => {
-  res.locals.entityType = 'role';
-  next();
-});
+roleRouter.use(wrapController(setEntityType('role')));
 
 roleRouter.post('/', () => {});
 // roleRouter.get('/digitalIdentity/:digitalIdentityUniqueId', () => {});

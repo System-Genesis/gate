@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Router } from 'express';
 import config from '../../config/index';
 import wrapController from '../../utils/wrapController';
 import Controller from '../controller/controller';
-import setService from '../middlewares/setService';
+import { setService, setEntityType } from '../middlewares';
 
 const {
   web: {
@@ -12,10 +12,7 @@ const {
 
 const groupRouter: Router = Router();
 
-groupRouter.use((_req: Request, res: Response, next: NextFunction) => {
-  res.locals.entityType = 'group';
-  next();
-});
+groupRouter.use(wrapController(setEntityType('group')));
 
 groupRouter.get(
   'hierarchy/:hierarchy',

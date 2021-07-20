@@ -35,3 +35,4 @@ const start = async (port) => {
 };
 
 export default start;
+export { app };
