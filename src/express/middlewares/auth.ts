@@ -13,7 +13,7 @@ const averify = util.promisify(jwt.verify);
 export default async (req: Request, _res: Response, next: NextFunction) => {
     if (!web.isAuth) return next();
 
-    const token = req.header('Authorization');
+    const token = req.headers['Authorization'];
 
     try {
         const key = fs.readFileSync(path.join(__dirname, '../../assets/spikePubKey.pem'));
@@ -33,8 +33,6 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
 };
 
 export const basicScopeHandler = (scopes: String [], requiredScopes: String []) => {
-
-    console.log(scopes);
     
     if(!scopes || scopes.length === 0) throw new ServiceError(403, 'Access denied');
 
