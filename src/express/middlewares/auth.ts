@@ -22,9 +22,9 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
             throw new ServiceError(401, 'Unauthorized');
         });
         
-        const { scopes } = payload;
+        const { scope } = payload;
         const { requiredScopes } = web;
-        basicScopeHandler(scopes, requiredScopes);
+        basicScopeHandler(scope, requiredScopes);
 
         return next();
     } catch (err) {
@@ -33,7 +33,7 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
 };
 
 export const basicScopeHandler = (scopes: String [], requiredScopes: String []) => {
-    
+
     if(!scopes || scopes.length === 0) throw new ServiceError(403, 'Access denied');
 
     const haveBasicScopes = requiredScopes.some(scope => scopes.includes(scope));
