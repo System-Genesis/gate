@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Router } from 'express';
 // import { Router } from 'express';
 import Controller from '../controller/controller';
 import wrapController from '../../utils/wrapController';
-import setService from '../middlewares/setService';
+import { setEntityType, setService } from '../middlewares';
 import config from '../../config/index';
 import isAuth from '../middlewares/auth';
 
@@ -14,10 +14,7 @@ const {
 
 const entityRouter: Router = Router();
 
-entityRouter.use((_req: Request, res: Response, next: NextFunction) => {
-  res.locals.entityType = 'entity';
-  next();
-});
+entityRouter.use(wrapController(setEntityType('entity')));
 
 entityRouter.get('/identifier/:identifier', (_req, res) => {
   console.log('g');

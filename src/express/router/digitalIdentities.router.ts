@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Router } from 'express';
 import config from '../../config';
 import wrapController from '../../utils/wrapController';
 import Controller from '../controller/controller';
-import setService from '../middlewares/setService';
+import { setEntityType, setService } from '../middlewares';
 
 const {
   web: {
@@ -12,12 +12,7 @@ const {
 
 const digitalIdentitiesRouter: Router = Router();
 
-digitalIdentitiesRouter.use(
-  (_req: Request, res: Response, next: NextFunction) => {
-    res.locals.entityType = 'digitalIdentity';
-    next();
-  }
-);
+digitalIdentitiesRouter.use(wrapController(setEntityType('digitalIdentity')));
 
 digitalIdentitiesRouter.post(
   '/search',
