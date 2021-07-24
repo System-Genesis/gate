@@ -24,7 +24,7 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
         
         const { scope } = payload;
         const { requiredScopes } = web;
-        basicScopeHandler(scope, requiredScopes);
+        basicScopeHandler(scope, requiredScopes, req.method);
 
         return next();
     } catch (err) {
@@ -32,10 +32,14 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
     }
 };
 
-export const basicScopeHandler = (scopes: String [], requiredScopes: String []) => {
+export const basicScopeHandler = (scopes: String [], requiredScopes: String [], reqMethod: string) => {
 
     if(!scopes || scopes.length === 0) throw new ServiceError(403, 'Access denied');
 
     const haveBasicScopes = requiredScopes.some(scope => scopes.includes(scope));
     if(!haveBasicScopes) throw new ServiceError(403, 'Access denied');
+
+    if (reqMethod && reqMethod != 'GET' && !scopes.includes('write')) {
+        throw new ServiceError(401, 'Unauthorized');
+    }
 }
