@@ -4,7 +4,6 @@ import Controller from '../controller/controller';
 import wrapController from '../../utils/wrapController';
 import { setEntityType, setService } from '../middlewares';
 import config from '../../config/index';
-import isAuth from '../middlewares/auth';
 
 const {
   web: {
@@ -16,13 +15,12 @@ const entityRouter: Router = Router();
 
 entityRouter.use(wrapController(setEntityType('entity')));
 
-entityRouter.get('/identifier/:identifier', (_req, res) => {
-  console.log('g');
-  res.send('dodh');
-});
+// entityRouter.get('/identifier/:identifier', (_req, res) => {
+//   console.log('g');
+//   res.send('dodh');
+// });
 entityRouter.get(
   '/search',
-  isAuth,
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );

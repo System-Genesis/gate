@@ -15,10 +15,7 @@ const groupRouter: Router = Router();
 groupRouter.use(wrapController(setEntityType('group')));
 
 groupRouter.get(
-  'hierarchy/:hierarchy',
-  wrapController(setService(db)),
-  wrapController(Controller.proxyRequest)
-);
+  'hierarchy/:hierarchy', wrapController(setService(db)), wrapController(Controller.proxyRequest));
 groupRouter.patch(
   'changeParent/:id',
   wrapController(setService(db)),
