@@ -60,7 +60,13 @@ const config = {
           values: [`root/sensitive`],
         },
       ],
-      group: [],
+      group: [
+        {
+          name: 'hideSensitivePersons',
+          field: 'source',
+          values: [`root/sensitive`, `granpa/son`],
+        }
+      ],
       digitalIdentity: [],
       role: [],
       organizationGroup: [],
