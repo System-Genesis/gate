@@ -30,8 +30,8 @@ const config = {
     isAuth: env.get('IS_AUTH').required().asBool(),
     requiredScopes: ['write', 'read'],
     services: {
-      elastic: env.get('ELASTIC_SERVICE').required().asUrlString(),
-      db: env.get('DB_SERVICE').required().asUrlString(),
+      elastic: env.get('ELASTIC_SERVICE').required().asString(),
+      db: env.get('DB_SERVICE').required().asString(),
     }
   },
   // mongo: {
