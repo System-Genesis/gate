@@ -55,9 +55,9 @@ const config = {
           values: [`root/sensitive`, `granpa/son`],
         },
         {
-          name: 'jobFilter',
-          field: 'job',
-          values: [`root/sensitive`],
+          name: 'sourceFilter',
+          field: 'source',
+          values: [`city_name`],
         },
       ],
       group: [
@@ -126,7 +126,7 @@ const config = {
     },
   },
   scopes: {
-    externalScope: ['hideSensitivePersons'],
+    externalScope: ['sourceFilter'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };
