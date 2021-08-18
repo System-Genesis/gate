@@ -6,7 +6,7 @@ import { setEntityType, setService } from '../middlewares';
 
 const {
   web: {
-    services: { db, elastic },
+    services: { read, elastic, write },
   },
 } = config;
 
@@ -14,34 +14,34 @@ const digitalIdentitiesRouter: Router = Router();
 
 digitalIdentitiesRouter.use(wrapController(setEntityType('digitalIdentity')));
 
-digitalIdentitiesRouter.post(
+digitalIdentitiesRouter.get(
   '/search',
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );
 digitalIdentitiesRouter.get(
   'role/:roleId',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 digitalIdentitiesRouter.get(
   '/:id',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 digitalIdentitiesRouter.patch(
   '/:id',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 digitalIdentitiesRouter.delete(
   '/:id',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 digitalIdentitiesRouter.post(
   '/',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 

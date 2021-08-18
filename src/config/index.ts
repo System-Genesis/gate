@@ -31,8 +31,9 @@ const config = {
     requiredScopes: ['write', 'read'],
     services: {
       elastic: env.get('ELASTIC_SERVICE').required().asString(),
-      db: env.get('DB_SERVICE').required().asString(),
-    }
+      read: env.get('READ_SERVICE').required().asString(),
+      write: env.get('WRITE_SERVICE').required().asString(),
+    },
   },
   // mongo: {
   //     uri: env.get('MONGO_URI').required().asUrlString(),
@@ -65,7 +66,7 @@ const config = {
           name: 'hideSensitivePersons',
           field: 'source',
           values: [`root/sensitive`, `granpa/son`],
-        }
+        },
       ],
       digitalIdentity: [],
       role: [],

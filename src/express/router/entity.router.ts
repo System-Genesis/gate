@@ -7,7 +7,7 @@ import config from '../../config/index';
 
 const {
   web: {
-    services: { db, elastic },
+    services: { read, write, elastic },
   },
 } = config;
 
@@ -26,64 +26,64 @@ entityRouter.get(
 );
 entityRouter.get(
   '/role/:roleId',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.get(
   '/digitalIdentity/:uniqueID',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.get(
   '/group/:groupId',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.get(
   '/hierarchy/:hierarchy',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.get(
   '/:id',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.get(
   '/',
-  wrapController(setService(db)),
+  wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 entityRouter.patch(
   '/:id/connectDigitalIdentity',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.patch(
   '/:id/disconnectDigitalIdentity',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.patch(
   '/:id/deactivate',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.patch(
   '/:id',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 entityRouter.delete(
   '/:id',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
 entityRouter.post(
   '/',
-  wrapController(setService(db)),
+  wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 export default entityRouter;
