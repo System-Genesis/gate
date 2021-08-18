@@ -40,7 +40,7 @@ entityRouter.get(
   wrapController(Controller.proxyRequest)
 );
 entityRouter.get(
-  '/hiearachy/:hierarchy',
+  '/hierarchy/:hierarchy',
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );

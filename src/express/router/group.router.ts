@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import config from '../../config/index';
-import wrapController from '../../utils/wrapController';
-import Controller from '../controller/controller';
-import { setService, setEntityType } from '../middlewares';
+import { Router } from "express";
+import config from "../../config/index";
+import wrapController from "../../utils/wrapController";
+import Controller from "../controller/controller";
+import { setService, setEntityType } from "../middlewares";
 
 const {
   web: {
@@ -12,47 +12,51 @@ const {
 
 const groupRouter: Router = Router();
 
-groupRouter.use(wrapController(setEntityType('group')));
+groupRouter.use(wrapController(setEntityType("group")));
 
 groupRouter.get(
-  'hierarchy/:hierarchy', wrapController(setService(db)), wrapController(Controller.proxyRequest));
+  "/hierarchy/:hierarchy",
+  wrapController(setService(db)),
+  wrapController(Controller.proxyRequest)
+);
+
 groupRouter.patch(
-  'changeParent/:id',
+  "/changeParent/:id",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
 groupRouter.patch(
-  'rename/:id',
+  "/rename/:id",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
 groupRouter.get(
-    'search',
-    wrapController(setService(elastic)),
-    wrapController(Controller.proxyRequest)
-  );
+  "/search",
+  wrapController(setService(elastic)),
+  wrapController(Controller.proxyRequest)
+);
 groupRouter.get(
-  '/:id/children',
+  "/:id/children",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
 groupRouter.get(
-  '/:id',
+  "/:id",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
 groupRouter.delete(
-  '/:id',
+  "/:id",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
 groupRouter.get(
-  '/',
+  "/",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
 groupRouter.post(
-  '/',
+  "/",
   wrapController(setService(db)),
   wrapController(Controller.proxyRequest)
 );
