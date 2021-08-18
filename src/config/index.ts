@@ -30,8 +30,8 @@ const config = {
     isAuth: env.get('IS_AUTH').required().asBool(),
     requiredScopes: ['write', 'read'],
     services: {
-      elastic: env.get('ELASTIC_SERVICE').required().asUrlString(),
-      db: env.get('DB_SERVICE').required().asUrlString(),
+      elastic: env.get('ELASTIC_SERVICE').required().asString(),
+      db: env.get('DB_SERVICE').required().asString(),
     }
   },
   // mongo: {
@@ -55,9 +55,9 @@ const config = {
           values: [`root/sensitive`, `granpa/son`],
         },
         {
-          name: 'jobFilter',
-          field: 'job',
-          values: [`root/sensitive`],
+          name: 'sourceFilter',
+          field: 'source',
+          values: [`city_name`],
         },
       ],
       group: [
@@ -119,14 +119,14 @@ const config = {
           conditions: [sensitive2HierarchyCondition],
         },
       ],
-      group: {},
-      digitalIdentity: {},
-      role: {},
-      organizationGroup: {},
+      group: [],
+      digitalIdentity: [],
+      role: [],
+      organizationGroup: [],
     },
   },
   scopes: {
-    externalScope: ['hideSensitivePersons'],
+    externalScope: ['sourceFilter'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };

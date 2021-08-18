@@ -1,6 +1,5 @@
 /node_modules
 /dist
-/.vscode
 /src/models
 /src/pagination
 /mochawesome-reports

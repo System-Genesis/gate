@@ -13,7 +13,9 @@ const applyTransform = (entity: any, scopes: string[], type: tranformerType) => 
     const targetTransformers: any = transformers[type];
 
     const RelevantTransformers = targetTransformers.filter((transformer) => scopes.includes(transformer.name));
-    let entityCopy = { ...entity };
+
+    let entityCopy = Array.isArray(entity) ? [ ...entity ] : { ...entity };
+    
     RelevantTransformers.forEach((transformer) => {
         entityCopy = transformerMap[transformer.method](entityCopy, transformer);
     });
