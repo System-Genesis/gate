@@ -14,7 +14,6 @@ const {
 const roleRouter: Router = Router();
 
 roleRouter.use(wrapController(setEntityType('role')));
-// roleRouter.get('/digitalIdentity/:digitalIdentityUniqueId', () => {});
 
 roleRouter.get(
   '/digitalIdentityUniqueId/:digitalIdentityUniqueId',
@@ -27,11 +26,13 @@ roleRouter.get(
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 roleRouter.get(
   '/hierarchy/:hierarchy',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 roleRouter.get(
   '/search',
   wrapController(setService(elastic)),
@@ -57,6 +58,7 @@ roleRouter.patch(
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 roleRouter.get(
   '/:id',
   wrapController(setService(read)),
@@ -68,6 +70,7 @@ roleRouter.delete(
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 roleRouter.patch(
   '/:id',
   wrapController(setService(write)),

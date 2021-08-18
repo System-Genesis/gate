@@ -15,40 +15,42 @@ const entityRouter: Router = Router();
 
 entityRouter.use(wrapController(setEntityType('entity')));
 
-// entityRouter.get('/identifier/:identifier', (_req, res) => {
-//   console.log('g');
-//   res.send('dodh');
-// });
 entityRouter.get(
   '/search',
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.get(
   '/role/:roleId',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.get(
   '/digitalIdentity/:uniqueID',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.get(
   '/group/:groupId',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.get(
   '/hierarchy/:hierarchy',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.get(
   '/:id',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.get(
   '/',
   wrapController(setService(read)),
@@ -60,21 +62,25 @@ entityRouter.patch(
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.patch(
   '/:id/disconnectDigitalIdentity',
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.patch(
   '/:id/deactivate',
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.patch(
   '/:id',
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 entityRouter.delete(
   '/:id',
   wrapController(setService(write)),
@@ -86,4 +92,5 @@ entityRouter.post(
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
+
 export default entityRouter;
