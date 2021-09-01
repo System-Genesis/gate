@@ -80,9 +80,16 @@ const config = {
           ],
         },
         {
-          name: 'removeJob',
+          name: 'removeHierarchy',
           method: 'fieldExclude',
-          targetField: 'job',
+          targetField: 'hierarchy',
+          conditions: [
+            {
+              method: 'simpleValueCondition',
+              field: 'firstName',
+              value: `Myrony`,
+            },
+          ],
         },
         {
           name: 'removeSensitive2DomainUsersHierarchy',
@@ -120,7 +127,7 @@ const config = {
     },
   },
   scopes: {
-    externalScope: ['sourceFilter'],
+    externalScope: ['sourceFilter', 'removeHierarchy'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };
