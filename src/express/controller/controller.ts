@@ -73,7 +73,7 @@ function transformExpandedRes(
 
 function expandedEntity(result: any, scopes: string[]) {
   const transEntity = applyTransform(result, scopes, entitiesType.entity as any);
-  transEntity.digitalIdenties = transEntity.digitalIdenties.map((di) => {
+  transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
     expandedDi(di, scopes);
   });
 
@@ -82,7 +82,7 @@ function expandedEntity(result: any, scopes: string[]) {
 
 function expandedDi(result: any, scopes: string[]) {
   const transDi = applyTransform(result, scopes, entitiesType.digitalIdentity as any);
-  transDi.role = applyTransform(transDi, scopes, entitiesType.role as any);
+  transDi.role = applyTransform(transDi.role, scopes, entitiesType.role as any);
 
   return transDi;
 }

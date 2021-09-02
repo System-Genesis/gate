@@ -119,15 +119,40 @@ const config = {
           targetField: 'directGroup',
           conditions: [sensitive2HierarchyCondition],
         },
+        {
+          name: 'removeSex',
+          method: 'fieldExclude',
+          targetField: 'sex',
+          conditions: [
+            {
+              method: 'startsWithCondition',
+              field: 'hierarchy',
+              value: 'es_name/',
+            },
+          ],
+        },
       ],
       group: [],
-      digitalIdentity: [],
+      digitalIdentity: [
+        {
+          name: 'removeEntityId',
+          method: 'fieldExclude',
+          targetField: 'entityId',
+          conditions: [
+            {
+              method: 'simpleValueCondition',
+              field: 'source',
+              value: 'city_name',
+            },
+          ],
+        },
+      ],
       role: [],
       organizationGroup: [],
     },
   },
   scopes: {
-    externalScope: ['sourceFilter', 'removeHierarchy'],
+    externalScope: ['sourceFilter', 'removeSex', 'removeEntityId'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };

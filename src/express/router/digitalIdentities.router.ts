@@ -44,6 +44,12 @@ digitalIdentitiesRouter.delete(
   wrapController(Controller.proxyRequest)
 );
 
+digitalIdentitiesRouter.get(
+  '/',
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
+
 digitalIdentitiesRouter.post(
   '/',
   wrapController(setService(write)),

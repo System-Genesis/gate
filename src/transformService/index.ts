@@ -35,4 +35,3 @@ function getUserTransformersNames(userScopes: string[], scopes: { [k: string]: s
 
     return userTrandormers;
 }
-
