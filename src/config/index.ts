@@ -147,12 +147,25 @@ const config = {
           ],
         },
       ],
-      role: [],
+      role: [
+        {
+          name: 'jobTitle',
+          method: 'fieldExclude',
+          targetField: 'jobTitle',
+          conditions: [
+            {
+              method: 'startsWithCondition',
+              field: 'hierarchy',
+              value: 'wallmart',
+            },
+          ],
+        },
+      ],
       organizationGroup: [],
     },
   },
   scopes: {
-    externalScope: ['sourceFilter', 'removeSex', 'removeEntityId'],
+    externalScope: ['sourceFilter', 'removeSex', 'removeEntityId', 'jobTitle'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };

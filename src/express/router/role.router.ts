@@ -83,4 +83,10 @@ roleRouter.post(
   wrapController(Controller.proxyRequest)
 );
 
+roleRouter.get(
+  '/',
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
+
 export default roleRouter;
