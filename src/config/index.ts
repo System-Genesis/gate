@@ -127,7 +127,7 @@ const config = {
             {
               method: 'startsWithCondition',
               field: 'hierarchy',
-              value: 'es_name/',
+              value: 'es_name',
             },
           ],
         },
