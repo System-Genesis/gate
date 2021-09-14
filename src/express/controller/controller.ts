@@ -11,7 +11,6 @@ import config from '../../config';
 const { entitiesType } = config;
 class Controller {
   static async proxyRequest(req: Request, res: Response, _) {
-    console.log(req.query.expanded);
 
     const scopes = extractScopes(req.headers.authorization || '');
 
@@ -53,8 +52,10 @@ class Controller {
 
 function handleExpandedResult(result: any, entityType: string, scopes: string[]) {
   if (Array.isArray(result)) {
-    result = result.map((expandedItem) => transformExpandedRes(expandedItem, entityType, scopes)
-    );
+    result = result.map((expandedItem) => {
+      expandedItem = transformExpandedRes(expandedItem, entityType, scopes)
+      return expandedItem;
+    });
   } else {
     result = transformExpandedRes(result, entityType, scopes);
   }
@@ -74,7 +75,7 @@ function transformExpandedRes(
 function expandedEntity(result: any, scopes: string[]) {
   const transEntity = applyTransform(result, scopes, entitiesType.entity as any);
   transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
-    expandedDi(di, scopes);
+    return expandedDi(di, scopes);
   });
 
   return transEntity;

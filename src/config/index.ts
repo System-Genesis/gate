@@ -15,7 +15,7 @@ const DATA_SOURCE = [
   'city_name',
 ];
 
-const sensitiveDataSource = DATA_SOURCE[0];
+// const sensitiveDataSource = DATA_SOURCE[0];
 const sensitive2DataSource = DATA_SOURCE[1];
 
 const sensitive2HierarchyCondition = {
@@ -68,14 +68,14 @@ const config = {
     transformers: {
       entity: [
         {
-          name: 'removeSensitiveDomainUsers',
+          name: 'removeSensitiveDIs',
           method: 'arrayFilter',
-          targetField: 'domainUsers',
+          targetField: 'digitalIdentities',
           conditions: [
             {
               method: 'simpleValueCondition',
-              field: 'dataSource',
-              value: `${sensitiveDataSource}`,
+              field: 'source',
+              value: `sf_name`,
             },
           ],
         },
@@ -165,7 +165,7 @@ const config = {
     },
   },
   scopes: {
-    externalScope: ['sourceFilter', 'removeSex', 'removeEntityId', 'jobTitle'],
+    externalScope: ['removeSensitiveDIs'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };
