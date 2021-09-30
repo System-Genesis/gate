@@ -63,23 +63,23 @@ entityRouter.get(
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch(
-  "/:id/connectDigitalIdentity",
+entityRouter.put(
+  "/:id/digitalIdentity/:uniqueId",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch(
-  "/:id/disconnectDigitalIdentity",
+entityRouter.delete(
+  "/:id/digitalIdentity/:uniqueId",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch(
-  "/:id/deactivate",
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
+// entityRouter.patch(
+//   "/:id/deactivate",
+//   wrapController(setService(write)),
+//   wrapController(Controller.proxyRequest)
+// );
 
 entityRouter.patch(
   "/:id",
