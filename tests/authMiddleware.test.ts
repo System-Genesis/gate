@@ -30,11 +30,16 @@ describe('test basicScopeHandler to catch missing scopes', () => {
     });
     test('no error because has one of requiredScopes scopes', async () => {
         const scopes = ['write'];
-        expect(() => {basicScopeHandler(scopes, requiredScopes) }).not.toThrow(ServiceError);
+        expect(() => { basicScopeHandler(scopes, requiredScopes, 'POST') }).not.toThrow(ServiceError);
     });
 
     test('error because missing required scope', async () => {
         const scopes = [''];
-        expect(() => {basicScopeHandler(scopes, requiredScopes) }).toThrow(ServiceError);
+        expect(() => { basicScopeHandler(scopes, requiredScopes, 'GET') }).toThrow(ServiceError);
+    });
+
+    test('error because missing required scope', async () => {
+        const scopes = ['read'];
+        expect(() => { basicScopeHandler(scopes, requiredScopes, 'PUT') }).toThrow(ServiceError);
     });
 });
