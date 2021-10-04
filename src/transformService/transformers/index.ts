@@ -1,8 +1,9 @@
-import { simpleValueCondition, hierarchyCondition } from '../conditions';
+import { simpleValueCondition, hierarchyCondition, startsWithCondition } from '../conditions';
 
 const conditionsMap = {
-    simpleValueCondition: simpleValueCondition,
+    simpleValueCondition,
     hierarchyCondition,
+    startsWithCondition,
 };
 
 const fieldExclude = (entity: any, transformer: any) => {
@@ -19,7 +20,7 @@ const fieldExclude = (entity: any, transformer: any) => {
     const targetValue = conditions[0].value;
     const conditionMethod = conditionsMap[conditions[0].method];
 
-    if (!entity[targetField]) return entity;
+    if (!entity[targetField] || !entity[fieldToCheck]) return entity;
 
     if (conditionMethod(entityCopy[fieldToCheck], targetValue)) delete entityCopy[targetField];
     return entityCopy;

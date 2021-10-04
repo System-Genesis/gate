@@ -15,7 +15,7 @@ const DATA_SOURCE = [
   'city_name',
 ];
 
-const sensitiveDataSource = DATA_SOURCE[0];
+// const sensitiveDataSource = DATA_SOURCE[0];
 const sensitive2DataSource = DATA_SOURCE[1];
 
 const sensitive2HierarchyCondition = {
@@ -30,22 +30,16 @@ const config = {
     isAuth: env.get('IS_AUTH').required().asBool(),
     requiredScopes: ['write', 'read'],
     services: {
-      elastic: env.get('ELASTIC_SERVICE').required().asUrlString(),
-      db: env.get('DB_SERVICE').required().asUrlString(),
-    }
+      elastic: env.get('ELASTIC_SERVICE').required().asString(),
+      read: env.get('READ_SERVICE').required().asString(),
+      write: env.get('WRITE_SERVICE').required().asString(),
+    },
   },
-  // mongo: {
-  //     uri: env.get('MONGO_URI').required().asUrlString(),
-  //     featureCollectionName: env.get('MONGO_FEATURE_COLLECTION_NAME').required().asString(),
-  // },
-  // rabbit: {
-  //     uri: env.get('RABBIT_URI').required().asUrlString(),
-  //     retryOptions: {
-  //         minTimeout: env.get('RABBIT_RETRY_MIN_TIMEOUT').default(1000).asIntPositive(),
-  //         retries: env.get('RABBIT_RETRY_RETRIES').default(10).asIntPositive(),
-  //         factor: env.get('RABBIT_RETRY_FACTOR').default(1.8).asFloatPositive(),
-  //     },
-  // },
+  entitiesType: {
+    role: 'role',
+    entity: 'entity',
+    digitalIdentity: 'digitalIdentity',
+  },
   rules: {
     filters: {
       entity: [
@@ -55,12 +49,18 @@ const config = {
           values: [`root/sensitive`, `granpa/son`],
         },
         {
-          name: 'jobFilter',
-          field: 'job',
-          values: [`root/sensitive`],
+          name: 'sourceFilter',
+          field: 'source',
+          values: [`city_name`],
         },
       ],
-      group: [],
+      group: [
+        {
+          name: 'hideSensitivePersons',
+          field: 'source',
+          values: [`root/sensitive`, `granpa/son`],
+        },
+      ],
       digitalIdentity: [],
       role: [],
       organizationGroup: [],
@@ -68,21 +68,28 @@ const config = {
     transformers: {
       entity: [
         {
-          name: 'removeSensitiveDomainUsers',
+          name: 'removeSensitiveDIs',
           method: 'arrayFilter',
-          targetField: 'domainUsers',
+          targetField: 'digitalIdentities',
           conditions: [
             {
               method: 'simpleValueCondition',
-              field: 'dataSource',
-              value: `${sensitiveDataSource}`,
+              field: 'source',
+              value: `sf_name`,
             },
           ],
         },
         {
-          name: 'removeJob',
+          name: 'removeHierarchy',
           method: 'fieldExclude',
-          targetField: 'job',
+          targetField: 'hierarchy',
+          conditions: [
+            {
+              method: 'simpleValueCondition',
+              field: 'firstName',
+              value: `Myrony`,
+            },
+          ],
         },
         {
           name: 'removeSensitive2DomainUsersHierarchy',
@@ -112,15 +119,53 @@ const config = {
           targetField: 'directGroup',
           conditions: [sensitive2HierarchyCondition],
         },
+        {
+          name: 'removeSex',
+          method: 'fieldExclude',
+          targetField: 'sex',
+          conditions: [
+            {
+              method: 'startsWithCondition',
+              field: 'hierarchy',
+              value: 'es_name',
+            },
+          ],
+        },
       ],
-      group: {},
-      digitalIdentity: {},
-      role: {},
-      organizationGroup: {},
+      group: [],
+      digitalIdentity: [
+        {
+          name: 'removeEntityId',
+          method: 'fieldExclude',
+          targetField: 'entityId',
+          conditions: [
+            {
+              method: 'simpleValueCondition',
+              field: 'source',
+              value: 'city_name',
+            },
+          ],
+        },
+      ],
+      role: [
+        {
+          name: 'jobTitle',
+          method: 'fieldExclude',
+          targetField: 'jobTitle',
+          conditions: [
+            {
+              method: 'startsWithCondition',
+              field: 'hierarchy',
+              value: 'wallmart',
+            },
+          ],
+        },
+      ],
+      organizationGroup: [],
     },
   },
   scopes: {
-    externalScope: ['hideSensitivePersons'],
+    externalScope: ['removeSensitiveDIs'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };

@@ -1,0 +1,5 @@
+PORT=3000
+IS_AUTH=false
+# services
+ELASTIC_SERVICE=http://localhost:4000
+READ_SERVICE=http://localhost:5000

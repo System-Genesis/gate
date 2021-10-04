@@ -13,14 +13,14 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "outDir": "./dist/",
-    "lib": ["ES2020.Promise","DOM"]
+    "lib": ["ES2020"]
   },
   "include": ["src/**/*", "src/server.ts", "src/config"]
 }

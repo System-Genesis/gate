@@ -1,28 +1,92 @@
-import { Router } from 'express';
-import wrapController from '../../utils/wrapController';
-import Controller from '../controller/controller';
-import { setEntityType } from '../middlewares';
-// import FeatureController from './controller';
-// import FeatureValidator from './validator';
-// import { wrapController, wrapValidator } from '../../utils/express';
-// import ValidateRequest from '../../utils/joi';
-// import { getFoldersRequestSchema, createFolderRequestSchema } from './validator.schema';
+import { Router } from "express";
+import config from "../../config";
+import wrapController from "../../utils/wrapController";
+import Controller from "../controller/controller";
+import { setEntityType, setService } from "../middlewares";
+
+// TODO: add service write
+const {
+  web: {
+    services: { read, write, elastic },
+  },
+} = config;
 
 const roleRouter: Router = Router();
 
-roleRouter.use(wrapController(setEntityType('role')));
+roleRouter.use(wrapController(setEntityType("role")));
 
-roleRouter.post('/', () => {});
-// roleRouter.get('/digitalIdentity/:digitalIdentityUniqueId', () => {});
-roleRouter.get('/:id', wrapController(Controller.proxyRequest));
-roleRouter.delete('/:id', () => {});
-roleRouter.patch('/:id', () => {});
-roleRouter.get('/group/:groupId', () => {});
-roleRouter.get('/hierarchy/:hierarchy', () => {});
-roleRouter.get('/search', () => {});
-roleRouter.patch('/:roleId/moveToGroup', () => {});
-roleRouter.patch('/:roleId/connectDigitalIdentity', () => {});
-roleRouter.patch(':roleId/disconnectDigitalIdentity', () => {});
-roleRouter.patch(':roleId/replaceDigitalIdentity', () => {});
+roleRouter.get(
+  "/digitalIdentityUniqueId/:digitalIdentityUniqueId",
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.get(
+  "/group/:groupId",
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.get(
+  "/hierarchy/:hierarchy",
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.get(
+  "/search",
+  wrapController(setService(elastic)),
+  wrapController(Controller.proxyRequest)
+);
+roleRouter.patch(
+  "/:roleId/moveToGroup",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+roleRouter.put(
+  "/:roleId/digitalIdentity/:digitalIdentityId",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+roleRouter.delete(
+  "/:roleId/digitalIdentity/:digitalIdentityId",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+roleRouter.patch(
+  ":roleId/replaceDigitalIdentity",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.get(
+  "/:id",
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.delete(
+  "/:id",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.patch(
+  "/:id",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.post(
+  "/",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+
+roleRouter.get(
+  "/",
+  wrapController(setService(read)),
+  wrapController(Controller.proxyRequest)
+);
 
 export default roleRouter;
