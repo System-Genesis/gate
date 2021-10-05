@@ -16,7 +16,7 @@ const DATA_SOURCE = [
 ];
 
 // const sensitiveDataSource = DATA_SOURCE[0];
-const sensitive2DataSource = DATA_SOURCE[1];
+// const sensitive2DataSource = DATA_SOURCE[1];
 
 const sensitive2HierarchyCondition = {
   method: 'hierarchyCondition',
@@ -92,17 +92,17 @@ const config = {
           ],
         },
         {
-          name: 'removeSensitive2DomainUsersHierarchy',
+          name: 'removeSensitive443DomainUsersHierarchy',
           method: 'arrayMapper',
-          targetField: 'domainUsers',
+          targetField: 'digitalIdentities',
           transformer: {
             method: 'fieldExclude',
             targetField: 'hierarchy',
             conditions: [
               {
                 method: 'simpleValueCondition',
-                field: 'dataSource',
-                value: `${sensitive2DataSource}`,
+                field: 'source',
+                value: `sf_name`,
               },
             ],
           },
@@ -135,6 +135,22 @@ const config = {
       group: [],
       digitalIdentity: [
         {
+          name: 'removeSensitive2DomainUsersHierarchy',
+          method: 'arrayMapper',
+          targetField: 'role',
+          transformer: {
+            method: 'fieldExclude',
+            targetField: 'hierarchy',
+            conditions: [
+              {
+                method: 'simpleValueCondition',
+                field: 'source',
+                value: `sf_name`,
+              },
+            ],
+          },
+        },
+        {
           name: 'removeEntityId',
           method: 'fieldExclude',
           targetField: 'entityId',
@@ -165,7 +181,7 @@ const config = {
     },
   },
   scopes: {
-    externalScope: ['removeSensitiveDIs'],
+    externalScope: ['removeSensitive2DomainUsersHierarchy'],
     // ['removeSensitive2Hierarchy', 'removeSensitive2DirectGroup'],
   },
 };
