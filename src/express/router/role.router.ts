@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import config from '../../config';
-import wrapController from '../../utils/wrapController';
-import Controller from '../controller/controller';
-import { setEntityType, setService } from '../middlewares';
+import { Router } from "express";
+import config from "../../config";
+import wrapController from "../../utils/wrapController";
+import Controller from "../controller/controller";
+import { setEntityType, setService } from "../middlewares";
 
 // TODO: add service write
 const {
@@ -13,78 +13,78 @@ const {
 
 const roleRouter: Router = Router();
 
-roleRouter.use(wrapController(setEntityType('role')));
+roleRouter.use(wrapController(setEntityType("role")));
 
 roleRouter.get(
-  '/digitalIdentityUniqueId/:digitalIdentityUniqueId',
+  "/digitalIdentityUniqueId/:digitalIdentityUniqueId",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.get(
-  '/group/:groupId',
+  "/group/:groupId",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.get(
-  '/hierarchy/:hierarchy',
+  "/hierarchy/:hierarchy",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.get(
-  '/search',
+  "/search",
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );
 roleRouter.patch(
-  '/:roleId/moveToGroup',
+  "/:roleId/moveToGroup",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+roleRouter.put(
+  "/:roleId/digitalIdentity/:digitalIdentityId",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+roleRouter.delete(
+  "/:roleId/digitalIdentity/:digitalIdentityId",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 roleRouter.patch(
-  '/:roleId/connectDigitalIdentity',
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
-roleRouter.patch(
-  ':roleId/disconnectDigitalIdentity',
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
-roleRouter.patch(
-  ':roleId/replaceDigitalIdentity',
+  ":roleId/replaceDigitalIdentity",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.get(
-  '/:id',
+  "/:id",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.delete(
-  '/:id',
+  "/:id",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.patch(
-  '/:id',
+  "/:id",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.post(
-  '/',
+  "/",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
 roleRouter.get(
-  '/',
+  "/",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
