@@ -1,19 +1,19 @@
 import * as env from 'env-var';
 import './dotenv';
 
-const DATA_SOURCE = [
-  'dataSource1',
-  'dataSource2',
-  'aka',
-  'es_name',
-  'ads_name',
-  'adNN_name',
-  'nvSQL_name',
-  'lmn_name',
-  'mdn_name',
-  'mm_name',
-  'city_name',
-];
+// const DATA_SOURCE = [
+//   'dataSource1',
+//   'dataSource2',
+//   'aka',
+//   'es_name',
+//   'ads_name',
+//   'adNN_name',
+//   'nvSQL_name',
+//   'lmn_name',
+//   'mdn_name',
+//   'mm_name',
+//   'city_name',
+// ];
 
 // const sensitiveDataSource = DATA_SOURCE[0];
 // const sensitive2DataSource = DATA_SOURCE[1];
@@ -34,6 +34,9 @@ const config = {
       read: env.get('READ_SERVICE').required().asString(),
       write: env.get('WRITE_SERVICE').required().asString(),
     },
+  },
+  spike: {
+    myAud: 'QjNHhx5eGMBTVvA00UclwEJOHlwVYN',
   },
   entitiesType: {
     role: 'role',
