@@ -16,7 +16,7 @@ const roleRouter: Router = Router();
 roleRouter.use(wrapController(setEntityType("role")));
 
 roleRouter.get(
-  "/digitalIdentityUniqueId/:digitalIdentityUniqueId",
+  "/digitalIdentity/:digitalIdentityUniqueId",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );

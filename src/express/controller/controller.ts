@@ -1,26 +1,25 @@
 // import axios from 'axios';
-import { Request, Response } from 'express';
-import getFilterQueries from '../../scopeQuery';
+import { Request, Response } from "express";
+import getFilterQueries from "../../scopeQuery";
 // import getFilterQueries from '../../scopeQuery';
-import { applyTransform } from '../../transformService';
-import axios from 'axios';
-import { QueryParams } from '../../types';
-import QueryString from 'qs';
-import config from '../../config';
+import { applyTransform } from "../../transformService";
+import axios from "axios";
+import { QueryParams } from "../../types";
+import QueryString from "qs";
+import config from "../../config";
 
 const { entitiesType } = config;
 class Controller {
   static async proxyRequest(req: Request, res: Response, _) {
-
-    const scopes = extractScopes(req.headers.authorization || '');
+    const scopes = extractScopes(req.headers.authorization || "");
 
     let ruleFilters: QueryParams[] = [];
-    if (req.method === 'GET') {
+    if (req.method === "GET") {
       ruleFilters = getFilterQueries(scopes, res.locals.entityType);
     }
 
     const options = {
-      url: `${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
+      url: `${res.locals.destServiceUrl}${req.originalUrl.split("?")[0]}`,
       method: req.method.toLowerCase(),
       headers: req.headers,
       data: req.body,
@@ -30,11 +29,12 @@ class Controller {
       params: { ...req.query, ruleFilters },
       timeout: 1000 * 60 * 60, // 1 hour
     };
+    let response;
+    response = await axios(options as any);
 
-    const response = await axios(options as any);
     let result = response.data;
 
-    if (req.method === 'GET') {
+    if (req.method === "GET") {
       if (Boolean(req.query.expanded)) {
         result = handleExpandedResult(result, res.locals.entityType, scopes);
       } else if (Array.isArray(result)) {
@@ -50,10 +50,14 @@ class Controller {
   }
 }
 
-function handleExpandedResult(result: any, entityType: string, scopes: string[]) {
+function handleExpandedResult(
+  result: any,
+  entityType: string,
+  scopes: string[]
+) {
   if (Array.isArray(result)) {
     result = result.map((expandedItem) => {
-      expandedItem = transformExpandedRes(expandedItem, entityType, scopes)
+      expandedItem = transformExpandedRes(expandedItem, entityType, scopes);
       return expandedItem;
     });
   } else {
@@ -73,7 +77,11 @@ function transformExpandedRes(
 }
 
 function expandedEntity(result: any, scopes: string[]) {
-  const transEntity = applyTransform(result, scopes, entitiesType.entity as any);
+  const transEntity = applyTransform(
+    result,
+    scopes,
+    entitiesType.entity as any
+  );
   transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
     return expandedDi(di, scopes);
   });
@@ -82,7 +90,11 @@ function expandedEntity(result: any, scopes: string[]) {
 }
 
 function expandedDi(result: any, scopes: string[]) {
-  const transDi = applyTransform(result, scopes, entitiesType.digitalIdentity as any);
+  const transDi = applyTransform(
+    result,
+    scopes,
+    entitiesType.digitalIdentity as any
+  );
   transDi.role = applyTransform(transDi.role, scopes, entitiesType.role as any);
 
   return transDi;
@@ -91,7 +103,7 @@ function expandedDi(result: any, scopes: string[]) {
 function extractScopes(token: string): string[] {
   try {
     const scopes = JSON.parse(
-      Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')
+      Buffer.from((token || "").split(".")[1], "base64").toString("ascii")
     ).scope;
     return Array.isArray(scopes) ? scopes : [scopes];
   } catch (err) {

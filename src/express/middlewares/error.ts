@@ -16,10 +16,9 @@ export const errorMiddleware = (
   _next: express.NextFunction
 ) => {
   const {
-    message,
     response: { status },
   } = error;
-
+  const message = error.response.data.message;
   res.status(status || 500).json({
     message,
     status,
