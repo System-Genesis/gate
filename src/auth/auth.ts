@@ -1,22 +1,22 @@
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import path from 'path';
-import { NextFunction, Request, Response } from 'express';
-import config from '../config/index';
+import jwt from "jsonwebtoken";
+import fs from "fs";
+import path from "path";
+import { NextFunction, Request, Response } from "express";
+import config from "../config/index";
 
-const errorRes = (res: Response) => res.status(401).send('Unauthorized');
+const errorRes = (res: Response) => res.status(401).send("Unauthorized");
 
 type payloadType = { aud: string };
 
 const isAuth = async (req: Request, res: Response, next: NextFunction) => {
-  if (process.env.ENV === 'mock') return next();
+  if (config.web.isAuth === false) return next();
 
-  const token = req.header('Authorization');
+  const token = req.header("Authorization");
 
   try {
     if (!token) return errorRes(res);
 
-    const key = fs.readFileSync(path.join(__dirname, '../key/key.pem'));
+    const key = fs.readFileSync(path.join(__dirname, "../key/key.pem"));
 
     const payload: payloadType = jwt.verify(
       token,
