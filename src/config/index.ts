@@ -36,7 +36,7 @@ const config = {
     },
   },
   spike: {
-    myAud: 'QjNHhx5eGMBTVvA00UclwEJOHlwVYN',
+    myAud: env.get('KARTOFFEL_AUD').required().asString(),
   },
   entitiesType: {
     role: 'role',

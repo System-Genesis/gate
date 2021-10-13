@@ -1,4 +1,4 @@
-import * as express from "express";
+import * as express from 'express';
 
 export class ServiceError extends Error {
   public code;
@@ -18,9 +18,9 @@ export const errorMiddleware = (
   const {
     response: { status },
   } = error;
-  const message = error.response.data.message;
+  const data = error.response.data;
   res.status(status || 500).json({
-    message,
+    ...data,
     status,
   });
 };
