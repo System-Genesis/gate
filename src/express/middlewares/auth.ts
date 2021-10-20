@@ -11,7 +11,6 @@ const { web } = config;
 const averify = util.promisify(jwt.verify);
 
 export default async (req: Request, _res: Response, next: NextFunction) => {
-  return next(); // TODO DELETE this line: spike is down
   if (!web.isAuth) return next();
 
   const token = req.headers["Authorization"];

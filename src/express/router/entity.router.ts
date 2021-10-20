@@ -1,5 +1,4 @@
 import { Router } from "express";
-// import { Router } from 'express';
 import Controller from "../controller/controller";
 import wrapController from "../../utils/wrapController";
 import { setEntityType, setService } from "../middlewares";

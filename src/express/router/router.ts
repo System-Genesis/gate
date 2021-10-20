@@ -5,10 +5,7 @@ import entityRouter from "./entity.router";
 import groupRouter from "./group.router";
 import digitalIdentitiesRouter from "./digitalIdentities.router";
 import roleRouter from "./role.router";
-import isAuth from '../middlewares/auth';
 export const router = express.Router();
-
-router.use(isAuth);
 
 router.use('/entities', entityRouter);
 router.use('/groups', groupRouter);
