@@ -5,10 +5,10 @@ type tranformerType = 'entity' | 'group' | 'digitalIdentity' | 'role' | 'organiz
 
 const applyTransform = (entity: any, userScopes: string[], type: tranformerType) => {
     const {
-        rules: {
-            transformers
-        },
+      spike: {
+        rules: { transformers },
         scopes,
+      },
     } = config;
 
     const userTransformersNames = getUserTransformersNames(userScopes, scopes);

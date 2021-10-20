@@ -2,10 +2,12 @@ import config from '../config';
 import { QueryParams } from '../types';
 
 const {
-  rules: {
-    filters,
-  },
-  scopes,
+  spike: {
+    rules: {
+      filters,
+    },
+    scopes,
+  }
 } = config;
 
 const getFilterQueries = (userScopes: string | string[], entityType: string): QueryParams[] => {

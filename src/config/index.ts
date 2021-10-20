@@ -17,6 +17,8 @@ const config = {
   },
   spike: {
     myAud: env.get('KARTOFFEL_AUD').required().asString(),
+    rules: rules,
+    scopes: scopes,
   },
   entitiesType: {
     role: 'role',
@@ -24,8 +26,6 @@ const config = {
     digitalIdentity: 'digitalIdentity',
     group: 'group',
   },
-  rules: rules,
-  scopes: scopes,
 };
 
 export default config;
