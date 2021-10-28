@@ -5,6 +5,7 @@ import request from "supertest";
 import testJson from "../../src/config/test.json";
 import start, { app } from "../../src/express/index";
 import { Server } from "http";
+//import * as qs from "qs";
 //import { sleep } from "../../src/utils/indexTest";
 
 let server: Server;
@@ -146,6 +147,7 @@ describe("Connect/Disconnect DI to entity", () => {
   it("should return entity with the DI id", async (done) => {
     request(app)
       .get(`/api/entities/${entityId}`)
+      // .query(qs.stringify({ expanded: true }))
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
