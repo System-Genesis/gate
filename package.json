@@ -9,7 +9,7 @@
     "dev": "npm run build && npm run startDev",
     "build": "tsc && npm run copy-files",
     "copy-files": "cp -r ./src/assets/ ./dist/",
-    "test": "jest --coverage"
+    "test": "jest --testPathPattern=integration"
   },
   "author": "",
   "license": "ISC",
