@@ -1,20 +1,12 @@
-<<<<<<< HEAD
+import fs from "fs";
 import express from "express";
 // import helmet from "helmet";
+import compression from "compression";
 import morgan from "morgan";
 import router from "./router/router";
 import isAuth from "../auth/auth";
 import { errorMiddleware } from "./middlewares/error";
 import { getDocsMiddleware } from "./middlewares/getDocs";
-import fs from 'fs';
-import express from 'express';
-// import helmet from "helmet";
-import compression from 'compression';
-import morgan from 'morgan';
-import router from './router/router';
-import isAuth from '../auth/auth';
-import { errorMiddleware } from './middlewares/error';
-import { getDocsMiddleware } from './middlewares/getDocs';
 
 import { once } from "events";
 
@@ -24,13 +16,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use(
-  morgan('dev', {
-    stream: fs.createWriteStream('./access.log', { flags: 'a' }),
+  morgan("dev", {
+    stream: fs.createWriteStream("./access.log", { flags: "a" }),
   })
 );
-
 
 app.use(compression());
 
