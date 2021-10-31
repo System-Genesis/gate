@@ -17,7 +17,11 @@
     "@types/config": "0.0.39",
     "@types/supertest": "^2.0.11",
     "axios": "^0.21.1",
+<<<<<<< HEAD
     "config": "^3.3.6",
+=======
+    "compression": "^1.7.4",
+>>>>>>> origin/dev
     "dotenv": "^10.0.0",
     "env-var": "^7.0.1",
     "express": "^4.17.1",
