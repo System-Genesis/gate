@@ -106,22 +106,6 @@
       "group": [],
       "digitalIdentity": [
         {
-          "name": "removeSensitive2DomainUsersHierarchy",
-          "method": "arrayMapper",
-          "targetField": "role",
-          "transformer": {
-            "method": "fieldExclude",
-            "targetField": "hierarchy",
-            "conditions": [
-              {
-                "method": "simpleValueCondition",
-                "field": "source",
-                "value": "sf_name"
-              }
-            ]
-          }
-        },
-        {
           "name": "removeEntityId",
           "method": "fieldExclude",
           "targetField": "entityId",
@@ -152,6 +136,6 @@
     }
   },
   "scopes": {
-    "externalScope": ["removeSensitive2DomainUsersHierarchy"]
+    "externalScope": []
   }
 }
