@@ -5,8 +5,8 @@ import request from "supertest";
 import testJson from "../../src/config/test.json";
 import start, { app } from "../../src/express/index";
 import { Server } from "http";
-//import * as qs from "qs";
-//import { sleep } from "../../src/utils/indexTest";
+import * as qs from "qs";
+import { sleep } from "../../src/utils/indexTest";
 
 let server: Server;
 beforeAll(async () => {
@@ -130,7 +130,7 @@ describe("Connect/Disconnect DI to entity", () => {
       .expect(200);
   });
   afterEach(() => {
-    jest.setTimeout(2000);
+    sleep(2000);
   });
 
   it("should connect the both of themselves", async (done) => {
@@ -144,16 +144,40 @@ describe("Connect/Disconnect DI to entity", () => {
         return done();
       });
   });
-  it("should return entity with the DI id", async (done) => {
+  it("should return entity with the DI id Route-FIND BY ID", async (done) => {
     request(app)
       .get(`/api/entities/${entityId}`)
-      // .query(qs.stringify({ expanded: true }))
+      .query(qs.stringify({ expanded: true }))
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
           throw done(err);
         }
-        console.log(res.body);
+        expect(res.body.digitalIdentities[0].uniqueId).toBe(diId);
+        return done();
+      });
+  });
+  it("should return entity with the DI id Route-FIND BY UID", async (done) => {
+    request(app)
+      .get(`/api/entities/digitalIdentity/${diId}`)
+      .query(qs.stringify({ expanded: true }))
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          throw done(err);
+        }
+        expect(res.body.digitalIdentities[0].uniqueId).toBe(diId);
+        return done();
+      });
+  });
+  it("should disconnect di from entity", async (done) => {
+    request(app)
+      .delete(`/api/entities/${entityId}/digitalIdentity/${diId}`)
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          throw done(err);
+        }
         return done();
       });
   });
