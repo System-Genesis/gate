@@ -1,25 +1,23 @@
-// import axios from 'axios';
-import { Request, Response } from "express";
-import getFilterQueries from "../../scopeQuery";
-// import getFilterQueries from '../../scopeQuery';
-import { applyTransform } from "../../transformService";
-import axios from "axios";
-import { QueryParams } from "../../types";
-import QueryString from "qs";
-import config from "../../config";
+import { Request, Response } from 'express';
+import getFilterQueries from '../../scopeQuery';
+import { applyTransform } from '../../transformService';
+import axios from 'axios';
+import { QueryParams } from '../../types';
+import QueryString from 'qs';
+import config from '../../config';
 
 const { entitiesType } = config;
 class Controller {
   static async proxyRequest(req: Request, res: Response, _) {
-    const scopes = extractScopes(req.headers.authorization || "");
+    const scopes = extractScopes(req.headers.authorization || '');
 
     let ruleFilters: QueryParams[] = [];
-    if (req.method === "GET") {
+    if (req.method === 'GET') {
       ruleFilters = getFilterQueries(scopes, res.locals.entityType);
     }
 
     const options = {
-      url: `${res.locals.destServiceUrl}${req.originalUrl.split("?")[0]}`,
+      url: `${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
       method: req.method.toLowerCase(),
       headers: req.headers,
       data: req.body,
@@ -34,8 +32,11 @@ class Controller {
 
     let result = response.data;
 
-    if (req.method === "GET") {
-      if (Boolean(req.query.expanded)) {
+    if (req.method === 'GET') {
+      if (Boolean(req.query.expanded) && (
+        res.locals.entityType !== config.entitiesType.role ||
+        res.locals.entityType !== config.entitiesType.group
+      )) {
         result = handleExpandedResult(result, res.locals.entityType, scopes);
       } else if (Array.isArray(result)) {
         result = result.map((dataObj) =>
@@ -103,7 +104,7 @@ function expandedDi(result: any, scopes: string[]) {
 function extractScopes(token: string): string[] {
   try {
     const scopes = JSON.parse(
-      Buffer.from((token || "").split(".")[1], "base64").toString("ascii")
+      Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')
     ).scope;
     return Array.isArray(scopes) ? scopes : [scopes];
   } catch (err) {
