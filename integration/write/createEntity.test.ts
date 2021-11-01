@@ -181,4 +181,17 @@ describe("Connect/Disconnect DI to entity", () => {
         return done();
       });
   });
+  it("should return entity without any di`s", async (done) => {
+    request(app)
+      .get(`/api/entities/${entityId}`)
+      .query(qs.stringify({ expanded: true }))
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          throw done(err);
+        }
+        expect(res.body.digitalIdentities).toStrictEqual([]);
+        return done();
+      });
+  });
 });
