@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   morgan('dev', {
-    stream: fs.createWriteStream('./access.log', { flags: 'a' }),
+    stream: fs.createWriteStream('./access.log', { flags: 'w' }),
   })
 );
 app.use(morgan('dev'));
