@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import getFilterQueries from '../../scopeQuery';
 import { applyTransform } from '../../transformService';
 import axios from 'axios';
-import { QueryParams } from '../../types';
+import {
+  DigitalIdentityDTO,
+  EntityDTO,
+  QueryParams,
+  RoleDTO,
+  typesOfEntities,
+} from '../../types';
 import QueryString from 'qs';
 import config from '../../config';
 
@@ -33,10 +39,11 @@ class Controller {
     let result = response.data;
 
     if (req.method === 'GET') {
-      if (Boolean(req.query.expanded) && (
-        res.locals.entityType !== config.entitiesType.role ||
-        res.locals.entityType !== config.entitiesType.group
-      )) {
+      if (
+        Boolean(req.query.expanded) &&
+        (res.locals.entityType !== config.entitiesType.role ||
+          res.locals.entityType !== config.entitiesType.group)
+      ) {
         result = handleExpandedResult(result, res.locals.entityType, scopes);
       } else if (Array.isArray(result)) {
         result = result.map((dataObj) =>
@@ -53,7 +60,7 @@ class Controller {
 
 function handleExpandedResult(
   result: any,
-  entityType: string,
+  entityType: typesOfEntities,
   scopes: string[]
 ) {
   if (Array.isArray(result)) {
@@ -69,7 +76,7 @@ function handleExpandedResult(
 
 function transformExpandedRes(
   result: any,
-  entityType: string,
+  entityType: typesOfEntities,
   scopes: string[]
 ) {
   return entityType === entitiesType.entity
@@ -77,26 +84,36 @@ function transformExpandedRes(
     : expandedDi(result, scopes);
 }
 
-function expandedEntity(result: any, scopes: string[]) {
+function expandedEntity(result: EntityDTO, scopes: string[]) {
   const transEntity = applyTransform(
     result,
     scopes,
-    entitiesType.entity as any
-  );
-  transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
-    return expandedDi(di, scopes);
-  });
+    entitiesType.entity as typesOfEntities
+  ) as EntityDTO;
+
+  if (transEntity.digitalIdentities) {
+    transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
+      return expandedDi(di, scopes);
+    });
+  }
 
   return transEntity;
 }
 
-function expandedDi(result: any, scopes: string[]) {
+function expandedDi(result, scopes: string[]) {
   const transDi = applyTransform(
     result,
     scopes,
     entitiesType.digitalIdentity as any
-  );
-  transDi.role = applyTransform(transDi.role, scopes, entitiesType.role as any);
+  ) as DigitalIdentityDTO;
+
+  if (transDi.role) {
+    transDi.role = applyTransform(
+      transDi.role,
+      scopes,
+      entitiesType.role as typesOfEntities
+    ) as RoleDTO;
+  }
 
   return transDi;
 }

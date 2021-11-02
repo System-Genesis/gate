@@ -1,2 +1,3 @@
 [0mGET /api/entities?expanded=true [31m500[0m 28440.084 ms - 68[0m
 [0mGET /api/entities?expanded=true [32m200[0m 716.861 ms - -[0m
+[0mGET /api/persons/identifier/299521138 [33m404[0m 6.790 ms - 13[0m

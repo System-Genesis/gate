@@ -1,9 +1,8 @@
 import config from '../config';
+import { DigitalIdentityDTO, EntityDTO, RoleDTO, typesOfEntities } from '../types';
 import { transformerMap } from './transformers';
 
-type tranformerType = 'entity' | 'group' | 'digitalIdentity' | 'role' | 'organizationGroup';
-
-const applyTransform = (entity: any, userScopes: string[], type: tranformerType) => {
+const applyTransform = (entity: EntityDTO | RoleDTO | DigitalIdentityDTO, userScopes: string[], type: typesOfEntities)  => {
     const {
       spike: {
         rules: { transformers },
@@ -17,11 +16,12 @@ const applyTransform = (entity: any, userScopes: string[], type: tranformerType)
 
     const RelevantTransformers = targetTransformers.filter((transformer) => userTransformersNames.includes(transformer.name));
 
-    let entityCopy = Array.isArray(entity) ? [ ...entity ] : { ...entity };
+    let entityCopy = { ...entity };
     
     RelevantTransformers.forEach((transformer) => {
         entityCopy = transformerMap[transformer.method](entityCopy, transformer);
     });
+
     return entityCopy;
 };
 
