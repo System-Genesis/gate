@@ -7,8 +7,8 @@ import { sleep } from "../../src/utils/indexTest";
 // const serviceTypes: string[] = testJson.valueObjects.serviceType.values;
 // const entityTypes: { Soldier: string; Civilian: string; GoalUser: string } =
 //   testJson.valueObjects.EntityType;
-// const digitalIdentitiesDomains: string[] =
-//   testJson.valueObjects.digitalIdentityId.domain.values;
+const digitalIdentitiesDomains: string[] =
+  testJson.valueObjects.digitalIdentityId.domain.values;
 const allSources: string[] = testJson.valueObjects.source.values;
 //const allDITypes = testJson.valueObjects.digitalIdentityType;
 
@@ -19,7 +19,7 @@ describe("VALID CREATIONS", () => {
   };
 
   afterEach(() => {
-    sleep(2000);
+    sleep(1000);
   });
 
   let fatherGroupId;
@@ -113,6 +113,66 @@ describe("VALID CREATIONS", () => {
         expect(res.body.ancestors[0]).toBe(firstChildGroupId);
         expect(res.body.ancestors[1]).toBe(fatherGroupId);
         expect(res.body.hierarchy).toBe(allSources[1] + "/firstchild");
+
+        return done();
+      });
+  });
+
+  it("should create a new role", (done) => {
+    const roleToCreate: any = {
+      roleId: `t123@${digitalIdentitiesDomains[0]}`,
+      source: allSources[1],
+      directGroup: secondChildGroupId,
+    };
+    request(app)
+      .post("/api/roles")
+      .send(roleToCreate)
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          console.log(err);
+          throw done(err);
+        }
+
+        return done();
+      });
+  });
+  it("should get the new role", (done) => {
+    request(app)
+      .get(`/api/roles/t123@${digitalIdentitiesDomains[0]}`)
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          console.log(err);
+          throw done(err);
+        }
+        expect(res.body.roleId).toBe(`t123@${digitalIdentitiesDomains[0]}`);
+        return done();
+      });
+  });
+  it("should connect the new role to di", (done) => {
+    request(app)
+      .put(
+        `/api/roles/t123@${digitalIdentitiesDomains[0]}/digitalIdentity/t123@${digitalIdentitiesDomains[0]}`
+      )
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          throw done(err);
+        }
+        return done;
+      });
+  });
+  it("should return the di expanded with direct role", (done) => {
+    request(app)
+      .get(`/api/digitalIdentities//t123@${digitalIdentitiesDomains[0]}`)
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          console.log(err);
+          throw done(err);
+        }
+        console.log(res.body);
 
         return done();
       });
