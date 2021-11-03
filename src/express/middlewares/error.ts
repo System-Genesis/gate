@@ -10,17 +10,15 @@ export class ServiceError extends Error {
 }
 
 export const errorMiddleware = (
-  error: any,
+  error: any, // TODO manage service error properly
   _req: express.Request,
   res: express.Response,
   _next: express.NextFunction
 ) => {
   const status = error.response?.status || 500;
-  const message = error.response?.data?.message || error.message;
-  // const stack = error.stack;
+  const resBody = error.response?.data || { message: error.message };
   res.status(status).json({
+    ...resBody,
     status,
-    message,
-    // stack
   });
 };
