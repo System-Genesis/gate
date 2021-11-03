@@ -1,5 +1,3 @@
-import { type } from "os";
-
 type QueryParams = {
   entityType?: string;
   field?: string;
@@ -76,13 +74,6 @@ type ProfilePictureData = {
   createdAt: Date;
 };
 
-type typesOfEntities = "entity" | "digitalIdentity" | "role" | "group";
+type typesOfEntities = 'entity' | 'digitalIdentity' | 'role' | 'group';
 
-export {
-  ProfilePictureData,
-  RoleDTO,
-  EntityDTO,
-  QueryParams,
-  DigitalIdentityDTO,
-  typesOfEntities,
-};
+export { ProfilePictureData, RoleDTO, EntityDTO, QueryParams, DigitalIdentityDTO, typesOfEntities };
