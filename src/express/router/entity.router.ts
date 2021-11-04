@@ -15,17 +15,9 @@ const entityRouter: Router = Router();
 
 entityRouter.use(wrapController(setEntityType('entity')));
 
-entityRouter.get(
-  '/search',
-  wrapController(setService(elastic)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.get('/search', wrapController(setService(elastic)), wrapController(Controller.proxyRequest));
 
-entityRouter.get(
-  '/role/:roleId',
-  wrapController(setService(read)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.get('/role/:roleId', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
 entityRouter.get(
   '/digitalIdentity/:uniqueID',
@@ -33,26 +25,16 @@ entityRouter.get(
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.get(
-  '/group/:groupId',
-  wrapController(setService(read)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.get('/group/:groupId', wrapController(setService(read)), wrapController(Controller.proxyRequest));
+
+entityRouter.get('/hierarchy/:hierarchy', wrapController(setService(read)), wrapController(Controller.proxyRequest));
+
+entityRouter.get('/:id', wrapController(setService(read)), wrapController(Controller.proxyRequest));
+
+entityRouter.get('/', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
 entityRouter.get(
-  '/hierarchy/:hierarchy',
-  wrapController(setService(read)),
-  wrapController(Controller.proxyRequest)
-);
-
-entityRouter.get(
-  '/:id',
-  wrapController(setService(read)),
-  wrapController(Controller.proxyRequest)
-);
-
-entityRouter.get(
-  '/',
+  ':identifier/pictures/profile',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
@@ -69,28 +51,12 @@ entityRouter.patch(
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch(
-  '/:id/deactivate',
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.patch('/:id/deactivate', wrapController(setService(write)), wrapController(Controller.proxyRequest));
 
-entityRouter.patch(
-  '/:id',
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.patch('/:id', wrapController(setService(write)), wrapController(Controller.proxyRequest));
 
-entityRouter.delete(
-  '/:id',
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.delete('/:id', wrapController(setService(write)), wrapController(Controller.proxyRequest));
 
-entityRouter.post(
-  '/',
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
+entityRouter.post('/', wrapController(setService(write)), wrapController(Controller.proxyRequest));
 
 export default entityRouter;

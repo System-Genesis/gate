@@ -11,7 +11,6 @@ import config from '../../config';
 const { entitiesType } = config;
 class Controller {
   static async proxyRequest(req: Request, res: Response, _) {
-
     const scopes = extractScopes(req.headers.authorization || '');
 
     let ruleFilters: QueryParams[] = [];
@@ -38,9 +37,7 @@ class Controller {
       if (Boolean(req.query.expanded)) {
         result = handleExpandedResult(result, res.locals.entityType, scopes);
       } else if (Array.isArray(result)) {
-        result = result.map((dataObj) =>
-          applyTransform(dataObj, scopes, res.locals.entityType)
-        );
+        result = result.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
       } else {
         result = applyTransform(result, scopes, res.locals.entityType);
       }
@@ -53,7 +50,7 @@ class Controller {
 function handleExpandedResult(result: any, entityType: string, scopes: string[]) {
   if (Array.isArray(result)) {
     result = result.map((expandedItem) => {
-      expandedItem = transformExpandedRes(expandedItem, entityType, scopes)
+      expandedItem = transformExpandedRes(expandedItem, entityType, scopes);
       return expandedItem;
     });
   } else {
@@ -62,14 +59,8 @@ function handleExpandedResult(result: any, entityType: string, scopes: string[])
   return result;
 }
 
-function transformExpandedRes(
-  result: any,
-  entityType: string,
-  scopes: string[]
-) {
-  return entityType === entitiesType.entity
-    ? expandedEntity(result, scopes)
-    : expandedDi(result, scopes);
+function transformExpandedRes(result: any, entityType: string, scopes: string[]) {
+  return entityType === entitiesType.entity ? expandedEntity(result, scopes) : expandedDi(result, scopes);
 }
 
 function expandedEntity(result: any, scopes: string[]) {
@@ -90,9 +81,7 @@ function expandedDi(result: any, scopes: string[]) {
 
 function extractScopes(token: string): string[] {
   try {
-    const scopes = JSON.parse(
-      Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')
-    ).scope;
+    const scopes = JSON.parse(Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')).scope;
     return Array.isArray(scopes) ? scopes : [scopes];
   } catch (err) {
     return [];
