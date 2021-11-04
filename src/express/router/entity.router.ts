@@ -1,5 +1,4 @@
 import { Router } from 'express';
-// import { Router } from 'express';
 import Controller from '../controller/controller';
 import wrapController from '../../utils/wrapController';
 import { setEntityType, setService } from '../middlewares';
@@ -16,6 +15,8 @@ const entityRouter: Router = Router();
 entityRouter.use(wrapController(setEntityType('entity')));
 
 entityRouter.get('/search', wrapController(setService(elastic)), wrapController(Controller.proxyRequest));
+
+entityRouter.get('/identifier/:identifier', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
 entityRouter.get('/role/:roleId', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
@@ -34,24 +35,28 @@ entityRouter.get('/:id', wrapController(setService(read)), wrapController(Contro
 entityRouter.get('/', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
 entityRouter.get(
-  ':identifier/pictures/profile',
+  '/:identifier/pictures/profile',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch(
-  '/:id/connectDigitalIdentity',
+entityRouter.put(
+  '/:id/digitalIdentity/:uniqueId',
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch(
-  '/:id/disconnectDigitalIdentity',
+entityRouter.delete(
+  '/:id/digitalIdentity/:uniqueId',
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
-entityRouter.patch('/:id/deactivate', wrapController(setService(write)), wrapController(Controller.proxyRequest));
+// entityRouter.patch(
+//   "/:id/deactivate",
+//   wrapController(setService(write)),
+//   wrapController(Controller.proxyRequest)
+// );
 
 entityRouter.patch('/:id', wrapController(setService(write)), wrapController(Controller.proxyRequest));
 

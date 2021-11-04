@@ -1,10 +1,14 @@
-// import axios from 'axios';
 import { Request, Response } from 'express';
 import getFilterQueries from '../../scopeQuery';
-// import getFilterQueries from '../../scopeQuery';
 import { applyTransform } from '../../transformService';
 import axios from 'axios';
-import { QueryParams } from '../../types';
+import {
+  DigitalIdentityDTO,
+  EntityDTO,
+  QueryParams,
+  RoleDTO,
+  typesOfEntities,
+} from '../../types';
 import QueryString from 'qs';
 import config from '../../config';
 
@@ -29,12 +33,17 @@ class Controller {
       params: { ...req.query, ruleFilters },
       timeout: 1000 * 60 * 60, // 1 hour
     };
+    let response;
+    response = await axios(options as any);
 
-    const response = await axios(options as any);
     let result = response.data;
 
     if (req.method === 'GET') {
-      if (Boolean(req.query.expanded)) {
+      if (
+        Boolean(req.query.expanded) &&
+        (res.locals.entityType !== config.entitiesType.role ||
+          res.locals.entityType !== config.entitiesType.group)
+      ) {
         result = handleExpandedResult(result, res.locals.entityType, scopes);
       } else if (Array.isArray(result)) {
         result = result.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
@@ -47,7 +56,11 @@ class Controller {
   }
 }
 
-function handleExpandedResult(result: any, entityType: string, scopes: string[]) {
+function handleExpandedResult(
+  result: any,
+  entityType: typesOfEntities,
+  scopes: string[]
+) {
   if (Array.isArray(result)) {
     result = result.map((expandedItem) => {
       expandedItem = transformExpandedRes(expandedItem, entityType, scopes);
@@ -59,22 +72,51 @@ function handleExpandedResult(result: any, entityType: string, scopes: string[])
   return result;
 }
 
+<<<<<<< HEAD
 function transformExpandedRes(result: any, entityType: string, scopes: string[]) {
   return entityType === entitiesType.entity ? expandedEntity(result, scopes) : expandedDi(result, scopes);
+=======
+function transformExpandedRes(
+  result: any,
+  entityType: typesOfEntities,
+  scopes: string[]
+) {
+  return entityType === entitiesType.entity
+    ? expandedEntity(result, scopes)
+    : expandedDi(result, scopes);
+>>>>>>> 30c2415d5f9aed2b7815107d0aa054809834d6ca
 }
 
-function expandedEntity(result: any, scopes: string[]) {
-  const transEntity = applyTransform(result, scopes, entitiesType.entity as any);
-  transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
-    return expandedDi(di, scopes);
-  });
+function expandedEntity(result: EntityDTO, scopes: string[]) {
+  const transEntity = applyTransform(
+    result,
+    scopes,
+    entitiesType.entity as typesOfEntities
+  ) as EntityDTO;
+
+  if (transEntity.digitalIdentities) {
+    transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
+      return expandedDi(di, scopes);
+    });
+  }
 
   return transEntity;
 }
 
-function expandedDi(result: any, scopes: string[]) {
-  const transDi = applyTransform(result, scopes, entitiesType.digitalIdentity as any);
-  transDi.role = applyTransform(transDi.role, scopes, entitiesType.role as any);
+function expandedDi(result, scopes: string[]) {
+  const transDi = applyTransform(
+    result,
+    scopes,
+    entitiesType.digitalIdentity as any
+  ) as DigitalIdentityDTO;
+
+  if (transDi.role) {
+    transDi.role = applyTransform(
+      transDi.role,
+      scopes,
+      entitiesType.role as typesOfEntities
+    ) as RoleDTO;
+  }
 
   return transDi;
 }

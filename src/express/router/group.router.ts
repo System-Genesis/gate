@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import config from '../../config/index';
-import wrapController from '../../utils/wrapController';
-import Controller from '../controller/controller';
-import { setService, setEntityType } from '../middlewares';
+import { Router } from "express";
+import config from "../../config/index";
+import wrapController from "../../utils/wrapController";
+import Controller from "../controller/controller";
+import { setService, setEntityType } from "../middlewares";
 
 const {
   web: {
@@ -12,58 +12,58 @@ const {
 
 const groupRouter: Router = Router();
 
-groupRouter.use(wrapController(setEntityType('group')));
+groupRouter.use(wrapController(setEntityType("group")));
 
 groupRouter.get(
-  '/hierarchy/:hierarchy',
+  "/hierarchy/:hierarchy",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.patch(
-  '/changeParent/:id',
-  wrapController(setService(read)),
+  "/changeParent/:id",
+  wrapController(setService(read)), // TODO: update valid route
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.patch(
-  '/rename/:id',
+  "/rename/:id",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.get(
-  '/search',
+  "/search",
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.get(
-  '/:id/children',
+  "/:id/children",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.get(
-  '/:id',
+  "/:id",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.delete(
-  '/:id',
+  "/:id",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.get(
-  '/',
+  "/",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.post(
-  '/',
+  "/",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
