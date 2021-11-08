@@ -22,12 +22,23 @@ groupRouter.get(
 
 groupRouter.patch(
   "/changeParent/:id",
-  wrapController(setService(read)), // TODO: update valid route
+  wrapController(setService(write)), // TODO: update valid route
   wrapController(Controller.proxyRequest)
 );
 
 groupRouter.patch(
   "/rename/:id",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+groupRouter.patch(
+  "/:id",
+  wrapController(setService(write)),
+  wrapController(Controller.proxyRequest)
+);
+
+groupRouter.get(
+  "/:id/diPrefix",
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );

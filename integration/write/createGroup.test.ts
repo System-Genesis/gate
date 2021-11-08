@@ -16,6 +16,7 @@ describe("VALID CREATIONS", () => {
   const fatherGroupToCreate: any = {
     name: allSources[1],
     source: allSources[1],
+    diPrefix: "123"
   };
 
   afterEach(() => {
@@ -39,6 +40,22 @@ describe("VALID CREATIONS", () => {
         return done();
       });
   });
+  it("should get the father diPrefix", (done) => {
+    request(app)
+      .get(`/api/groups/${fatherGroupId}/diPrefix`)
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          console.log(err);
+          throw done(err);
+        }
+        expect(res.body).toBe("1234")
+
+        return done();
+      });
+  });
+
+
 
   let firstChildGroupId;
   it("should create a child group under father", (done) => {
@@ -84,6 +101,7 @@ describe("VALID CREATIONS", () => {
       name: "secondchild",
       source: allSources[1],
       directGroup: firstChildGroupId,
+
     };
     request(app)
       .post("/api/groups")
@@ -100,6 +118,20 @@ describe("VALID CREATIONS", () => {
         return done();
       });
   });
+  it("should get the father diPrefix", (done) => {
+    request(app)
+      .get(`/api/groups/${secondChildGroupId}/diPrefix`)
+      .expect(200)
+      .end(async (err: any, res: any) => {
+        if (err) {
+          console.log(err);
+          throw done(err);
+        }
+        expect(res.body).toBe("1234")
+
+        return done();
+      });
+  })
   it("should get second child group expanded", (done) => {
     request(app)
       .get(`/api/groups/${secondChildGroupId}`)
@@ -134,7 +166,7 @@ describe("VALID CREATIONS", () => {
           throw done(err);
         }
 
-        return done();
+        return done();;
       });
   });
   it("should get the new role", (done) => {
@@ -160,7 +192,7 @@ describe("VALID CREATIONS", () => {
         if (err) {
           throw done(err);
         }
-        return done;
+        return done();
       });
   });
   it("should return the di expanded with direct role", (done) => {
@@ -177,4 +209,4 @@ describe("VALID CREATIONS", () => {
         return done();
       });
   });
-});
+})
