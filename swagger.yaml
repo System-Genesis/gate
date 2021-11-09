@@ -1787,7 +1787,7 @@ definitions:
         type: string
       sex:
         enum:
-          - mail
+          - male
           - female
         example: male
         type: string
