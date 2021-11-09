@@ -1,12 +1,8 @@
 import { Request, Response } from 'express';
 import getFilterQueries from '../../scopeQuery';
-// import { applyTransform } from '../../transformService';
 import axios, { AxiosResponse } from 'axios';
-import { DigitalIdentityDTO, EntityDTO, QueryParams, RoleDTO, typesOfEntities } from '../../types';
+import { QueryParams } from '../../types';
 import QueryString from 'qs';
-// import config from '../../config';
-// import { Readable } from 'stream';
-// const { entitiesType } = config;
 
 class PicturesController {
   static async proxyRequest(req: Request, res: Response, _) {
