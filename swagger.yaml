@@ -54,7 +54,7 @@ paths:
         x-expanded:
           description: Expanded DigitalIdentities
           schema:
-            $ref: '#/definitions/expandedDigitalIdenties'
+            $ref: '#/definitions/expandedDigitalIdentities'
       tags:
         - DigitalIdentities
       operationId: getAllDigitalIdentities
@@ -74,7 +74,7 @@ paths:
         '200':
           description: message
           examples:
-            string: Created succefully
+            string: Created successfully
         '400':
           description: Bad request
           examples:
@@ -154,7 +154,7 @@ paths:
         x-expanded:
           description: Expanded DigitalIdentities
           schema:
-            $ref: '#/definitions/expandedDigitalIdenties'
+            $ref: '#/definitions/expandedDigitalIdentities'
       tags:
         - DigitalIdentities
       description: |
@@ -176,7 +176,7 @@ paths:
         '200':
           description: deleted
           examples:
-            string: Successfully deleted digitalIdentity with id ...
+            string: successfully deleted digitalIdentity with id ...
         '404':
           description: digitalIdentity not found
           examples:
@@ -226,7 +226,7 @@ paths:
       summary: Get digitalIdentity by id
     patch:
       consumes:
-        - aplication/json
+        - application/json
       produces:
         - string
       parameters:
@@ -244,7 +244,7 @@ paths:
         '200':
           description: deleted
           examples:
-            string: Successfully update digitalIdentity with id ...
+            string: successfully update digitalIdentity with id ...
         '400':
           description: Bad request
           examples:
@@ -264,7 +264,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - description: the number of page you want to get. defualt 1
+        - description: the number of page you want to get. default 1
           in: query
           name: page
           required: false
@@ -278,7 +278,7 @@ paths:
           required: false
           type: integer
         - description: |
-            comma separeted ids to get (id1,id2...) 
+            comma separated ids to get (id1,id2...)
           in: query
           name: ids
           required: false
@@ -348,7 +348,7 @@ paths:
         '200':
           description: message
           examples:
-            string: Created succefully
+            string: Created successfully
         '400':
           description: Bad request
           examples:
@@ -392,7 +392,7 @@ paths:
         - Entities
       description: |
         By passing the appropriate options, you can get an expanded entity
-      operationId: getEntityBydigitalIdentity
+      operationId: getEntityByDigitalIdentity
       summary: Get entity by digital Identity
   '/entities/group/{groupId}':
     get:
@@ -448,7 +448,7 @@ paths:
       description: |
         By passing the appropriate options, you can get an expanded entity
         and all the children under certain group (direct and undirect)
-      operationId: getEntitesByGroupId
+      operationId: getEntitiesByGroupId
       summary: Get entities by group id
   '/entities/hierarchy/{hierarchy}':
     get:
@@ -506,8 +506,8 @@ paths:
       description: |
         By passing the appropriate options, you can get an expanded entity
         and all the children under certain group (direct and undirect)
-      operationId: getEntitesByHierarchy
-      summary: Get entites by hierarchy
+      operationId: getEntitiesByHierarchy
+      summary: Get Entities by hierarchy
   '/entities/identifier/{identifier}':
     get:
       produces:
@@ -680,7 +680,7 @@ paths:
         '200':
           description: Entity
           examples:
-            string: Successfully deleted entity with id
+            string: successfully deleted entity with id
         '404':
           description: Entity not found
           examples:
@@ -779,7 +779,7 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully removed entity with id ...
+            string: successfully removed entity with id ...
         '400':
           description: Bad request
           examples:
@@ -789,14 +789,14 @@ paths:
           examples:
             string:
               - Entity with id not found
-              - Digital identeity with unipue_id not found
+              - Digital identity with unique_id not found
       tags:
         - Entities
       description: |
-        Disonnect between Entity and DigitalIdentity, DigitalIdentity uniqueId
+        Disconnect between Entity and DigitalIdentity, DigitalIdentity uniqueId
         should passed in the request's body
       operationId: disconnectEntityToDigitalIdentityById
-      summary: Disonnect Entity from it's DigitalIdentity
+      summary: Disconnect Entity from it's DigitalIdentity
     put:
       produces:
         - string
@@ -817,7 +817,7 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully connect entity with id to digitalIdentity with id
+            string: successfully connect entity with id to digitalIdentity with id
         '400':
           description: Bad request
           examples:
@@ -827,7 +827,7 @@ paths:
           examples:
             string:
               - Entity with id not found
-              - Digital identeity with unipue_id not found
+              - Digital identity with unique_id not found
       tags:
         - Entities
       description: |
@@ -841,7 +841,7 @@ paths:
         - string
       parameters:
         - description: |
-            name of the source 
+            name of the source
           in: query
           name: source
           required: false
@@ -901,7 +901,7 @@ paths:
         '200':
           description: message
           examples:
-            string: Created succefully
+            string: Created successfully
         '400':
           description: Bad request
           examples:
@@ -969,7 +969,7 @@ paths:
           required: false
           type: boolean
         - description: >-
-            terms to search in both name and hierarchy (overrided by name or
+            terms to search in both name and hierarchy (override by name or
             hierarchy), use it when you are not sure whether the4 term is a name
             of hierarchy
           in: query
@@ -1007,7 +1007,7 @@ paths:
         '200':
           description: Message
           examples:
-            string: Successfully deleted entity with id
+            string: successfully deleted entity with id
         '404':
           description: Group not found
           examples:
@@ -1092,7 +1092,7 @@ paths:
         - Groups
       description: |
         Get Group's children (groups)
-      operationId: getGroupChildrens
+      operationId: getGroupChildren
       summary: Get Group's children (groups)
   '/groups/{id}/parent/{parentId}':
     put:
@@ -1115,17 +1115,17 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully connect entity with id to digitalIdentity with id
+            string: successfully connect entity with id to digitalIdentity with id
         '400':
           description: Bad request
           examples:
-            string: DigitalIdenteity is required
+            string: DigitalIdentity is required
         '404':
           description: Entity not found
           examples:
             string:
               - Entity with id not found
-              - Digital identeity with unipue_id not found
+              - Digital identity with unique_id not found
       tags:
         - Groups
       description: |
@@ -1135,7 +1135,7 @@ paths:
   '/groups/{id}/rename':
     patch:
       consumes:
-        - aplication/json
+        - application/json
       produces:
         - string
       parameters:
@@ -1154,11 +1154,11 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully connect entity with id to digitalIdentity with id
+            string: successfully connect entity with id to digitalIdentity with id
         '400':
           description: Bad request
           examples:
-            string: DigitalIdenteity is required
+            string: DigitalIdentity is required
         '404':
           description: Entity not found
           examples:
@@ -1221,7 +1221,7 @@ paths:
         '200':
           description: message
           examples:
-            string: Created succefully
+            string: Created successfully
         '400':
           description: Bad request
           examples:
@@ -1258,7 +1258,7 @@ paths:
         - Roles
       description: |
         Get role by digital Identity
-      operationId: getRoleBydigitalIdentity
+      operationId: getRoleByDigitalIdentity
       summary: Get role by digital Identity
   '/roles/group/{groupId}':
     get:
@@ -1411,7 +1411,7 @@ paths:
         '200':
           description: deleted
           examples:
-            string: Successfully deleted role with id
+            string: successfully deleted role with id
         '404':
           description: role not found
           examples:
@@ -1450,7 +1450,7 @@ paths:
       summary: Get role by roleId
     patch:
       consumes:
-        - aplication/json
+        - application/json
       produces:
         - string
       parameters:
@@ -1468,7 +1468,7 @@ paths:
         '200':
           description: updated
           examples:
-            string: Successfully update role with id
+            string: successfully update role with id
         '404':
           description: role not found
           examples:
@@ -1501,17 +1501,17 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully disconnect Role with id from digitalIdentity with Id
+            string: successfully disconnect Role with id from digitalIdentity with Id
         '400':
           description: Bad request
           examples:
-            string: DigitalIdenteity is required
+            string: DigitalIdentity is required
         '404':
           description: Role or digitalIdentity not found
           examples:
             string:
               - Role with id not found
-              - Digital identeity with unipue_id not found
+              - Digital identity with unique_id not found
       tags:
         - Roles
       description: |
@@ -1538,17 +1538,17 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully connect Role with id to digitalIdentity with Id
+            string: successfully connect Role with id to digitalIdentity with Id
         '400':
           description: Bad request
           examples:
-            string: DigitalIdenteity is required
+            string: DigitalIdentity is required
         '404':
           description: Role or digitalIdentity not found
           examples:
             string:
               - Role with id not found
-              - Digital identeity with unipue_id not found
+              - Digital identity with unique_id not found
       tags:
         - Roles
       description: |
@@ -1576,7 +1576,7 @@ paths:
         '200':
           description: Success
           examples:
-            string: Successfully moved role with id to group with id
+            string: successfully moved role with id to group with id
         '400':
           description: Bad request
           examples:
@@ -1910,7 +1910,7 @@ definitions:
   entityExpanded:
     allOf:
       - $ref: '#/definitions/entity'
-      - $ref: '#/definitions/expandedDigitalIdentitesForEntity'
+      - $ref: '#/definitions/expandedDigitalIdentitiesForEntity'
   entityRes:
     items:
       $ref: '#/definitions/entity'
@@ -1924,26 +1924,26 @@ definitions:
     properties:
       meta:
         $ref: '#/definitions/entity_pictures_profile_meta'
-      path:
+      url:
         example: 'https://devante.net'
         type: string
     type: object
   entity_pictures_profile_meta:
     properties:
-      createdAt:
-        format: date-time
+      format:
+        format: string
         type: string
       updatedAt:
         format: date-time
         type: string
     type: object
-  expandedDigitalIdenties:
+  expandedDigitalIdentities:
     items:
       $ref: '#/definitions/digitalIdentityExpanded'
     type: array
-  expandedDigitalIdentitesForEntity:
+  expandedDigitalIdentitiesForEntity:
     properties:
-      digitalIdentites:
+      digitalIdentities:
         items:
           $ref: '#/definitions/digitalIdentityExpanded'
         type: array
@@ -1973,7 +1973,7 @@ definitions:
       isLeaf:
         type: boolean
       name:
-        example: Human resorce
+        example: Human resource
         type: string
       source:
         example: es
@@ -1990,7 +1990,7 @@ definitions:
   groupDTO:
     properties:
       name:
-        example: Human resorce
+        example: Human resource
         type: string
       parentId:
         example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
@@ -2013,7 +2013,7 @@ definitions:
     type: object
   role:
     properties:
-      clearence:
+      clearance:
         enum:
           - red
           - green
@@ -2079,4 +2079,3 @@ tags:
   - description: Operations about DigitalIdentities
     name: DigitalIdentities
 x-components: {}
-
