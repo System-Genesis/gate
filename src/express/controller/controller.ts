@@ -27,30 +27,23 @@ class Controller {
       timeout: 1000 * 60 * 60, // 1 hour
     };
 
-    if (req.url.includes('pictures')) {
-      options['responseType'] = 'stream';
-      let response;
-      response = await axios(options as any);
-      response.data.pipe(res);
-    } else {
-      let response;
-      response = await axios(options as any);
-      let result = response.data;
+    let response;
+    response = await axios(options as any);
+    let result = response.data;
 
-      if (req.method === 'GET') {
-        if (
-          Boolean(req.query.expanded) &&
-          (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
-        ) {
-          result = handleExpandedResult(result, res.locals.entityType, scopes);
-        } else if (Array.isArray(result)) {
-          result = result.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
-        } else {
-          result = applyTransform(result, scopes, res.locals.entityType);
-        }
+    if (req.method === 'GET') {
+      if (
+        Boolean(req.query.expanded) &&
+        (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
+      ) {
+        result = handleExpandedResult(result, res.locals.entityType, scopes);
+      } else if (Array.isArray(result)) {
+        result = result.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
+      } else {
+        result = applyTransform(result, scopes, res.locals.entityType);
       }
-      res.status(response.status).set(response.headers).send(result);
     }
+    res.status(response.status).set(response.headers).send(result);
   }
 }
 

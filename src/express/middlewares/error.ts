@@ -16,7 +16,11 @@ export const errorMiddleware = (
   _next: express.NextFunction
 ) => {
   const status = error.response?.status || 500;
-  const resBody = error.response?.data || { message: error.message };
+
+  const resBody =
+    error.response.config.responseType === 'stream'
+      ? { message: error.response.statusText }
+      : error.response?.data || { message: error.message };
   res.status(status).json({
     ...resBody,
     status,

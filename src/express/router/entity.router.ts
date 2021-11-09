@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import Controller from '../controller/controller';
+import PicturesController from '../controller/pictures.controller';
 import wrapController from '../../utils/wrapController';
 import { setEntityType, setService } from '../middlewares';
 import config from '../../config/index';
@@ -37,7 +38,7 @@ entityRouter.get('/', wrapController(setService(read)), wrapController(Controlle
 entityRouter.get(
   '/:identifier/pictures/profile',
   wrapController(setService(read)),
-  wrapController(Controller.proxyRequest)
+  wrapController(PicturesController.proxyRequest)
 );
 
 entityRouter.put(
