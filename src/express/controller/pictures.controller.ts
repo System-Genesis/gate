@@ -28,6 +28,7 @@ class PicturesController {
 
     // let response: AxiosResponse<Readable>;
     const response: AxiosResponse<any> = await axios(options as any);
+    res.writeHead(200, { 'Content-Type': 'image/jpeg' });
     response.data.pipe(res);
   }
 }
