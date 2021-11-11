@@ -6,7 +6,7 @@ const conditionsMap = {
     startsWithCondition,
 };
 
-const fieldExclude = (entity: any, transformer: any) => {
+const fieldExclude = (entity: any, transformer: any, originalEntity: any) => {
     const { targetField, conditions } = transformer;
 
     const entityCopy = { ...entity };
@@ -20,13 +20,13 @@ const fieldExclude = (entity: any, transformer: any) => {
     const targetValue = conditions[0].value;
     const conditionMethod = conditionsMap[conditions[0].method];
 
-    if (!entity[targetField] || !entity[fieldToCheck]) return entity;
+    if (!entityCopy[targetField] || !originalEntity[fieldToCheck]) return entityCopy;
 
-    if (conditionMethod(entityCopy[fieldToCheck], targetValue)) delete entityCopy[targetField];
+    if (conditionMethod(originalEntity[fieldToCheck], targetValue)) delete entityCopy[targetField];
     return entityCopy;
 };
 
-const arrayFilter = (entity: any, transformer: any) => {
+const arrayFilter = (entity: any, transformer: any, _originalEntity: any) => {
     const { targetField, conditions } = transformer;
 
     const fieldToCheck = conditions[0].field;
@@ -42,7 +42,7 @@ const arrayFilter = (entity: any, transformer: any) => {
     return entityCopy;
 };
 
-const arrayMapper = (entity: any, transformer: any) => {
+const arrayMapper = (entity: any, transformer: any, originalEntity: any) => {
     const { targetField } = transformer;
     const innerTransformer = transformer.transformer;
     const { method } = innerTransformer;
@@ -50,11 +50,11 @@ const arrayMapper = (entity: any, transformer: any) => {
     // const targetValue = conditions.value;
     // const conditionMethod = conditionsMap[conditions.method];
 
-    const transformerMethod = transformerMap[method];
+    const innerTransformerMethod = transformerMap[method];
 
     if (!entity[targetField]) return entity;
 
-    const modifedTargetField = entity[targetField].map((obj) => transformerMethod(obj, innerTransformer));
+    const modifedTargetField = entity[targetField].map((obj) => innerTransformerMethod(obj, innerTransformer, originalEntity));
 
     const entityCopy = { ...entity };
     entityCopy[targetField] = modifedTargetField;
