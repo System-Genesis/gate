@@ -1,4 +1,3 @@
-[0mGET /api/entities/8753679/pictures/profile [33m404[0m 6092.480 ms - 36[0m
-[0mGET /api/entities/8753670/pictures/profile [32m200[0m 301.980 ms - -[0m
-[0mGET /api/entities/8753679/pictures/profile [33m404[0m 3400.262 ms - 36[0m
-[0mGET /api/entities/identifier/8753679 [33m404[0m 151.364 ms - 36[0m
+[0mGET /api/groups/618a2b810df86d40b6cd5a1a/diPrefix [32m200[0m 61.821 ms - 18[0m
+[0mGET /api/groups/618a2b810df86d40b6cd5a1a/diPrefix [32m200[0m 8.191 ms - 18[0m
+[0mGET /api/groups/618a2b810df86d40b6cd5a1a/diPrefix [32m200[0m 6.891 ms - 18[0m
