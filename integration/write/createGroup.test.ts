@@ -16,7 +16,7 @@ describe("VALID CREATIONS", () => {
   const fatherGroupToCreate: any = {
     name: allSources[1],
     source: allSources[1],
-    diPrefix: "123"
+    diPrefix: "1234"
   };
 
   afterEach(() => {
@@ -49,7 +49,7 @@ describe("VALID CREATIONS", () => {
           console.log(err);
           throw done(err);
         }
-        expect(res.body).toBe("1234")
+        expect(res.body).toStrictEqual({ diPrefix: "1234" })
 
         return done();
       });
@@ -127,7 +127,7 @@ describe("VALID CREATIONS", () => {
           console.log(err);
           throw done(err);
         }
-        expect(res.body).toBe("1234")
+        expect(res.body).toStrictEqual({ diPrefix: "1234" })
 
         return done();
       });
