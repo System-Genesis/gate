@@ -1,3 +1,6 @@
-[0mGET /api/groups/618a2b810df86d40b6cd5a1a/diPrefix [32m200[0m 61.821 ms - 18[0m
-[0mGET /api/groups/618a2b810df86d40b6cd5a1a/diPrefix [32m200[0m 8.191 ms - 18[0m
-[0mGET /api/groups/618a2b810df86d40b6cd5a1a/diPrefix [32m200[0m 6.891 ms - 18[0m
+[0mGET /docs/ [36m304[0m 5.835 ms - -[0m
+[0mGET /docs/swagger-ui.css [36m304[0m 3.048 ms - -[0m
+[0mGET /docs/swagger-ui-bundle.js [36m304[0m 2.374 ms - -[0m
+[0mGET /docs/swagger-ui-standalone-preset.js [36m304[0m 2.000 ms - -[0m
+[0mHEAD /docs/ [36m304[0m 0.707 ms - -[0m
+[0mGET /api-docs [32m200[0m 2.372 ms - -[0m
