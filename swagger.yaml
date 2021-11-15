@@ -1,11 +1,11 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   contact:
     email: you@your-company.com
   description: API of Kartoffel server
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
   title: Swagger Kartoffel 2.0
   version: 2.0.0
 host: virtserver.swaggerhub.com
@@ -45,16 +45,16 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: DigitalIdentities
           schema:
-            $ref: '#/definitions/digitalIdentityRes'
-        '400':
+            $ref: "#/definitions/digitalIdentityRes"
+        "400":
           description: Bad request
         x-expanded:
           description: Expanded DigitalIdentities
           schema:
-            $ref: '#/definitions/expandedDigitalIdentities'
+            $ref: "#/definitions/expandedDigitalIdentities"
       tags:
         - DigitalIdentities
       operationId: getAllDigitalIdentities
@@ -69,23 +69,23 @@ paths:
           in: body
           name: body
           schema:
-            $ref: '#/definitions/digitalIdentityDTO'
+            $ref: "#/definitions/digitalIdentityDTO"
       responses:
-        '200':
+        "200":
           description: message
           examples:
             string: Created successfully
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Bad request
-        '401':
+        "401":
           description: Unauthorized
           examples:
             string: Unauthorized
       tags:
         - DigitalIdentities
-  '/digitalIdentities/role/{roleId}':
+  "/digitalIdentities/role/{roleId}":
     get:
       produces:
         - application/json
@@ -105,18 +105,18 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: DigitalIdentity
           schema:
-            $ref: '#/definitions/digitalIdentity'
-        '404':
+            $ref: "#/definitions/digitalIdentity"
+        "404":
           description: role with uniqueId not found
           examples:
             string: Role with uniqueId not found
         x-expanded:
           description: DigitalIdentity expanded
           schema:
-            $ref: '#/definitions/digitalIdentityExpanded'
+            $ref: "#/definitions/digitalIdentityExpanded"
       tags:
         - DigitalIdentities
       description: |
@@ -143,25 +143,25 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: DigitalIdentities
           schema:
-            $ref: '#/definitions/digitalIdentityRes'
-        '400':
+            $ref: "#/definitions/digitalIdentityRes"
+        "400":
           description: Bad request
           examples:
             string: Bad Request
         x-expanded:
           description: Expanded DigitalIdentities
           schema:
-            $ref: '#/definitions/expandedDigitalIdentities'
+            $ref: "#/definitions/expandedDigitalIdentities"
       tags:
         - DigitalIdentities
       description: |
         search DigitalIdentities by uniqueId (returns the top 20 results)
       operationId: searchDigitalIdentities
       summary: search a DigitalIdentities or uniqueId
-  '/digitalIdentities/{id}':
+  "/digitalIdentities/{id}":
     delete:
       produces:
         - string
@@ -173,11 +173,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: deleted
           examples:
             string: successfully deleted digitalIdentity with id ...
-        '404':
+        "404":
           description: digitalIdentity not found
           examples:
             string: digitalIdentity with id not found
@@ -206,18 +206,18 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: DigitalIdentity
           schema:
-            $ref: '#/definitions/digitalIdentity'
-        '404':
+            $ref: "#/definitions/digitalIdentity"
+        "404":
           description: DigitalIdentity with uniqueId not found
           examples:
             string: DigitalIdentity with uniqueId ... not found
         x-expanded:
           description: DigitalIdentity expanded
           schema:
-            $ref: '#/definitions/digitalIdentityExpanded'
+            $ref: "#/definitions/digitalIdentityExpanded"
       tags:
         - DigitalIdentities
       description: |
@@ -239,17 +239,17 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/digitalIdentities_id_body'
+            $ref: "#/definitions/digitalIdentities_id_body"
       responses:
-        '200':
+        "200":
           description: deleted
           examples:
             string: successfully update digitalIdentity with id ...
-        '400':
+        "400":
           description: Bad request
           examples:
             string: unknown field Batata
-        '404':
+        "404":
           description: digitalIdentity not found
           examples:
             string: role with id not found
@@ -315,18 +315,18 @@ paths:
           name: updateFrom
           required: false
           type: string
-          x-example: '2021-06-06T07:25:45.363Z'
+          x-example: "2021-06-06T07:25:45.363Z"
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entityRes'
-        '400':
+            $ref: "#/definitions/entityRes"
+        "400":
           description: Bad request
         x-expanded:
           description: Expanded entities
           schema:
-            $ref: '#/definitions/entitiesExpanded'
+            $ref: "#/definitions/entitiesExpanded"
       tags:
         - Entities
       description: |
@@ -343,23 +343,23 @@ paths:
           in: body
           name: body
           schema:
-            $ref: '#/definitions/entityDTO'
+            $ref: "#/definitions/entityDTO"
       responses:
-        '200':
+        "200":
           description: message
           examples:
             string: Created successfully
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Bad request
-        '401':
+        "401":
           description: Unauthorized
           examples:
             string: Unauthorized
       tags:
         - Entities
-  '/entities/digitalIdentity/{digitalIdentityUniqueId}':
+  "/entities/digitalIdentity/{digitalIdentityUniqueId}":
     get:
       produces:
         - application/json
@@ -378,23 +378,23 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entity'
-        '404':
+            $ref: "#/definitions/entity"
+        "404":
           description: Entity with id not found
         x-expanded:
           description: Entity expanded
           schema:
-            $ref: '#/definitions/entityExpanded'
+            $ref: "#/definitions/entityExpanded"
       tags:
         - Entities
       description: |
         By passing the appropriate options, you can get an expanded entity
       operationId: getEntityByDigitalIdentity
       summary: Get entity by digital Identity
-  '/entities/group/{groupId}':
+  "/entities/group/{groupId}":
     get:
       produces:
         - application/json
@@ -433,16 +433,16 @@ paths:
           required: false
           type: integer
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entityRes'
-        '404':
+            $ref: "#/definitions/entityRes"
+        "404":
           description: Group with id not found
         x-expanded:
           description: Expanded entities
           schema:
-            $ref: '#/definitions/entitiesExpanded'
+            $ref: "#/definitions/entitiesExpanded"
       tags:
         - Entities
       description: |
@@ -450,7 +450,7 @@ paths:
         and all the children under certain group (direct and undirect)
       operationId: getEntitiesByGroupId
       summary: Get entities by group id
-  '/entities/hierarchy/{hierarchy}':
+  "/entities/hierarchy/{hierarchy}":
     get:
       produces:
         - application/json
@@ -491,16 +491,16 @@ paths:
           required: false
           type: integer
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entityRes'
-        '404':
+            $ref: "#/definitions/entityRes"
+        "404":
           description: Group with id not found
         x-expanded:
           description: Expanded entities
           schema:
-            $ref: '#/definitions/entitiesExpanded'
+            $ref: "#/definitions/entitiesExpanded"
       tags:
         - Entities
       description: |
@@ -508,7 +508,7 @@ paths:
         and all the children under certain group (direct and undirect)
       operationId: getEntitiesByHierarchy
       summary: Get Entities by hierarchy
-  '/entities/identifier/{identifier}':
+  "/entities/identifier/{identifier}":
     get:
       produces:
         - application/json
@@ -527,23 +527,23 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entity'
-        '404':
+            $ref: "#/definitions/entity"
+        "404":
           description: Entity with id not found
         x-expanded:
           description: Entity expanded
           schema:
-            $ref: '#/definitions/entityExpanded'
+            $ref: "#/definitions/entityExpanded"
       tags:
         - Entities
       description: |
         By passing the appropriate options, you can get an expanded entity
       operationId: getEntityByIdentifier
       summary: Get entity by identifier
-  '/entities/role/{roleId}':
+  "/entities/role/{roleId}":
     get:
       produces:
         - application/json
@@ -562,16 +562,16 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entity'
-        '404':
+            $ref: "#/definitions/entity"
+        "404":
           description: Entity with id not found
         x-expanded:
           description: Entity expanded
           schema:
-            $ref: '#/definitions/entityExpanded'
+            $ref: "#/definitions/entityExpanded"
       tags:
         - Entities
       description: |
@@ -627,25 +627,25 @@ paths:
           type: string
           x-example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entityRes'
-        '400':
+            $ref: "#/definitions/entityRes"
+        "400":
           description: Bad request
           examples:
             string: Bad Request
         x-expanded:
           description: Expanded entities
           schema:
-            $ref: '#/definitions/entitiesExpanded'
+            $ref: "#/definitions/entitiesExpanded"
       tags:
         - Entities
       description: |
         search Entity with filters
       operationId: searchEntity
       summary: search an entities by full name
-  '/entities/{identifier}/pictures/profile':
+  "/entities/{identifier}/pictures/profile":
     get:
       parameters:
         - description: |
@@ -655,9 +655,9 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Stream of a picture
-        '404':
+        "404":
           description: Entity not found or does not have profile picture
       tags:
         - Entities
@@ -665,7 +665,7 @@ paths:
         By passing the appropriate options, you can get an expanded entity
       operationId: getPictureByIdentifier
       summary: Get entity by identifier
-  '/entities/{id}':
+  "/entities/{id}":
     delete:
       produces:
         - string
@@ -677,11 +677,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           examples:
             string: successfully deleted entity with id
-        '404':
+        "404":
           description: Entity not found
           examples:
             string: Entity with id not found
@@ -709,16 +709,16 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entity'
-        '404':
+            $ref: "#/definitions/entity"
+        "404":
           description: Entity with id not found
         x-expanded:
           description: Entity expanded
           schema:
-            $ref: '#/definitions/entityExpanded'
+            $ref: "#/definitions/entityExpanded"
       tags:
         - Entities
       description: |
@@ -741,13 +741,13 @@ paths:
           in: body
           name: body
           schema:
-            $ref: '#/definitions/entityDTO'
+            $ref: "#/definitions/entityDTO"
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/entityRes'
-        '404':
+            $ref: "#/definitions/entityRes"
+        "404":
           description: Entity with id not found
       tags:
         - Entities
@@ -758,7 +758,7 @@ paths:
         already exists
       operationId: updateEntityById
       summary: Update entity by id
-  '/entities/{id}/digitalIdentity/{uniqueId}':
+  "/entities/{id}/digitalIdentity/{uniqueId}":
     delete:
       produces:
         - string
@@ -776,15 +776,15 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully removed entity with id ...
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Invalid id
-        '404':
+        "404":
           description: Entity not found
           examples:
             string:
@@ -814,15 +814,15 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully connect entity with id to digitalIdentity with id
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Invalid id
-        '404':
+        "404":
           description: Entity not found
           examples:
             string:
@@ -872,11 +872,11 @@ paths:
           required: false
           type: integer
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/groupRes'
-        '404':
+            $ref: "#/definitions/groupRes"
+        "404":
           description: Group with id not found
           examples:
             string: Group with id not found
@@ -896,24 +896,24 @@ paths:
           in: body
           name: body
           schema:
-            $ref: '#/definitions/groupDTO'
+            $ref: "#/definitions/groupDTO"
       responses:
-        '200':
+        "200":
           description: message
           examples:
             string: Created successfully
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Bad request
-        '401':
+        "401":
           description: Unauthorized
           examples:
             string: Unauthorized
       tags:
         - Groups
       summary: Create a new Group
-  '/groups/hierarchy/{hierarchy}':
+  "/groups/hierarchy/{hierarchy}":
     get:
       produces:
         - application/json
@@ -926,11 +926,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Group
           schema:
-            $ref: '#/definitions/group'
-        '404':
+            $ref: "#/definitions/group"
+        "404":
           description: Group with id not found
       tags:
         - Groups
@@ -977,11 +977,11 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: Group
           schema:
-            $ref: '#/definitions/group'
-        '400':
+            $ref: "#/definitions/group"
+        "400":
           description: Bad request
           examples:
             string: Bad Request
@@ -991,7 +991,7 @@ paths:
         search Group with filters
       operationId: searchGroups
       summary: search a Group
-  '/groups/{id}':
+  "/groups/{id}":
     delete:
       produces:
         - string
@@ -1004,11 +1004,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Message
           examples:
             string: successfully deleted entity with id
-        '404':
+        "404":
           description: Group not found
           examples:
             string: Group with id ... not found
@@ -1031,11 +1031,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/group'
-        '404':
+            $ref: "#/definitions/group"
+        "404":
           description: Group with id not found
           examples:
             string: Group with id not found
@@ -1045,7 +1045,7 @@ paths:
         Get Group by id
       operationId: getGroupById
       summary: Get Group by id
-  '/groups/{id}/children':
+  "/groups/{id}/children":
     get:
       produces:
         - application/json
@@ -1078,13 +1078,13 @@ paths:
           required: false
           type: boolean
       responses:
-        '200':
+        "200":
           description: Groups
           schema:
             items:
-              $ref: '#/definitions/group'
+              $ref: "#/definitions/group"
             type: array
-        '404':
+        "404":
           description: Group with id not found
           examples:
             string: Group with id not found
@@ -1094,7 +1094,7 @@ paths:
         Get Group's children (groups)
       operationId: getGroupChildren
       summary: Get Group's children (groups)
-  '/groups/{id}/parent/{parentId}':
+  "/groups/{id}/parent/{parentId}":
     put:
       produces:
         - string
@@ -1112,15 +1112,15 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully connect entity with id to digitalIdentity with id
-        '400':
+        "400":
           description: Bad request
           examples:
             string: DigitalIdentity is required
-        '404':
+        "404":
           description: Entity not found
           examples:
             string:
@@ -1132,7 +1132,7 @@ paths:
         Change Group's parent
       operationId: changeGroupParent
       summary: Change Group's parent
-  '/groups/{id}/rename':
+  "/groups/{id}/rename":
     patch:
       consumes:
         - application/json
@@ -1149,22 +1149,92 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/id_rename_body'
+            $ref: "#/definitions/id_rename_body"
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully connect entity with id to digitalIdentity with id
-        '400':
+        "400":
           description: Bad request
           examples:
             string: DigitalIdentity is required
-        '404':
+        "404":
           description: Entity not found
           examples:
             string:
               - Entity with id not found
               - Digital identity with uniqueId not found
+      tags:
+        - Groups
+      description: |
+        Change Group's parent
+      operationId: changeGroupName
+      summary: Change Group's parent
+  "/groups/{id}/diPrefix":
+    get:
+      consumes:
+        - application/json
+      produces:
+        - string
+      parameters:
+        - description: |
+            Group id
+          format: uuid
+          in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/diPrefix"
+        "400":
+          description: Bad request
+          examples:
+            string: Di prefix is required
+        "404":
+          description: Group not found
+          examples:
+            string: Group with id not found
+      tags:
+        - Groups
+      description: |
+        Get Group's di prefix
+      operationId: getGroupDiPrefix
+      summary: Get Group's di prefix
+  "/groups/{id}/":
+    patch:
+      consumes:
+        - application/json
+      produces:
+        - string
+      parameters:
+        - description: |
+            Group id
+          format: uuid
+          in: path
+          name: id
+          required: true
+          type: string
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/id_diPrefix_body"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/id_patch_body"
+        "400":
+          description: Bad request
+          examples:
+            string: group id is required
+        "404":
+          description: Group not found
+          examples:
+            string: Group with id not found
       tags:
         - Groups
       description: |
@@ -1196,11 +1266,11 @@ paths:
           required: false
           type: integer
       responses:
-        '200':
+        "200":
           description: Role
           schema:
-            $ref: '#/definitions/roleRes'
-        '400':
+            $ref: "#/definitions/roleRes"
+        "400":
           description: Bad request
       tags:
         - Roles
@@ -1216,24 +1286,24 @@ paths:
           in: body
           name: body
           schema:
-            $ref: '#/definitions/role'
+            $ref: "#/definitions/role"
       responses:
-        '200':
+        "200":
           description: message
           examples:
             string: Created successfully
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Bad request
-        '401':
+        "401":
           description: Unauthorized
           examples:
             string: Unauthorized
       tags:
         - Roles
       summary: create a new role
-  '/roles/digitalIdentity/{digitalIdentityUniqueId}':
+  "/roles/digitalIdentity/{digitalIdentityUniqueId}":
     get:
       produces:
         - application/json
@@ -1246,11 +1316,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/role'
-        '404':
+            $ref: "#/definitions/role"
+        "404":
           description: role with digitalIdentity uniqueId not found
           examples:
             string: Role with digitalIdentity uniqueId not found
@@ -1260,7 +1330,7 @@ paths:
         Get role by digital Identity
       operationId: getRoleByDigitalIdentity
       summary: Get role by digital Identity
-  '/roles/group/{groupId}':
+  "/roles/group/{groupId}":
     get:
       produces:
         - application/json
@@ -1293,13 +1363,13 @@ paths:
           required: false
           type: integer
       responses:
-        '200':
+        "200":
           description: Roles
           schema:
             items:
-              $ref: '#/definitions/roleRes'
+              $ref: "#/definitions/roleRes"
             type: array
-        '404':
+        "404":
           description: Group with id not found
           examples:
             string: Group with id not found
@@ -1310,7 +1380,7 @@ paths:
         group
       operationId: getRolesByGroupId
       summary: Get roles by group id
-  '/roles/hierarchy/{hierarchy}':
+  "/roles/hierarchy/{hierarchy}":
     get:
       produces:
         - application/json
@@ -1344,13 +1414,13 @@ paths:
           required: false
           type: integer
       responses:
-        '200':
+        "200":
           description: Roles
           schema:
             items:
-              $ref: '#/definitions/roleRes'
+              $ref: "#/definitions/roleRes"
             type: array
-        '404':
+        "404":
           description: Group with id not found
           examples:
             string: Group with hierarchy not found
@@ -1380,13 +1450,13 @@ paths:
           required: false
           type: string
       responses:
-        '200':
+        "200":
           description: Roles
           schema:
             items:
-              $ref: '#/definitions/role'
+              $ref: "#/definitions/role"
             type: array
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Bad Request
@@ -1396,7 +1466,7 @@ paths:
         search Roles by hierarchy or roleId (returns the top 20 results)
       operationId: searchRole
       summary: search a role by hierarchy or roleId
-  '/roles/{roleId}':
+  "/roles/{roleId}":
     delete:
       produces:
         - string
@@ -1408,11 +1478,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: deleted
           examples:
             string: successfully deleted role with id
-        '404':
+        "404":
           description: role not found
           examples:
             string: role with id not found
@@ -1434,11 +1504,11 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Entity
           schema:
-            $ref: '#/definitions/role'
-        '404':
+            $ref: "#/definitions/role"
+        "404":
           description: role with uniqueId not found
           examples:
             string: Role with uniqueId not found
@@ -1463,13 +1533,13 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/roles_roleId_body'
+            $ref: "#/definitions/roles_roleId_body"
       responses:
-        '200':
+        "200":
           description: updated
           examples:
             string: successfully update role with id
-        '404':
+        "404":
           description: role not found
           examples:
             string: role with id not found
@@ -1480,7 +1550,7 @@ paths:
         <strong>/roles/{roleId}/moveToGroup</strong>
       operationId: updateRoleById
       summary: Update Role
-  '/roles/{roleId}/digitalIdentity/{digitalIdentityId}':
+  "/roles/{roleId}/digitalIdentity/{digitalIdentityId}":
     delete:
       produces:
         - string
@@ -1498,15 +1568,15 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully disconnect Role with id from digitalIdentity with Id
-        '400':
+        "400":
           description: Bad request
           examples:
             string: DigitalIdentity is required
-        '404':
+        "404":
           description: Role or digitalIdentity not found
           examples:
             string:
@@ -1535,15 +1605,15 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully connect Role with id to digitalIdentity with Id
-        '400':
+        "400":
           description: Bad request
           examples:
             string: DigitalIdentity is required
-        '404':
+        "404":
           description: Role or digitalIdentity not found
           examples:
             string:
@@ -1555,7 +1625,7 @@ paths:
         Connect between Role and DigitalIdentity
       operationId: connectRoleToDigitalIdentityById
       summary: Connect between Role and DigitalIdentity
-  '/roles/{roleId}/group/{groupId}':
+  "/roles/{roleId}/group/{groupId}":
     put:
       produces:
         - string
@@ -1573,15 +1643,15 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Success
           examples:
             string: successfully moved role with id to group with id
-        '400':
+        "400":
           description: Bad request
           examples:
             string: Invalid id
-        '404':
+        "404":
           description: group or role not found
           examples:
             string:
@@ -1676,33 +1746,33 @@ definitions:
     type: object
   digitalIdentityExpanded:
     allOf:
-      - $ref: '#/definitions/digitalIdentity'
-      - $ref: '#/definitions/expandedRole'
+      - $ref: "#/definitions/digitalIdentity"
+      - $ref: "#/definitions/expandedRole"
   digitalIdentityRes:
     items:
-      $ref: '#/definitions/digitalIdentity'
+      $ref: "#/definitions/digitalIdentity"
     type: array
   entitiesExpanded:
     items:
-      $ref: '#/definitions/entityExpanded'
+      $ref: "#/definitions/entityExpanded"
     type: array
   entity:
     properties:
       address:
-        example: '962 Darion Streets, Irving'
+        example: "962 Darion Streets, Irving"
         type: string
       akaUnit:
         example: Lions
         type: string
       birthDate:
-        example: '2016-08-29T09:12:33.001Z'
+        example: "2016-08-29T09:12:33.001Z"
         format: date-time
         type: string
       clearance:
-        example: '6'
+        example: "6"
         type: string
       createdAt:
-        example: '2016-08-29T09:12:33.001Z'
+        example: "2016-08-29T09:12:33.001Z"
         format: date-time
         type: string
       directGroup:
@@ -1710,7 +1780,7 @@ definitions:
         format: uuid
         type: string
       dischargeDay:
-        example: '2016-08-29T09:12:33.001Z'
+        example: "2016-08-29T09:12:33.001Z"
         format: date-time
         type: string
       displayName:
@@ -1740,7 +1810,7 @@ definitions:
         format: uuid
         type: string
       identityCard:
-        example: '234567891'
+        example: "234567891"
         pattern: '^\d{6,9}$'
         type: string
       jobTitle:
@@ -1762,19 +1832,19 @@ definitions:
           type: string
         type: array
       personalNumber:
-        example: '3456712'
+        example: "3456712"
         pattern: '^\d{6,9}$'
         type: string
       phone:
         example:
           - 09-0000000
-          - '012222222'
+          - "012222222"
         items:
           pattern: '^\d{1,2}-?\d{6,7}$]'
           type: string
         type: array
       pictures:
-        $ref: '#/definitions/entity_pictures'
+        $ref: "#/definitions/entity_pictures"
       rank:
         enum:
           - champ
@@ -1797,7 +1867,7 @@ definitions:
           - inactive
         type: string
       updatedAt:
-        example: '2016-08-29T09:12:33.001Z'
+        example: "2016-08-29T09:12:33.001Z"
         format: date-time
         type: string
     required:
@@ -1829,20 +1899,20 @@ definitions:
   entityDTO:
     properties:
       address:
-        example: '962 Darion Streets, Irving'
+        example: "962 Darion Streets, Irving"
         type: string
       akaUnit:
         example: Lions
         type: string
       birthDate:
-        example: '2016-08-29T09:12:33.001Z'
+        example: "2016-08-29T09:12:33.001Z"
         format: date-time
         type: string
       clearance:
-        example: '6'
+        example: "6"
         type: string
       dischargeDay:
-        example: '2016-08-29T09:12:33.001Z'
+        example: "2016-08-29T09:12:33.001Z"
         format: date-time
         type: string
       entityType:
@@ -1856,7 +1926,7 @@ definitions:
         example: John
         type: string
       identityCard:
-        example: '234567891'
+        example: "234567891"
         pattern: '^\d{6,9}$'
         type: string
       lastName:
@@ -1871,19 +1941,19 @@ definitions:
           type: string
         type: array
       personalNumber:
-        example: '3456712'
+        example: "3456712"
         pattern: '^\d{6,9}$'
         type: string
       phone:
         example:
           - 09-0000000
-          - '012222222'
+          - "012222222"
         items:
           pattern: '^\d{1,2}-?\d{6,7}$]'
           type: string
         type: array
       pictures:
-        $ref: '#/definitions/entity_pictures'
+        $ref: "#/definitions/entity_pictures"
       rank:
         enum:
           - champ
@@ -1909,23 +1979,23 @@ definitions:
     type: object
   entityExpanded:
     allOf:
-      - $ref: '#/definitions/entity'
-      - $ref: '#/definitions/expandedDigitalIdentitiesForEntity'
+      - $ref: "#/definitions/entity"
+      - $ref: "#/definitions/expandedDigitalIdentitiesForEntity"
   entityRes:
     items:
-      $ref: '#/definitions/entity'
+      $ref: "#/definitions/entity"
     type: array
   entity_pictures:
     properties:
       profile:
-        $ref: '#/definitions/entity_pictures_profile'
+        $ref: "#/definitions/entity_pictures_profile"
     type: object
   entity_pictures_profile:
     properties:
       meta:
-        $ref: '#/definitions/entity_pictures_profile_meta'
+        $ref: "#/definitions/entity_pictures_profile_meta"
       url:
-        example: 'https://devante.net'
+        example: "https://devante.net"
         type: string
     type: object
   entity_pictures_profile_meta:
@@ -1939,20 +2009,25 @@ definitions:
     type: object
   expandedDigitalIdentities:
     items:
-      $ref: '#/definitions/digitalIdentityExpanded'
+      $ref: "#/definitions/digitalIdentityExpanded"
     type: array
   expandedDigitalIdentitiesForEntity:
     properties:
       digitalIdentities:
         items:
-          $ref: '#/definitions/digitalIdentityExpanded'
+          $ref: "#/definitions/digitalIdentityExpanded"
         type: array
     type: object
   expandedRole:
     properties:
       role:
-        $ref: '#/definitions/role'
+        $ref: "#/definitions/role"
     type: object
+  diPrefix:
+    properties:
+      diPrefix:
+        example: "123"
+        type: string
   group:
     properties:
       ancestors:
@@ -2002,13 +2077,27 @@ definitions:
     type: object
   groupRes:
     items:
-      $ref: '#/definitions/group'
+      $ref: "#/definitions/group"
     type: array
   id_rename_body:
     properties:
       name:
         description: new name
         example: Morning Riders
+        type: string
+    type: object
+  id_diPrefix_body:
+    properties:
+      diPrefix:
+        description: new di prefix
+        example: 123
+        type: string
+    type: object
+  id_patch_body:
+    properties:
+      id:
+        description: id of group patched
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
         type: string
     type: object
   role:
@@ -2061,7 +2150,7 @@ definitions:
     type: object
   roleRes:
     items:
-      $ref: '#/definitions/role'
+      $ref: "#/definitions/role"
     type: array
   roles_roleId_body:
     properties:
