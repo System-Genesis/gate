@@ -11,15 +11,13 @@ const applyTransform = (entity: EntityDTO | RoleDTO | DigitalIdentityDTO, userSc
     } = config;
 
     const userTransformersNames = getUserTransformersNames(userScopes, scopes);
-
     const targetTransformers: any = transformers[type];
-
-    const RelevantTransformers = targetTransformers.filter((transformer) => userTransformersNames.includes(transformer.name));
+    const relevantTransformers = targetTransformers.filter((transformer) => userTransformersNames.includes(transformer.name));
 
     let entityCopy = { ...entity };
     
-    RelevantTransformers.forEach((transformer) => {
-        entityCopy = transformerMap[transformer.method](entityCopy, transformer);
+    relevantTransformers.forEach((transformer) => {
+        entityCopy = transformerMap[transformer.method](entityCopy, transformer, entity);
     });
 
     return entityCopy;
