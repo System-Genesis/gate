@@ -38,8 +38,8 @@ roleRouter.get(
   wrapController(setService(elastic)),
   wrapController(Controller.proxyRequest)
 );
-roleRouter.patch(
-  "/:roleId/moveToGroup",
+roleRouter.put(
+  "/:roleId/group/:groupId",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );
@@ -50,11 +50,6 @@ roleRouter.put(
 );
 roleRouter.delete(
   "/:roleId/digitalIdentity/:digitalIdentityId",
-  wrapController(setService(write)),
-  wrapController(Controller.proxyRequest)
-);
-roleRouter.patch(
-  ":roleId/replaceDigitalIdentity",
   wrapController(setService(write)),
   wrapController(Controller.proxyRequest)
 );

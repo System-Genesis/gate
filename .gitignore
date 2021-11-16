@@ -9,4 +9,5 @@ npm-debug.log
 /coverage
 .env
 !example.env
-./access.log
+
+/access.log
