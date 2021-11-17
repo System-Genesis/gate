@@ -21,7 +21,7 @@ digitalIdentitiesRouter.get(
 );
 
 digitalIdentitiesRouter.get(
-  'role/:roleId',
+  '/role/:roleId',
   wrapController(setService(read)),
   wrapController(Controller.proxyRequest)
 );
