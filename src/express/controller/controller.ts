@@ -5,6 +5,7 @@ import axios from 'axios';
 import { DigitalIdentityDTO, EntityDTO, QueryParams, RoleDTO, typesOfEntities } from '../../types';
 import QueryString from 'qs';
 import config from '../../config';
+import { extractScopes } from '../../helpers';
 const { entitiesType } = config;
 class Controller {
   static async proxyRequest(req: Request, res: Response, _) {
@@ -83,15 +84,6 @@ function expandedDi(result, scopes: string[]) {
   }
 
   return transDi;
-}
-
-function extractScopes(token: string): string[] {
-  try {
-    const scopes = JSON.parse(Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')).scope;
-    return Array.isArray(scopes) ? scopes : [scopes];
-  } catch (err) {
-    return [];
-  }
 }
 
 export default Controller;

@@ -14,6 +14,10 @@ const config = {
       read: env.get('READ_SERVICE').required().asString(),
       write: env.get('WRITE_SERVICE').required().asString(),
     },
+    apm: { 
+      url: env.get('APM_SERVER').required().asString(),
+      secretToken: env.get('APM_SECRET_TOKEN').asString(),
+    },
   },
   spike: {
     myAud: env.get('KARTOFFEL_AUD').required().asString(),

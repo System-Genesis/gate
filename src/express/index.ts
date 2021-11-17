@@ -9,6 +9,7 @@ import { errorMiddleware } from './middlewares/error';
 import { getDocsMiddleware } from './middlewares/getDocs';
 
 import { once } from 'events';
+import { setApmLabel } from './middlewares/setApmLabel';
 
 const app = express();
 
@@ -36,6 +37,8 @@ app.use('/isAlive', (_req, res) => {
   res.status(200).send('alive');
 });
 app.use(getDocsMiddleware());
+
+app.use(setApmLabel);
 
 app.use(isAuth);
 

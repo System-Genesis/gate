@@ -18,7 +18,7 @@ export const errorMiddleware = (
   const status = error.response?.status || 500;
 
   const resBody =
-    error.response.config.responseType === 'stream'
+    error.response?.config?.responseType === 'stream'
       ? { message: error.response.statusText }
       : error.response?.data || { message: error.message };
   res.status(status).json({
