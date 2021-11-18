@@ -1,29 +1,30 @@
-name: "gate"
-replicaCount: 1
+name: "gate" # name of service
+replicaCount: 1 # dont touch
 
 images:
   PullSecrets: 
-    name: kartoffelreg
-  repository: genesisproject.azurecr.io/gate
-  tag: "latest"
+    name: kartoffelreg # dont touch
+  repository: genesisproject.azurecr.io/gate # image name
+  tag: "latest" # tag name
 
 service:
   type: ClusterIP
   ports:
-  - name: http
-    port: 3000
+  - name: gate-http # name of port, have to be difrrent!
+    port: 3000 # inside and outside port
+
 volume:
-  - name: gate-volume
-    mountPath: /opt
-    secretName: azure-secret
-    shareName: system-genesis/
-    type: azurefile
+  - name: gate-volume # name of the volume
+    mountPath: /opt # where the folder is aloced in the pod
+    secretName: azure-secret # dont touch
+    shareName: system-genesis/ # where the folder is aloced in the azure portal
+    type: azurefile # dont touch
 
 
 config:
   configmaps: 
-    name: gate
-
+    name: gate # name of the service configmap
+    
 # ingress:
 #   enabled: true
 #   hosts:
@@ -32,4 +33,4 @@ config:
 #       - path: /message
 #         service: testname
 #         port: "3000"
-  
+
