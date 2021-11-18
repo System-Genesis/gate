@@ -4,7 +4,7 @@ replicaCount: 1
 images:
   PullSecrets: 
     name: kartoffelreg
-  repository: rabazhub.azurecr.io/values-test
+  repository: genesisproject.azurecr.io/gate:latest
   tag: "latest"
 
 service:
@@ -23,12 +23,12 @@ config:
   configmaps: 
     name: gate
 
-ingress:
-  enabled: true
-  hosts:
-  - host: test-cd.branch-yesodot.org
-    paths:
-      - path: /message
-        service: testname
-        port: "3000"
+# ingress:
+#   enabled: true
+#   hosts:
+#   - host: test-cd.branch-yesodot.org
+#     paths:
+#       - path: /message
+#         service: testname
+#         port: "3000"
   
