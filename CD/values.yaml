@@ -28,9 +28,9 @@ config:
 # ingress:
 #   enabled: true
 #   hosts:
-#   - host: test-cd.branch-yesodot.org
+#   - host: test-cd.branch-yesodot.org  #app adrress
 #     paths:
-#       - path: /message
-#         service: testname
+#       - path: /
+#         service: gate
 #         port: "3000"
 
