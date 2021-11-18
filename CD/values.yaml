@@ -12,12 +12,13 @@ service:
   ports:
   - name: http
     port: 3000
+volume:
+  - name: gate-volume
+    mountPath: /opt
+    secretName: azure-secret
+    shareName: system-genesis/
+    type: azurefile
 
-# volume:
-#   -name:
-#    mountPath:
-#    type:
-#    claimName:
 
 config:
   configmaps: 
