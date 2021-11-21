@@ -9,11 +9,11 @@ repositories:
   
 releases:
 - name: gate
-  namespace: kartoffel
+  namespace: genesis
   chart: yesodot/common
   version: {{ requiredEnv "COMMON_VERSION" | default "0.1.0" }}
-  # values:
-  #   - ./gate/values.yaml
+  values:
+    - ./values.yaml
 
 helmDefaults:
-  createNamespace: true
+#  createNamespace: true
