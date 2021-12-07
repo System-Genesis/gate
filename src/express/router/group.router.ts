@@ -20,8 +20,8 @@ groupRouter.get(
   wrapController(Controller.proxyRequest)
 );
 
-groupRouter.patch(
-  "/changeParent/:id",
+groupRouter.put(
+  "/:id/parent/:parentId",
   wrapController(setService(write)), // TODO: update valid route
   wrapController(Controller.proxyRequest)
 );

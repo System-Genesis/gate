@@ -160,7 +160,7 @@ paths:
       description: |
         search DigitalIdentities by uniqueId (returns the top 20 results)
       operationId: searchDigitalIdentities
-      summary: search a DigitalIdentities or uniqueId
+      summary: Search digitalIdentities by uniqueId
   "/digitalIdentities/{id}":
     delete:
       produces:
@@ -330,7 +330,7 @@ paths:
       tags:
         - Entities
       description: |
-        By passing the appropriate options, you can get an expanded entity
+        Get all entities with optional filters. By using the expanded query you can get an expanded entity with it's digital identities and roles.
       operationId: getAllEntities
       summary: Get all entities
     post:
@@ -359,6 +359,9 @@ paths:
             string: Unauthorized
       tags:
         - Entities
+      description: |
+        Create an entity
+
   "/entities/digitalIdentity/{digitalIdentityUniqueId}":
     get:
       produces:
@@ -391,7 +394,7 @@ paths:
       tags:
         - Entities
       description: |
-        By passing the appropriate options, you can get an expanded entity
+        Get the entity that has the digitalIdentity with the uniqueId given
       operationId: getEntityByDigitalIdentity
       summary: Get entity by digital Identity
   "/entities/group/{groupId}":
@@ -448,6 +451,8 @@ paths:
       description: |
         By passing the appropriate options, you can get an expanded entity
         and all the children under certain group (direct and undirect)
+        direct = true: directly in the group given
+        direct = false: in the group given or in it's children
       operationId: getEntitiesByGroupId
       summary: Get entities by group id
   "/entities/hierarchy/{hierarchy}":
@@ -506,6 +511,8 @@ paths:
       description: |
         By passing the appropriate options, you can get an expanded entity
         and all the children under certain group (direct and undirect)
+        direct = true: directly in the group given
+        direct = false: in the group given or in it's children
       operationId: getEntitiesByHierarchy
       summary: Get Entities by hierarchy
   "/entities/identifier/{identifier}":
@@ -514,7 +521,7 @@ paths:
         - application/json
       parameters:
         - description: |
-            personalNumber or identityCard
+            personalNumber or identityCard or goalUserId
           in: path
           name: identifier
           required: true
@@ -540,7 +547,9 @@ paths:
       tags:
         - Entities
       description: |
+        Get one entity based on it's either personalNumber/identityCard/goalUserId
         By passing the appropriate options, you can get an expanded entity
+
       operationId: getEntityByIdentifier
       summary: Get entity by identifier
   "/entities/role/{roleId}":
@@ -549,7 +558,7 @@ paths:
         - application/json
       parameters:
         - description: |
-            uniqueId of a role
+            roleId of a role
           in: path
           name: roleId
           required: true
@@ -575,6 +584,7 @@ paths:
       tags:
         - Entities
       description: |
+        Get an entity that has a digitalIdentity connected to the role given
         By passing the appropriate options, you can get an expanded entity
       operationId: getEntityByRole
       summary: Get entity by role id
@@ -662,9 +672,9 @@ paths:
       tags:
         - Entities
       description: |
-        By passing the appropriate options, you can get an expanded entity
+        Get the picture of an entity with the identifier given
       operationId: getPictureByIdentifier
-      summary: Get entity by identifier
+      summary: Get entity picture by identifier
   "/entities/{id}":
     delete:
       produces:
@@ -883,9 +893,9 @@ paths:
       tags:
         - Groups
       description: |
-        Get Group by id
+        Get groups with optional filters
       operationId: getGroups
-      summary: Get all groups
+      summary: Get groups by customized filters
     post:
       consumes:
         - application/json
@@ -935,6 +945,8 @@ paths:
       tags:
         - Groups
       operationId: getGroupByHierarchy
+      description: |
+        Get a group by an hierarchy - return the group with the given hierarchy and name of the last element
       summary: Get Group by hierarchy
   /groups/search:
     get:
@@ -1092,6 +1104,8 @@ paths:
         - Groups
       description: |
         Get Group's children (groups)
+        direct = true: directly under the group given
+        direct = false: under the group given or in it's children
       operationId: getGroupChildren
       summary: Get Group's children (groups)
   "/groups/{id}/parent/{parentId}":
@@ -1129,7 +1143,7 @@ paths:
       tags:
         - Groups
       description: |
-        Change Group's parent
+        Move group to be under another group
       operationId: changeGroupParent
       summary: Change Group's parent
   "/groups/{id}/rename":
@@ -1168,9 +1182,9 @@ paths:
       tags:
         - Groups
       description: |
-        Change Group's parent
+        Change Group's name
       operationId: changeGroupName
-      summary: Change Group's parent
+      summary: Change Group's name
   "/groups/{id}/diPrefix":
     get:
       consumes:
@@ -1201,7 +1215,7 @@ paths:
       tags:
         - Groups
       description: |
-        Get Group's di prefix
+        Get the diPrefix of a group with the id given
       operationId: getGroupDiPrefix
       summary: Get Group's di prefix
   "/groups/{id}/":
@@ -1238,9 +1252,9 @@ paths:
       tags:
         - Groups
       description: |
-        Change Group's parent
-      operationId: changeGroupName
-      summary: Change Group's parent
+        Change group's diPrefix
+      operationId: updateGroup
+      summary: Update group properties
   /roles:
     get:
       produces:
