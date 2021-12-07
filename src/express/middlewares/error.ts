@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { apmAgent } from '../..';
 
 export class ServiceError extends Error {
   public code;
@@ -21,6 +22,8 @@ export const errorMiddleware = (
     error.response?.config?.responseType === 'stream'
       ? { message: error.response.statusText }
       : error.response?.data || { message: error.message };
+
+  apmAgent.captureError(resBody);
   res.status(status).json({
     ...resBody,
     status,
