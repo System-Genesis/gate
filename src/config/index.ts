@@ -1,6 +1,6 @@
 import * as env from 'env-var';
 import './dotenv';
-import * as scopesConfig from './scopes.json';
+import * as scopesConfig from './volume/scopes.json';
 
 const { rules, scopes } = scopesConfig;
 
