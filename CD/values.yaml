@@ -10,7 +10,7 @@ images:
 service:
   type: ClusterIP
   ports:
-  - name: http # name of port, have to be difrrent!
+  - name: gate # name of port, have to be difrrent!
     port: 80 # inside and outside port
 
 volume:
@@ -31,6 +31,6 @@ ingress:
   - host: genesis-kartoffel.branch-yesodot.org  #app adrress
     paths:
       - path: /
-        service: http
+        service: gate
         port: "80"
 
