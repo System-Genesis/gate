@@ -31,6 +31,6 @@ ingress:
   - host: genesis-kartoffel.branch-yesodot.org  #app adrress
     paths:
       - path: /
-        service: gate
+        service: gate-http
         port: "80"
 
