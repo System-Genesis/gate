@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 
 export const getDocsMiddleware = () => {
   // load swagger docs
-  const swaggerDoc = YAML.load('swagger.yaml');
+  const swaggerDoc = YAML.load('../../config/volume/swagger.yaml');
   // get middleware promise
   const loadSwaggerPromise = new Promise((resolve, reject) => {
     swaggerTools.initializeMiddleware(swaggerDoc, (middleware: any) => resolve(middleware));
