@@ -28,7 +28,7 @@ config:
 ingress:
   enabled: true
   hosts:
-  - host: kartoffel.branch-yesodot.org  #app adrress
+  - host: genesis.kartoffel.branch-yesodot.org  #app adrress
     paths:
       - path: /
         service: gate
