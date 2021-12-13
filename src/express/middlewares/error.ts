@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { apmAgent } from '../..';
+// import { apmAgent } from '../..';
 
 export class ServiceError extends Error {
   public code;
@@ -23,7 +23,7 @@ export const errorMiddleware = (
       ? { message: error.response.statusText }
       : error.response?.data || { message: error.message };
 
-  apmAgent.captureError(resBody);
+//   apmAgent.captureError(resBody);
   res.status(status).json({
     ...resBody,
     status,
