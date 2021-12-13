@@ -11,7 +11,7 @@ service:
   type: ClusterIP
   ports:
   - name: gate-http # name of port, have to be difrrent!
-    port: 3000 # inside and outside port
+    port: 80 # inside and outside port
 
 volume:
   - name: gate-volume # name of the volume
@@ -25,12 +25,12 @@ config:
   configmaps: 
     name: gate # name of the service configmap
     
-# ingress:
-#   enabled: true
-#   hosts:
-#   - host: test-cd.branch-yesodot.org  #app adrress
-#     paths:
-#       - path: /
-#         service: gate
-#         port: "3000"
+ingress:
+  enabled: true
+  hosts:
+  - host: kartoffel.branch-yesodot.org  #app adrress
+    paths:
+      - path: /
+        service: gate
+        port: "80"
 
