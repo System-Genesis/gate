@@ -2089,7 +2089,7 @@ definitions:
         example: es
         type: string
       diPrefix:
-        example: 234
+        example: "234"
         type: string
     type: object
   groupRes:
@@ -2107,7 +2107,7 @@ definitions:
     properties:
       diPrefix:
         description: new di prefix
-        example: 123
+        example: "123"
         type: string
     type: object
   id_patch_body:
