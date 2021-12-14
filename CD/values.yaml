@@ -19,12 +19,6 @@ volume:
     secretName: azure-secret # dont touch
     shareName: system-genesis/gate # where the folder is aloced in the azure portal
     type: azurefile # dont touch
-  
-  - name: swagger-volume # name of the volume
-    mountPath: /dist # where the folder is aloced in the pod
-    secretName: azure-secret # dont touch
-    shareName: system-genesis/gate/swagger.yaml # where the folder is aloced in the azure portal
-    type: azurefile # dont touch
 
 
 config:
