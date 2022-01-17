@@ -30,7 +30,7 @@ const isAuth = async (req: Request, res: Response, next: NextFunction) => {
 
     return next();
   } catch (err) {
-    throw new ServiceError(401, 'Unauthorized');
+    next(err);
   }
 };
 

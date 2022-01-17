@@ -16,7 +16,7 @@ export const errorMiddleware = (
   res: express.Response,
   _next: express.NextFunction
 ) => {
-  const status = error.response?.status || 500;
+  const status = error.code || error.response?.status || 500;
 
   const resBody =
     error.response?.config?.responseType === 'stream'
