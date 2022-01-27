@@ -19,7 +19,7 @@ paths:
         - application/json
       parameters:
         - description: |
-            Date to get an updated objects from
+            filter only digitalIdentities updated from given date
           in: query
           name: updatedFrom
           required: false
@@ -65,7 +65,7 @@ paths:
       produces:
         - string
       parameters:
-        - description: Entity to add
+        - description: Digital Identity to create
           in: body
           name: body
           schema:
@@ -186,7 +186,7 @@ paths:
       description: |
         Delete digitalIdentity
       operationId: deleteDigitalIdentityById
-      summary: Delete an digitalIdentity by id
+      summary: Delete a digitalIdentity by id
     get:
       produces:
         - application/json
@@ -231,7 +231,7 @@ paths:
         - string
       parameters:
         - description: |
-            uniqueId of a DigitalIdentity
+            uniqueId of a digitalIdentity to update
           in: path
           name: id
           required: true
@@ -258,7 +258,7 @@ paths:
       description: |
         Update DigitalIdentity
       operationId: updateDigitalIdentityById
-      summary: Update digitalIdentities
+      summary: Update digitalIdentity
   /entities:
     get:
       produces:
@@ -278,20 +278,19 @@ paths:
           required: false
           type: integer
         - description: |
-            comma separated ids to get (id1,id2...)
+            filter from comma separated ids to get (id1,id2...)
           in: query
           name: ids
           required: false
           type: string
         - description: >-
-            whether the entity will be expanded with data from his digital
-            identities field
+            whether the entity will be expanded with his digitalIdentities and roles
           in: query
           name: expanded
           required: false
           type: string
           x-example: true
-        - description: filter entities by rank
+        - description: filter from comma separated ranks to get (rank1,rank2...)
           in: query
           name: rank
           required: false
@@ -303,16 +302,17 @@ paths:
           required: false
           type: string
           x-example: goalUser
-        - description: filter entities by source
+        - description: filter entities by digitalIdentity source
           in: query
-          name: digitalIdentity.source
+          # TODO: add aliases in sources!
+          name: digitalIdentity.source 
           required: false
           type: string
           x-example: es
-        - description: search entities by a part of a full name
+        - description: filter only entities updated from given date
           format: ISO date
           in: query
-          name: updateFrom
+          name: updatedFrom
           required: false
           type: string
           x-example: "2021-06-06T07:25:45.363Z"
@@ -374,8 +374,7 @@ paths:
           required: true
           type: string
         - description: >-
-            whether the entity will be expanded with data from his digital
-            identities field
+            whether the entity will be expanded with his digitalIdentities and roles
           in: query
           name: expanded
           required: false
@@ -863,7 +862,7 @@ paths:
           required: false
           type: string
         - description: |
-            filter results by updating date
+            filter only groups updated from given date
           in: query
           name: updatedFrom
           required: false
@@ -1089,6 +1088,7 @@ paths:
           name: direct
           required: false
           type: boolean
+          # TODO: add defaults to default fields?
       responses:
         "200":
           description: Groups
@@ -1261,7 +1261,7 @@ paths:
         - application/json
       parameters:
         - description: |
-            Date to get an updated objects from
+            filter only roles updated from given date
           in: query
           name: updatedFrom
           required: false
