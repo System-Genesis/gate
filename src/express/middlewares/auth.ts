@@ -28,7 +28,7 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
 
         return next();
     } catch (err) {
-        return next(err);
+        return next(new ServiceError(401, 'Unauthorized'));
     }
 };
 
