@@ -573,7 +573,7 @@ paths:
 
       operationId: getEntityByIdentifier
       summary: Get entity by identifier
-  "/entities/employeeId/{employeeId}/organization/{organization}":
+  "/entities/employeeNumber/{employeeNumber}/organization/{organization}":
     get:
       produces:
         - application/json
