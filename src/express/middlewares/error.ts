@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import * as express from 'express';
 import { apmAgent } from '../..';
 
@@ -10,21 +11,31 @@ export class ServiceError extends Error {
   }
 }
 
+/**
+ * Error Handler
+ * 
+ * @param error 
+ * @param _req 
+ * @param res 
+ * @param _next 
+ */
 export const errorMiddleware = (
-  error: any, // TODO manage service error properly
+  error: AxiosError | ServiceError,
   _req: express.Request,
   res: express.Response,
   _next: express.NextFunction
 ) => {
-  const status = error.code || error.response?.status || 500;
+  const status = error.code || (error as AxiosError).response?.status || 500;
 
+  // Error with pictures || Error with axios req || other errors
   const resBody =
-    error.response?.config?.responseType === 'stream'
-      ? { message: error.response.statusText }
-      : error.response?.data || { message: error.message };
+  (error as AxiosError).response?.config?.responseType === 'stream'
+      ? { message: (error as AxiosError).response?.statusText }
+      : (error as AxiosError).response?.data || { message: error.message };
 
   apmAgent.captureError(resBody);
-  res.status(status).json({
+
+  res.status(parseInt(status)).json({
     ...resBody,
     status,
   });

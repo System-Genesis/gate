@@ -26,13 +26,6 @@ app.use(morgan('dev'));
 
 app.use(compression());
 
-// app.use((req, _, next) => {
-//   if (req.headers["authorization"] === process.env.AUTH) {
-//     next();
-//   } else {
-//     throw "unauthorized";
-//   }
-// });
 app.use('/isAlive', (_req, res) => {
   res.status(200).send('alive');
 });

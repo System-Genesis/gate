@@ -1,11 +1,23 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import getFilterQueries from '../../scopeQuery';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosProxyConfig, AxiosResponse } from 'axios';
 import { QueryParams } from '../../types';
 import QueryString from 'qs';
+import { extractScopes } from '../../helpers';
 
 class PicturesController {
-  static async proxyRequest(req: Request, res: Response, _) {
+  /**
+   * Handeling clients picture requests 
+   * 
+   * - create 'filter queries' for based on the client scopes
+   * - pass the user's req to the relevant service with the 'filter queries'
+   * - stream the image to client
+   * 
+   * @param {Request} req 
+   * @param {Response} res 
+   * @param {NextFunction} _next 
+   */
+  static async proxyRequest(req: Request, res: Response, _next: NextFunction) {
     const scopes = extractScopes(req.headers.authorization || '');
 
     let ruleFilters: QueryParams[] = [];
@@ -13,7 +25,7 @@ class PicturesController {
       ruleFilters = getFilterQueries(scopes, res.locals.entityType);
     }
 
-    const options = {
+    const options  = {
       url: `${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
       method: req.method.toLowerCase(),
       headers: req.headers,
@@ -26,19 +38,9 @@ class PicturesController {
       timeout: 1000 * 60 * 60, // 1 hour
     };
 
-    // let response: AxiosResponse<Readable>;
-    const response: AxiosResponse<any> = await axios(options as any);
+    const response: AxiosResponse<any> = await axios((options as unknown) as AxiosProxyConfig);
     res.writeHead(200, { 'Content-Type': 'image/jpeg' });
     response.data.pipe(res);
-  }
-}
-
-function extractScopes(token: string): string[] {
-  try {
-    const scopes = JSON.parse(Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')).scope;
-    return Array.isArray(scopes) ? scopes : [scopes];
-  } catch (err) {
-    return [];
   }
 }
 
