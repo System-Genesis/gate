@@ -19,6 +19,8 @@ entityRouter.get('/search', wrapController(setService(elastic)), wrapController(
 
 entityRouter.get('/identifier/:identifier', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
+entityRouter.get('/employeeNumber/:employeeNumber/organization/:organization', wrapController(setService(read)), wrapController(Controller.proxyRequest))
+
 entityRouter.get('/role/:roleId', wrapController(setService(read)), wrapController(Controller.proxyRequest));
 
 entityRouter.get(

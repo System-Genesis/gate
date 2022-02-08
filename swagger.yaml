@@ -309,6 +309,28 @@ paths:
           required: false
           type: string
           x-example: es
+        - description: filter entities by aka unit
+          in: query
+          # TODO: add aliases in sources!
+          name: akaUnit
+          required: false
+          type: string
+          x-example: akaUnit1
+        - description: filter from comma separated personal numbers to get (personalNumber1,personalNumber2...)
+          in: query
+          name: personalNumbers
+          required: false
+          type: string
+        - description: filter from comma separated identity cards to get (identity1,identity2...)
+          in: query
+          name: identityCards
+          required: false
+          type: string
+        - description: filter from comma separated digital identities unique ids (uniqueId1,uniqueId2...)
+          in: query
+          name: digitalIdentities.uniqueIds
+          required: false
+          type: string
         - description: filter only entities updated from given date
           format: ISO date
           in: query
@@ -520,7 +542,7 @@ paths:
         - application/json
       parameters:
         - description: |
-            personalNumber or identityCard or goalUserId
+            personalNumber or identityCard or goalUserId or employeeId
           in: path
           name: identifier
           required: true
@@ -546,7 +568,50 @@ paths:
       tags:
         - Entities
       description: |
-        Get one entity based on it's either personalNumber/identityCard/goalUserId
+        Get one entity based on it's either personalNumber/identityCard/goalUserId/employeeId
+        By passing the appropriate options, you can get an expanded entity
+
+      operationId: getEntityByIdentifier
+      summary: Get entity by identifier
+  "/entities/employeeId/{employeeId}/organization/{organization}":
+    get:
+      produces:
+        - application/json
+      parameters:
+        - description: |
+            a valid employeeNumber
+          in: path
+          name: employeeNumber
+          required: true
+          type: string
+        - description: |
+            a valid organization
+          in: path
+          name: organization
+          required: true
+          type: string          
+        - description: >-
+            whether the entity will be expanded with data from his digital
+            identities field
+          in: query
+          name: expanded
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Entity
+          schema:
+            $ref: "#/definitions/entity"
+        "404":
+          description: Entity not found
+        x-expanded:
+          description: Entity expanded
+          schema:
+            $ref: "#/definitions/entityExpanded"
+      tags:
+        - Entities
+      description: |
+        Get one entity based on it's either personalNumber/identityCard/goalUserId/employeeId
         By passing the appropriate options, you can get an expanded entity
 
       operationId: getEntityByIdentifier
@@ -1826,6 +1891,17 @@ definitions:
       identityCard:
         example: "234567891"
         pattern: '^\d{6,9}$'
+        type: string
+      employeeNumber:
+        example: "1234"
+        pattern: '^\d{4,12}$'
+        type: string
+      organization:
+        example: "org1"
+        type: string
+      employeeId:
+        example: "org1-1234"
+        pattern: ${organization}-${employeeNumber}
         type: string
       jobTitle:
         example: clown
