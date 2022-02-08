@@ -2,6 +2,11 @@ import * as YAML from 'yamljs';
 import * as swaggerTools from 'swagger-tools';
 import { Request, Response, NextFunction } from 'express';
 
+/**
+ * create swagger ui docs from swagger.yaml and send it to client
+ * 
+ * @returns {(req: Requst, res: Response, next: NextFunction) => Promise<void>}
+ */
 export const getDocsMiddleware = () => {
   // load swagger docs
   const swaggerDoc = YAML.load('swagger.yaml');

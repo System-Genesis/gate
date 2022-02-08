@@ -1,3 +1,9 @@
+/**
+ * extract the user scopes array from the token
+ * 
+ * @param token - jwt token
+ * @returns 
+ */
 function extractScopes(token: string): string[] {
     try {
         const scopes = JSON.parse(Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')).scope;
@@ -7,6 +13,12 @@ function extractScopes(token: string): string[] {
     }
 }
 
+/**
+ * extract the client name from the token
+ * 
+ * @param token - jwt token
+ * @returns 
+ */
 function extractClientName(token: string): string {
     try {
         return JSON.parse(Buffer.from((token || '').split('.')[1], 'base64').toString('ascii')).clientName || '';

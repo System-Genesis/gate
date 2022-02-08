@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import getFilterQueries from '../../scopeQuery';
 import { applyTransform } from '../../transformService';
 import axios from 'axios';
@@ -8,7 +8,22 @@ import config from '../../config';
 import { extractScopes } from '../../helpers';
 const { entitiesType } = config;
 class Controller {
-  static async proxyRequest(req: Request, res: Response, _) {
+
+  /**
+   * Handeling clients data requests 
+   * 
+   * - create 'filter queries' for based on the client scopes
+   * - pass the user's req to the relevant service with the 'filter queries'
+   * - based on the user's scopes transfrom the retturned data,
+   *   this transformation is only for specific fields in each
+   *   data obj
+   * - return the data to client
+   * 
+   * @param {Request} req 
+   * @param {Response} res 
+   * @param {NextFunction} _next 
+   */
+  static async proxyRequest(req: Request, res: Response, _next: NextFunction) {
     const scopes = extractScopes(req.headers.authorization || '');
 
     let ruleFilters: QueryParams[] = [];
@@ -28,8 +43,7 @@ class Controller {
       timeout: 1000 * 60 * 60, // 1 hour
     };
 
-    let response;
-    response = await axios(options as any);
+    let response = await axios(options as any);
     let result = response.data;
 
     if (req.method === 'GET') {
@@ -48,6 +62,18 @@ class Controller {
   }
 }
 
+/**
+ * Take care of expanded result which contains several
+ * types of data in one response.
+ * 
+ * For example root type of 'digitalIdentity' that containes a 'role',
+ * each type will be handled differently 
+ * 
+ * @param {*} result data to manipulate
+ * @param {typesOfEntities} entityType the type of the root data
+ * @param {string[]} scopes user's scopes
+ * @returns transformed data
+ */
 function handleExpandedResult(result: any, entityType: typesOfEntities, scopes: string[]) {
   if (Array.isArray(result)) {
     result = result.map((expandedItem) => {
@@ -60,10 +86,26 @@ function handleExpandedResult(result: any, entityType: typesOfEntities, scopes: 
   return result;
 }
 
+/**
+ * Handle single expanded data obj,
+ * (for more explanation see handleExpandedResult)
+ * 
+ * @param {*} result data to manipulate
+ * @param {typesOfEntities} entityType the type of the root data
+ * @param {string[]} scopes user's scopes
+ * @returns transformed data
+ */
 function transformExpandedRes(result: any, entityType: typesOfEntities, scopes: string[]) {
   return entityType === entitiesType.entity ? expandedEntity(result, scopes) : expandedDi(result, scopes);
 }
 
+/**
+ * Handle transformation of an expanded result where the root type is 'Entity'
+ * 
+ * @param {*} result data to manipulate
+ * @param {string[]} scopes user's scopes
+ * @returns transformed data
+ */
 function expandedEntity(result: EntityDTO, scopes: string[]) {
   const transEntity = applyTransform(result, scopes, entitiesType.entity as typesOfEntities) as EntityDTO;
 
@@ -76,6 +118,13 @@ function expandedEntity(result: EntityDTO, scopes: string[]) {
   return transEntity;
 }
 
+/**
+ * Handle transformation of an expanded result where the root type is 'DigitalIdentity'
+ * 
+ * @param {*} result data to manipulate
+ * @param {string[]} scopes user's scopes
+ * @returns transformed data
+ */
 function expandedDi(result, scopes: string[]) {
   const transDi = applyTransform(result, scopes, entitiesType.digitalIdentity as any) as DigitalIdentityDTO;
 
