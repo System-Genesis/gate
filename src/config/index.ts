@@ -1,6 +1,6 @@
 import * as env from 'env-var';
 import './dotenv';
-import * as scopesConfig from './volume/scopes.json';
+import * as scopesConfig from './scopes.json';
 
 const { rules, scopes } = scopesConfig;
 
@@ -14,7 +14,7 @@ const config = {
       read: env.get('READ_SERVICE').required().asString(),
       write: env.get('WRITE_SERVICE').required().asString(),
     },
-    apm: { 
+    apm: {
       url: env.get('APM_SERVER').required().asString(),
       secretToken: env.get('APM_SECRET_TOKEN').asString(),
     },

@@ -22,7 +22,7 @@ const getFilterQueries = (userScopes: string | string[], entityType: string): Qu
   const scopesArr = Array.isArray(userScopes) ? userScopes : [userScopes];
   let rules: string[] = [];
   scopesArr.forEach((scopeName: string) => {
-    rules = [ ...rules, ...(scopes[scopeName] || []) ];
+    rules = [...rules, ...(scopes[scopeName] || [])];
   });
 
   rules = [...new Set(rules)];
