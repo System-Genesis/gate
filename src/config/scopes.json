@@ -54,9 +54,9 @@
               "value": "matador"
             },
             {
-              "method": "startsWithCondition",
-              "field": "hierarchy",
-              "value": "root"
+              "method": "simpleValueCondition",
+              "field": "serviceType",
+              "value": "Elder"
             }
           ]
         },
@@ -110,6 +110,11 @@
           "method": "fieldExclude",
           "targetField": "firstName",
           "conditions": [
+            {
+              "method": "startsWithCondition",
+              "field": "hierarchy",
+              "value": "root/blahblah"
+            },
             {
               "method": "startsWithCondition",
               "field": "hierarchy",

@@ -146,22 +146,18 @@ const transformerMap = {
 export { arrayFilter, fieldExclude, arrayMapper, transformerMap };
 
 
-type condData = EntityDTO | DigitalIdentityDTO | RoleDTO | {
-    [x: string]: any;
-};
+type condData = EntityDTO | DigitalIdentityDTO | RoleDTO;
 
 function conditionsHandler(conditions: condition[], data: condData): boolean {
-    let status = false;
-    
     for (const cond of conditions) {
         const { field, method, value } = cond;
-        
-        status = data[field] && conditionsMap[method](data[field], value);
+
+        const status = data[field] && conditionsMap[method](data[field], value);
 
         if (!status) {
             return false;
         }
     }
 
-    return status;
+    return true;
 }
