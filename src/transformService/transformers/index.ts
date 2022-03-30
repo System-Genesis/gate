@@ -1,3 +1,4 @@
+import { DigitalIdentityDTO, EntityDTO, RoleDTO } from '../../types';
 import { simpleValueCondition, hierarchyCondition, startsWithCondition } from '../conditions';
 
 const conditionsMap = {
@@ -5,6 +6,16 @@ const conditionsMap = {
     hierarchyCondition,
     startsWithCondition,
 };
+
+interface condition {
+    method: string,
+    field: string,
+    value: string,
+}
+interface transformer {
+    targetField: string;
+    conditions: condition[];
+}
 
 /**
  * Exclude one field from data according to the transformer,
@@ -31,23 +42,21 @@ const conditionsMap = {
  * 
  * 
  */
-const fieldExclude = (entity: any, transformer: any, originalEntity: any): any => {
+const fieldExclude = (entity: EntityDTO, transformer: transformer, originalEntity: EntityDTO): any => {
     const { targetField, conditions } = transformer;
 
     const entityCopy = { ...entity };
 
+    if (!entityCopy[targetField]) return entityCopy;
+
     if (!conditions) {
         delete entityCopy[targetField];
+
         return entityCopy;
     }
 
-    const fieldToCheck = conditions[0].field;
-    const targetValue = conditions[0].value;
-    const conditionMethod = conditionsMap[conditions[0].method];
+    if (conditionsHandler(conditions, originalEntity)) delete entityCopy[targetField];
 
-    if (!entityCopy[targetField] || !originalEntity[fieldToCheck]) return entityCopy;
-
-    if (conditionMethod(originalEntity[fieldToCheck], targetValue)) delete entityCopy[targetField];
     return entityCopy;
 };
 
@@ -69,16 +78,12 @@ const fieldExclude = (entity: any, transformer: any, originalEntity: any): any =
  * ); // => { rank: 'champion', digitalIdentities: [] }
  * 
  */
-const arrayFilter = (entity: any, transformer: any, _originalEntity: any) => {
+const arrayFilter = (entity: EntityDTO | DigitalIdentityDTO | RoleDTO, transformer: transformer, _originalEntity: EntityDTO | DigitalIdentityDTO | RoleDTO) => {
     const { targetField, conditions } = transformer;
-
-    const fieldToCheck = conditions[0].field;
-    const targetValue = conditions[0].value;
-    const conditionMethod = conditionsMap[conditions[0].method];
 
     if (!entity[targetField]) return entity;
 
-    const modifedTargetField = entity[targetField].filter((obj) => !conditionMethod(obj[fieldToCheck], targetValue));
+    const modifedTargetField = entity[targetField].filter((data: condData) => !conditionsHandler(conditions, data));
 
     const entityCopy = { ...entity };
     entityCopy[targetField] = modifedTargetField;
@@ -125,7 +130,7 @@ const arrayMapper = (entity: any, hybridTransformer: any, originalEntity: any) =
 
     if (!entity[targetField]) return entity;
 
-    const modifedTargetField = entity[targetField].map((obj) => innerTransformerMethod(obj, innerTransformer, originalEntity));
+    const modifedTargetField = entity[targetField].map((obj: any) => innerTransformerMethod(obj, innerTransformer, originalEntity));
 
     const entityCopy = { ...entity };
     entityCopy[targetField] = modifedTargetField;
@@ -139,3 +144,24 @@ const transformerMap = {
 };
 
 export { arrayFilter, fieldExclude, arrayMapper, transformerMap };
+
+
+type condData = EntityDTO | DigitalIdentityDTO | RoleDTO | {
+    [x: string]: any;
+};
+
+function conditionsHandler(conditions: condition[], data: condData): boolean {
+    let status = false;
+    
+    for (const cond of conditions) {
+        const { field, method, value } = cond;
+        
+        status = data[field] && conditionsMap[method](data[field], value);
+
+        if (!status) {
+            return false;
+        }
+    }
+
+    return status;
+}

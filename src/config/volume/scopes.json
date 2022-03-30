@@ -34,34 +34,61 @@
             {
               "method": "simpleValueCondition",
               "field": "source",
-              "value": "sf_name"
+              "value": "es"
             }
           ]
         },
         {
-          "name": "removeHierarchy",
+          "name": "removedirectGroup",
           "method": "fieldExclude",
-          "targetField": "hierarchy",
+          "targetField": "directGroup"
+        },
+        {
+          "name": "removeDIs",
+          "method": "fieldExclude",
+          "targetField": "digitalIdentities",
+          "conditions": [
+            {
+              "method": "simpleValueCondition",
+              "field": "rank",
+              "value": "matador"
+            },
+            {
+              "method": "startsWithCondition",
+              "field": "hierarchy",
+              "value": "root"
+            }
+          ]
+        },
+        {
+          "name": "removeJob",
+          "method": "fieldExclude",
+          "targetField": "jobTitle",
           "conditions": [
             {
               "method": "simpleValueCondition",
               "field": "firstName",
-              "value": "Myrony"
+              "value": "John"
+            },
+            {
+              "method": "simpleValueCondition",
+              "field": "lastName",
+              "value": "Doe"
             }
           ]
         },
         {
-          "name": "removeSensitive443DomainUsersHierarchy",
+          "name": "removeMailFromDI",
           "method": "arrayMapper",
           "targetField": "digitalIdentities",
           "transformer": {
             "method": "fieldExclude",
-            "targetField": "hierarchy",
+            "targetField": "mail",
             "conditions": [
               {
                 "method": "simpleValueCondition",
                 "field": "source",
-                "value": "sf_name"
+                "value": "es"
               }
             ]
           }
@@ -72,21 +99,21 @@
           "targetField": "hierarchy",
           "conditions": [
             {
-              "method": "hierarchyCondition",
+              "method": "startsWithCondition",
               "field": "hierarchy",
-              "value": "root/sensitive2"
+              "value": "root/father"
             }
           ]
         },
         {
-          "name": "removeSensitive2DirectGroup",
+          "name": "removefirstnameByHierarchy",
           "method": "fieldExclude",
-          "targetField": "directGroup",
+          "targetField": "firstName",
           "conditions": [
             {
-              "method": "hierarchyCondition",
+              "method": "startsWithCondition",
               "field": "hierarchy",
-              "value": "root/sensitive2"
+              "value": "root/blahblah"
             }
           ]
         },
@@ -136,6 +163,20 @@
     }
   },
   "scopes": {
-    "externalScope": []
+    "externalScope": [
+      "removeJob",
+      "removeSensitive2Hierarchy",
+      "removeDIs"
+    ],
+    "myScope": [
+      "removefirstnameByHierarchy",
+      "removeMailFromDI"
+    ],
+    "someScope": [
+      "removeSensitiveDIs"
+    ],
+    "someOtherScope": [
+      "removedirectGroup"
+    ]
   }
 }
