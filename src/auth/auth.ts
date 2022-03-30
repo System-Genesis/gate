@@ -69,7 +69,7 @@ export const basicScopeHandler = (
   if (!haveBasicScopes) throw new ServiceError(403, "Access denied");
 
   if (reqMethod && reqMethod != "GET" && !scopes.includes("write")) {
-    throw new ServiceError(401, "Unauthorized");
+    throw new ServiceError(403, "Access denied");
   }
 };
 
