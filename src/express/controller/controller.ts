@@ -125,7 +125,7 @@ function expandedEntity(result: EntityDTO, scopes: string[]) {
  * @param {string[]} scopes user's scopes
  * @returns transformed data
  */
-function expandedDi(result, scopes: string[]) {
+function expandedDi(result: DigitalIdentityDTO, scopes: string[]) {
   const transDi = applyTransform(result, scopes, entitiesType.digitalIdentity as any) as DigitalIdentityDTO;
 
   if (transDi.role) {
