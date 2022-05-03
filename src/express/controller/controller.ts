@@ -1,4 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
+//import * as fs from 'fs';
+import { Transform } from 'stream';
+import * as JSONStream from 'JSONStream';
 import getFilterQueries from '../../scopeQuery';
 import { applyTransform } from '../../transformService';
 import axios from 'axios';
@@ -31,7 +34,7 @@ class Controller {
       ruleFilters = getFilterQueries(scopes, res.locals.entityType);
     }
 
-    const options = {
+    let options = {
       url: `${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
       method: req.method.toLowerCase(),
       headers: req.headers,
@@ -42,11 +45,16 @@ class Controller {
       params: { ...req.query, ruleFilters },
       timeout: 1000 * 60 * 60, // 1 hour
     };
+    if (req.query.stream) {
+      options['responseType'] = 'stream';
+    }
 
     let response = await axios(options as any);
     let result = response.data;
+    //let streamResult = Object.assign({}, result)
 
-    if (req.method === 'GET') {
+    // response.data.on('data',)
+    if (req.method === 'GET' && !req.query.stream) {
       if (
         Boolean(req.query.expanded) &&
         (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
@@ -58,7 +66,34 @@ class Controller {
         result = applyTransform(result, scopes, res.locals.entityType);
       }
     }
-    res.status(response.status).set(response.headers).send(result);
+    if (req.query.stream) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      // response.data.pipe(JSONStream.stringify())
+      // let countOkey = 0;
+      // let countNotOkey = 0;
+
+      // response.data.readableObjectMode = true; // didnt work
+      response.data.pipe(JSONStream.parse('*', (chunk) => {
+        if (req.method === 'GET') {
+          if (
+            Boolean(req.query.expanded) &&
+            (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
+          ) {
+            chunk = handleExpandedResult(chunk, res.locals.entityType, scopes);
+          } else if (Array.isArray(chunk)) {
+            chunk = chunk.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
+          } else {
+            chunk = applyTransform(chunk, scopes, res.locals.entityType);
+          }
+        }
+        return chunk
+      })).pipe(JSONStream.stringify()).pipe(res);
+
+
+    } else {
+      res.status(response.status).set(response.headers).send(result);
+    }
+
   }
 }
 

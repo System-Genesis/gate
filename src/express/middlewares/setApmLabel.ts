@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { apmAgent } from "../.."
+import config from "../../config";
 import { extractClientName } from "../../helpers"
 
 /**
@@ -10,8 +11,11 @@ import { extractClientName } from "../../helpers"
  * @param {NextFunction} next 
  */
 export const setApmLabel = (req: Request, res: Response, next: NextFunction) => {
-    const clientName = extractClientName(req.headers['authorization'] || '');
+    if (config.web.isApm) {
+        const clientName = extractClientName(req.headers['authorization'] || '');
 
-    apmAgent.setLabel('clientName', clientName);
+        apmAgent!.setLabel('clientName', clientName);
+    }
+
     next();
 }
