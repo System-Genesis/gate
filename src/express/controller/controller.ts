@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-//import * as fs from 'fs';
-import { Transform } from 'stream';
 import * as JSONStream from 'JSONStream';
 import getFilterQueries from '../../scopeQuery';
 import { applyTransform } from '../../transformService';
@@ -51,9 +49,7 @@ class Controller {
 
     let response = await axios(options as any);
     let result = response.data;
-    //let streamResult = Object.assign({}, result)
 
-    // response.data.on('data',)
     if (req.method === 'GET' && !req.query.stream) {
       if (
         Boolean(req.query.expanded) &&
@@ -68,12 +64,7 @@ class Controller {
     }
     if (req.query.stream) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      // response.data.pipe(JSONStream.stringify())
-      // let countOkey = 0;
-      // let countNotOkey = 0;
-
-      // response.data.readableObjectMode = true; // didnt work
-      response.data.pipe(JSONStream.parse('*', (chunk) => {
+      result.pipe(JSONStream.parse('*', (chunk) => {
         if (req.method === 'GET') {
           if (
             Boolean(req.query.expanded) &&

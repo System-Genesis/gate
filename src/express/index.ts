@@ -46,6 +46,8 @@ app.use(errorMiddleware);
 const start = async (port) => {
   const server = app.listen(port);
   await once(server, 'listening');
+  return server;
+
 };
 
 export default start;
