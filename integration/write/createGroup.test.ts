@@ -9,6 +9,8 @@ import { sleep } from "../../src/utils/indexTest";
 //   testJson.valueObjects.EntityType;
 const digitalIdentitiesDomains: string[] =
   testJson.valueObjects.digitalIdentityId.domain.values;
+
+const roleDOmains: string[] = testJson.valueObjects.roleIdSuffixes.domain.values;
 const allSources: string[] = testJson.valueObjects.source.values;
 //const allDITypes = testJson.valueObjects.digitalIdentityType;
 
@@ -152,7 +154,7 @@ describe("VALID CREATIONS", () => {
 
   it("should create a new role", (done) => {
     const roleToCreate: any = {
-      roleId: `t123@${digitalIdentitiesDomains[0]}`,
+      roleId: `t123@${roleDOmains[0]}`,
       source: allSources[1],
       directGroup: secondChildGroupId,
     };
@@ -171,21 +173,21 @@ describe("VALID CREATIONS", () => {
   });
   it("should get the new role", (done) => {
     request(app)
-      .get(`/api/roles/t123@${digitalIdentitiesDomains[0]}`)
+      .get(`/api/roles/t123@${roleDOmains[0]}`)
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
           console.log(err);
           throw done(err);
         }
-        expect(res.body.roleId).toBe(`t123@${digitalIdentitiesDomains[0]}`);
+        expect(res.body.roleId).toBe(`t123@${roleDOmains[0]}`);
         return done();
       });
   });
   it("should connect the new role to di", (done) => {
     request(app)
       .put(
-        `/api/roles/t123@${digitalIdentitiesDomains[0]}/digitalIdentity/t123@${digitalIdentitiesDomains[0]}`
+        `/api/roles/t123@${roleDOmains[0]}/digitalIdentity/t123@${digitalIdentitiesDomains[0]}`
       )
       .expect(200)
       .end(async (err: any, res: any) => {
