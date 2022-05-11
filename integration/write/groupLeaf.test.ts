@@ -26,7 +26,6 @@ describe("Testing leaf update", () => {
                 }
                 fatherGroupId = res.body.id;
                 expect(fatherGroupId).toBeDefined();
-                expect(res.body.isLeaf).toBeTruthy()
 
                 return done();
             });
