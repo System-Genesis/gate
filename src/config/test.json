@@ -8,12 +8,15 @@
         "aka",
         "adNN_name",
         "city_name",
-        "mir_name"
+        "mir_name",
+        "ads_name"
       ],
       "strongSources": ["oa_name"],
+      "upnSource": "ads_name",
+      "weakSource": ["mir_name"],
       "primaryMap": {
-        "ads": "sf_name",
-        "unit2": "es"
+        "sf1": "sf_name",
+        "es1": "es_name"
       }
     },
     "rank": {
@@ -22,6 +25,9 @@
     "serviceType": {
       "values": ["A", "B", "C", "D", "E", "F", "G"]
     },
+    "organizations": {
+      "values": ["org1", "org2"]
+    },
     "digitalIdentityId": {
       "domain": {
         "values": [
@@ -29,7 +35,22 @@
           "jello.com",
           "adnn.com",
           "leonardo.com",
-          "city.com"
+          "city.com",
+          "turtle.com",
+          "rafael.turtle.com"
+        ]
+      }
+    },
+    "roleIdSuffixes": {
+      "domain": {
+        "values": [
+          "rabiran",
+          "jello",
+          "adnn",
+          "leonardo",
+          "city",
+          "turtle",
+          "rafael.turtle.com"
         ]
       }
     },
@@ -49,7 +70,7 @@
   },
   "db": {
     "mongo": {
-      "connectionString": "mongodb://nitro:password123@localhost:27017/kartoffelMock?replicaSet=rs0&directConnection=true&ssl=false",
+      "connectionString": "mongodb://localhost:27017/octo?replicaSet=rs0&directConnection=true&ssl=false",
       "poolSize": 10,
       "modelNames": {
         "group": "Group",
@@ -61,6 +82,7 @@
     }
   },
   "server": {
-    "port": 4000
-  }
+    "port": 4001
+  },
+  "NODE_ENV": "test"
 }
