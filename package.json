@@ -9,6 +9,9 @@
     "dev": "npm run build && npm run startDev",
     "build": "tsc && npm run copy-files",
     "copy-files": "cp -r ./src/assets/ ./dist/",
+    "test-unit": "jest --coverage --testPathPattern=tests",
+    "test-integration": "jest --coverage --testPathPattern=integration",
+    "test-file": "jest --coverage -- authMiddleware.test.ts",
     "test": "jest --coverage"
   },
   "author": "",

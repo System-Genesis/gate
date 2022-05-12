@@ -21,11 +21,16 @@ const {
 const getFilterQueries = (userScopes: string | string[], entityType: string): QueryParams[] => {
   const scopesArr = Array.isArray(userScopes) ? userScopes : [userScopes];
   let rules: string[] = [];
+  let undoesTransformers: string[] = [];
+
   scopesArr.forEach((scopeName: string) => {
-    rules = [...rules, ...(scopes[scopeName] || [])];
+    rules = [...rules, ...(scopes[scopeName].rules || [])];
+    undoesTransformers = [...undoesTransformers, ...scopes[scopeName].undoes ? scopes[scopeName].undoes : []].filter(f => f);
   });
 
   rules = [...new Set(rules)];
+
+  rules = rules.filter(rule => !undoesTransformers.includes(rule))
 
   return combineQueriesFromRules(rules, entityType);
 };
