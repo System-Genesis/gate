@@ -1,9 +1,6 @@
 import request from "supertest";
-//import testJson from "../../src/config/test.json";
 import { app } from "../../src/express";
 import { sleep } from "../../src/utils/indexTest";
-
-
 
 describe("Testing leaf update", () => {
     const fatherGroupToCreate: any = {

@@ -168,6 +168,7 @@ describe("Connect/Disconnect DI to entity", () => {
         }
         expect(res.body.digitalIdentities[0].uniqueId).toBe(diId);
         return done();
+
       });
   });
   it("should disconnect di from entity", async (done) => {
@@ -231,7 +232,6 @@ describe("Connect/Disconnect DI to entity", () => {
 function binaryParser(res, callback) {
   res.setEncoding('binary');
   res.data = '';
-  let i = 0;
   res.on('data', function (chunk) {
     res.data += chunk;
 
