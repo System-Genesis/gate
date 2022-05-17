@@ -35,19 +35,22 @@ class Controller {
 
     const axiosResult = await Controller.sendRequest(req, res, filters);
 
-    if (req.query.stream && req.method.toLowerCase() === 'get') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      axiosResult.data.pipe(JSONStream.parse('*', (doc) => {
-
-        return Controller.handleResponse(req, res.locals.entityType, doc, transformers);
-
-      })).pipe(JSONStream.stringify()).pipe(res);
-      return;
+    if (req.query.stream) {
+      return Controller.handleStreamResponse(req, req, axiosResult, transformers);
     }
 
     const result = Controller.handleResponse(req, res.locals.entityType, axiosResult.data, transformers);
 
     res.status(axiosResult.status).set(axiosResult.headers).send(result);
+  }
+
+  private static async handleStreamResponse(req, res, axiosResult, transformers) {
+    if (req.method.toLowerCase() === 'get') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      axiosResult.data.pipe(JSONStream.parse('*', (doc) =>
+        Controller.handleResponse(req, res.locals.entityType, doc, transformers)
+      )).pipe(JSONStream.stringify()).pipe(res);
+    }
   }
 
   private static async sendRequest(req: Request, res: Response, filters: filtersType[]) {
