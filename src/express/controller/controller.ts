@@ -50,43 +50,40 @@ class Controller {
     let response = await axios(options as any);
     let result = response.data;
 
-    if (req.method === 'GET' && !req.query.stream) {
-      if (
-        Boolean(req.query.expanded) &&
-        (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
-      ) {
-        result = handleExpandedResult(result, res.locals.entityType, scopes);
-      } else if (Array.isArray(result)) {
-        result = result.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
+    if (req.method === 'GET') {
+      if (!req.query.stream) {
+        result = documentHandler(result, scopes, req, res)
+
       } else {
-        result = applyTransform(result, scopes, res.locals.entityType);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        result.pipe(JSONStream.parse('*', (chunk) => {
+
+          return documentHandler(chunk, scopes, req, res)
+
+        })).pipe(JSONStream.stringify()).pipe(res);
+        return;
       }
     }
-    if (req.query.stream) {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      result.pipe(JSONStream.parse('*', (chunk) => {
-        if (req.method === 'GET') {
-          if (
-            Boolean(req.query.expanded) &&
-            (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
-          ) {
-            chunk = handleExpandedResult(chunk, res.locals.entityType, scopes);
-          } else if (Array.isArray(chunk)) {
-            chunk = chunk.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
-          } else {
-            chunk = applyTransform(chunk, scopes, res.locals.entityType);
-          }
-        }
-        return chunk
-      })).pipe(JSONStream.stringify()).pipe(res);
-
-
-    } else {
-      res.status(response.status).set(response.headers).send(result);
-    }
-
+    res.status(response.status).set(response.headers).send(result);
   }
 }
+
+const documentHandler = (docs: any | any[], scopes: string[], req: Request, res: Response) => {
+  if (
+    Boolean(req.query.expanded) &&
+    (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
+  ) {
+    docs = handleExpandedResult(docs, res.locals.entityType, scopes);
+  } else if (Array.isArray(docs)) {
+    docs = docs.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
+  } else {
+    docs = applyTransform(docs, scopes, res.locals.entityType);
+  }
+  return docs
+}
+
+
+
 
 /**
  * Take care of expanded result which contains several
