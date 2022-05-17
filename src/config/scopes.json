@@ -91,6 +91,23 @@
           ]
         },
         {
+          "name": "removeJob",
+          "method": "fieldExclude",
+          "targetField": "jobTitle",
+          "conditions": [
+            {
+              "method": "startsWithCondition",
+              "field": "hierarchy",
+              "value": "es_name"
+            }
+          ]
+        },
+        {
+          "name": "removeSex",
+          "method": "fieldExclude",
+          "targetField": "sex"
+        },
+        {
           "name": "removeSex",
           "method": "fieldExclude",
           "targetField": "sex",
@@ -136,6 +153,21 @@
     }
   },
   "scopes": {
-    "externalScope": []
+    "externalScope": { "rules": ["removeSensitive2DirectGroup"], "undoes": [""] },
+    "externalEnaaref": { "rules": ["anotherRule"], "undoes": ["removeSex"] },
+    "a": { "rules": ["removeSex"], "undoes": [""] },
+    "b": { "rules": ["removeSensitive2Hierarchy"], "undoes": [""] },
+    "c": { "rules": ["removeSensitive2DomainUsersHierarchy"], "undoes": [""] },
+    "d": { "rules": ["removeSensitiveDomainUsers"], "undoes": [""] },
+    "e": { "rules": ["removeSensitive2DirectGroup"], "undoes": [""] },
+    "f": { "rules": ["removeJob"], "undoes": [""] },
+    "undo_a": { "rules": [""], "undoes": ["removeSex"] },
+    "undo_a_add_b": { "rules": ["removeSensitive2Hierarchy"], "undoes": ["removeSex"] },
+    "f.a": { "rules": ["hideSensitivePersons"], "undoes": [] },
+    "f.b": { "rules": ["sourceFilter"], "undoes": [""] },
+    "f.undo_a": { "rules": [""], "undoes": ["hideSensitivePersons"] },
+    "f.undo_a_add_b": { "rules": ["sourceFilter"], "undoes": ["hideSensitivePersons"] },
+    "read": { "rules": ["remove_sbt"], "undoes": [""] },
+    "lego": { "rules": [""], "undoes": ["remove_sbt"] }
   }
 }

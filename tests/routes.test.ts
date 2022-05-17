@@ -17,42 +17,30 @@ beforeAll(async () => {
 
 })
 describe('Test server handling scopes', () => {
-    // let mockRequest: Partial<Request>;
-    // let mockResponse: Partial<Response>;
-    // let nextFunction: NextFunction = jest.fn();
 
-    // beforeEach(() => {
-    //     mockRequest = {};
-    //     mockResponse = {
-    //         json: jest.fn(),
-    //         locals: {}
-    //     };
-    // });
+  let mockRequest: Partial<Request>;
+  let mockResponse: Partial<Response>;
+  let nextFunction: NextFunction = jest.fn();
 
-    // test('It should set the entity type', async () => {
-    //     const middleware = setEntityType('entity');
-    //     await middleware(mockRequest as Request, mockResponse as Response, nextFunction);
+  beforeEach(() => {
+    mockRequest = {};
+    mockResponse = {
+      json: jest.fn(),
+      locals: {}
+    };
+  });
 
-    //     expect((mockResponse.locals as any).entityType).toBe('entity');
-    // });
+  test('It should set the entity type', async () => {
+    const middleware = setEntityType('entity');
+    await middleware(mockRequest as Request, mockResponse as Response, nextFunction);
 
-    // test('It should set the route for the propper service', async () => {
-    //     const middleware = setService('https://www.google.com');
-    //     await middleware(mockRequest as Request, mockResponse as Response, nextFunction);
+    expect((mockResponse.locals as any).entityType).toBe('entity');
+  });
 
-    //     expect((mockResponse.locals as any).destServiceUrl).toBe('https://www.google.com');
-    // });
+  test('It should set the route for the propper service', async () => {
+    const middleware = setService('https://www.google.com');
+    await middleware(mockRequest as Request, mockResponse as Response, nextFunction);
 
-    test(`it should stream`, async (done) => {
-        request(app).get(`/api/entities`)
-            .query(qs.stringify({ stream: true }))
-            .expect(200)
-            .end((err, res) => {
-                if (err) {
-                    throw done(err)
-                }
-                expect(res.body).toBe(undefined)
-                return done()
-            })
-    })
+    expect((mockResponse.locals as any).destServiceUrl).toBe('https://www.google.com');
+  });
 });

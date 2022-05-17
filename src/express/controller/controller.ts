@@ -1,21 +1,25 @@
 import { NextFunction, Request, Response } from 'express';
 import * as JSONStream from 'JSONStream';
-import getFilterQueries from '../../scopeQuery';
-import { applyTransform } from '../../transformService';
-import axios from 'axios';
-import { DigitalIdentityDTO, EntityDTO, QueryParams, RoleDTO, typesOfEntities } from '../../types';
+
+import axios, { AxiosRequestConfig, Method } from 'axios';
+import { DigitalIdentityDTO, EntityDTO, filtersType, QueryParams, RoleDTO, transformersType, typesOfEntities } from '../../types';
 import QueryString from 'qs';
 import config from '../../config';
 import { extractScopes } from '../../helpers';
+
+import { extractRulesFromScopes } from '../../utils/extractRules';
+import { applyTransformers } from '../../transformService';
+import { combineQueriesFromRules } from '../../scopeQuery';
 const { entitiesType } = config;
+
 class Controller {
 
   /**
-   * Handeling clients data requests 
+   * Handling clients data requests 
    * 
    * - create 'filter queries' for based on the client scopes
    * - pass the user's req to the relevant service with the 'filter queries'
-   * - based on the user's scopes transfrom the retturned data,
+   * - based on the user's scopes transform the returned data,
    *   this transformation is only for specific fields in each
    *   data obj
    * - return the data to client
@@ -27,44 +31,66 @@ class Controller {
   static async proxyRequest(req: Request, res: Response, _next: NextFunction) {
     const scopes = extractScopes(req.headers.authorization || '');
 
+    const { filters, transformers } = extractRulesFromScopes(scopes, res.locals.entityType);
+
+    const axiosResult = await Controller.sendRequest(req, res, filters);
+    if (req.query.stream && req.method.toLowerCase() === 'get') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      axiosResult.data.pipe(JSONStream.parse('*', (doc) => {
+
+        return Controller.handleResponse(req, res.locals.entityType, doc, transformers);
+
+      })).pipe(JSONStream.stringify()).pipe(res);
+      return;
+    }
+    const result = Controller.handleResponse(req, res.locals.entityType, axiosResult.data, transformers);
+
+    res.status(axiosResult.status).set(axiosResult.headers).send(result);
+  }
+
+  private static async sendRequest(req: Request, res: Response, filters: filtersType[]) {
     let ruleFilters: QueryParams[] = [];
-    if (req.method === 'GET') {
-      ruleFilters = getFilterQueries(scopes, res.locals.entityType);
+
+    if (req.method.toLowerCase() === 'get') {
+      ruleFilters = combineQueriesFromRules(filters, res.locals.entityType);
     }
 
-    let options = {
+    const options: AxiosRequestConfig = {
       url: `${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
-      method: req.method.toLowerCase(),
+      method: req.method.toLowerCase() as Method,
       headers: req.headers,
       data: req.body,
-      paramsSerializer: (params) => {
-        return QueryString.stringify(params);
-      },
+      paramsSerializer: (params) => QueryString.stringify(params),
       params: { ...req.query, ruleFilters },
       timeout: 1000 * 60 * 60, // 1 hour
     };
     if (req.query.stream) {
-      options['responseType'] = 'stream';
+
+      options.responseType = 'stream';
     }
 
-    let response = await axios(options as any);
-    let result = response.data;
+    return (await axios(options));
 
-    if (req.method === 'GET') {
-      if (!req.query.stream) {
-        result = documentHandler(result, scopes, req, res)
 
+
+  }
+
+  private static handleResponse(req: Request, entityType: typesOfEntities, result, transformers: transformersType[]) {
+    if (req.method.toLowerCase() === 'get') {
+      if (Controller.isExpanded(req.query.expanded as string, entityType)) {
+        result = handleExpandedResult(result, entityType, transformers);
+      } else if (Array.isArray(result)) {
+        result = result.map((dataObj) => applyTransformers(transformers, dataObj));
       } else {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        result.pipe(JSONStream.parse('*', (chunk) => {
-
-          return documentHandler(chunk, scopes, req, res)
-
-        })).pipe(JSONStream.stringify()).pipe(res);
-        return;
+        result = applyTransformers(transformers, result);
       }
     }
-    res.status(response.status).set(response.headers).send(result);
+
+    return result;
+  }
+
+  private static isExpanded(expanded: string, entityType: string) {
+    return Boolean(expanded) && ![config.entitiesType.role, config.entitiesType.group].includes(entityType)
   }
 }
 
@@ -94,19 +120,15 @@ const documentHandler = (docs: any | any[], scopes: string[], req: Request, res:
  * 
  * @param {*} result data to manipulate
  * @param {typesOfEntities} entityType the type of the root data
- * @param {string[]} scopes user's scopes
+ * @param {transformersType[]} transformers user's transformers
  * @returns transformed data
  */
-function handleExpandedResult(result: any, entityType: typesOfEntities, scopes: string[]) {
+function handleExpandedResult(result: any, entityType: typesOfEntities, transformers: transformersType[]) {
   if (Array.isArray(result)) {
-    result = result.map((expandedItem) => {
-      expandedItem = transformExpandedRes(expandedItem, entityType, scopes);
-      return expandedItem;
-    });
-  } else {
-    result = transformExpandedRes(result, entityType, scopes);
+    return result.map((expandedItem) => transformExpandedRes(expandedItem, entityType, transformers));
   }
-  return result;
+
+  return transformExpandedRes(result, entityType, transformers);
 }
 
 /**
@@ -115,27 +137,25 @@ function handleExpandedResult(result: any, entityType: typesOfEntities, scopes: 
  * 
  * @param {*} result data to manipulate
  * @param {typesOfEntities} entityType the type of the root data
- * @param {string[]} scopes user's scopes
+ * @param {transformersType[]} transformers user's transformers
  * @returns transformed data
  */
-function transformExpandedRes(result: any, entityType: typesOfEntities, scopes: string[]) {
-  return entityType === entitiesType.entity ? expandedEntity(result, scopes) : expandedDi(result, scopes);
+function transformExpandedRes(result: any, entityType: typesOfEntities, transformers: transformersType[]) {
+  return entityType === entitiesType.entity ? expandedEntity(result, transformers) : expandedDi(result, transformers);
 }
 
 /**
  * Handle transformation of an expanded result where the root type is 'Entity'
  * 
  * @param {*} result data to manipulate
- * @param {string[]} scopes user's scopes
+ * @param {transformersType[]} transformers user's transformers
  * @returns transformed data
  */
-function expandedEntity(result: EntityDTO, scopes: string[]) {
-  const transEntity = applyTransform(result, scopes, entitiesType.entity as typesOfEntities) as EntityDTO;
+function expandedEntity(result: EntityDTO, transformers: transformersType[]) {
+  const transEntity = applyTransformers(transformers, result) as EntityDTO;
 
   if (transEntity.digitalIdentities) {
-    transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => {
-      return expandedDi(di, scopes);
-    });
+    transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => expandedDi(di, transformers));
   }
 
   return transEntity;
@@ -145,14 +165,14 @@ function expandedEntity(result: EntityDTO, scopes: string[]) {
  * Handle transformation of an expanded result where the root type is 'DigitalIdentity'
  * 
  * @param {*} result data to manipulate
- * @param {string[]} scopes user's scopes
+ * @param {transformersType[]} transformers user's transformers
  * @returns transformed data
  */
-function expandedDi(result, scopes: string[]) {
-  const transDi = applyTransform(result, scopes, entitiesType.digitalIdentity as any) as DigitalIdentityDTO;
+function expandedDi(result: DigitalIdentityDTO, transformers: transformersType[]) {
+  const transDi = applyTransformers(transformers, result) as DigitalIdentityDTO;
 
   if (transDi.role) {
-    transDi.role = applyTransform(transDi.role, scopes, entitiesType.role as typesOfEntities) as RoleDTO;
+    transDi.role = applyTransformers(transformers, transDi.role) as RoleDTO;
   }
 
   return transDi;
