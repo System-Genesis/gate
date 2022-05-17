@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import * as JSONStream from 'JSONStream';
+
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import { DigitalIdentityDTO, EntityDTO, filtersType, QueryParams, RoleDTO, transformersType, typesOfEntities } from '../../types';
 import QueryString from 'qs';
@@ -64,10 +65,12 @@ class Controller {
       timeout: 1000 * 60 * 60, // 1 hour
     };
     if (req.query.stream) {
+
       options.responseType = 'stream';
     }
 
     return (await axios(options));
+
 
 
   }
@@ -90,6 +93,23 @@ class Controller {
     return Boolean(expanded) && ![config.entitiesType.role, config.entitiesType.group].includes(entityType)
   }
 }
+
+const documentHandler = (docs: any | any[], scopes: string[], req: Request, res: Response) => {
+  if (
+    Boolean(req.query.expanded) &&
+    (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
+  ) {
+    docs = handleExpandedResult(docs, res.locals.entityType, scopes);
+  } else if (Array.isArray(docs)) {
+    docs = docs.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
+  } else {
+    docs = applyTransform(docs, scopes, res.locals.entityType);
+  }
+  return docs
+}
+
+
+
 
 /**
  * Take care of expanded result which contains several

@@ -1,7 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
+import * as http from 'http';
+import * as request from 'supertest'
+import * as qs from 'qs'
+import start, { app } from '../src/express/index'
 import { setEntityType, setService } from '../src/express/middlewares';
 
+let server: http.Server;
+
+
+beforeAll(async () => {
+    try {
+        server = await start(3003);
+        return server;
+    } catch (err) { console.log(err.message) }
+    console.log(`Server started test bla bla`)
+
+})
 describe('Test server handling scopes', () => {
+
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let nextFunction: NextFunction = jest.fn();
