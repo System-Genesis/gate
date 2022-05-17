@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
+import * as JSONStream from 'JSONStream';
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import { DigitalIdentityDTO, EntityDTO, filtersType, QueryParams, RoleDTO, transformersType, typesOfEntities } from '../../types';
 import QueryString from 'qs';
 import config from '../../config';
 import { extractScopes } from '../../helpers';
+
 import { extractRulesFromScopes } from '../../utils/extractRules';
 import { applyTransformers } from '../../transformService';
 import { combineQueriesFromRules } from '../../scopeQuery';
@@ -30,8 +32,16 @@ class Controller {
 
     const { filters, transformers } = extractRulesFromScopes(scopes, res.locals.entityType);
 
-    let axiosResult = await Controller.sendRequest(req, res, filters);
+    const axiosResult = await Controller.sendRequest(req, res, filters);
+    if (req.query.stream && req.method.toLowerCase() === 'get') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      axiosResult.data.pipe(JSONStream.parse('*', (doc) => {
 
+        return Controller.handleResponse(req, res.locals.entityType, doc, transformers);
+
+      })).pipe(JSONStream.stringify()).pipe(res);
+      return;
+    }
     const result = Controller.handleResponse(req, res.locals.entityType, axiosResult.data, transformers);
 
     res.status(axiosResult.status).set(axiosResult.headers).send(result);
@@ -53,10 +63,13 @@ class Controller {
       params: { ...req.query, ruleFilters },
       timeout: 1000 * 60 * 60, // 1 hour
     };
+    if (req.query.stream) {
+      options.responseType = 'stream';
+    }
 
-    let result = await axios(options);
+    return (await axios(options));
 
-    return result;
+
   }
 
   private static handleResponse(req: Request, entityType: typesOfEntities, result, transformers: transformersType[]) {
