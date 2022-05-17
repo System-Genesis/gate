@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import getFilterQueries from '../../scopeQuery';
+import { combineQueriesFromRules } from '../../scopeQuery';
 import axios, { AxiosProxyConfig, AxiosResponse } from 'axios';
 import { QueryParams } from '../../types';
 import QueryString from 'qs';
 import { extractScopes } from '../../helpers';
+import { extractRulesFromScopes } from '../../utils/extractRules';
 
 class PicturesController {
   /**
@@ -19,13 +20,14 @@ class PicturesController {
    */
   static async proxyRequest(req: Request, res: Response, _next: NextFunction) {
     const scopes = extractScopes(req.headers.authorization || '');
+    const { filters } = extractRulesFromScopes(scopes, res.locals.entityType);
 
     let ruleFilters: QueryParams[] = [];
     if (req.method === 'GET') {
-      ruleFilters = getFilterQueries(scopes, res.locals.entityType);
+      ruleFilters = combineQueriesFromRules(filters, res.locals.entityType);
     }
 
-    const options  = {
+    const options = {
       url: `${res.locals.destServiceUrl}${req.originalUrl.split('?')[0]}`,
       method: req.method.toLowerCase(),
       headers: req.headers,
