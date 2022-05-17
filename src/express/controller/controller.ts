@@ -34,6 +34,7 @@ class Controller {
     const { filters, transformers } = extractRulesFromScopes(scopes, res.locals.entityType);
 
     const axiosResult = await Controller.sendRequest(req, res, filters);
+
     if (req.query.stream && req.method.toLowerCase() === 'get') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       axiosResult.data.pipe(JSONStream.parse('*', (doc) => {
@@ -43,6 +44,7 @@ class Controller {
       })).pipe(JSONStream.stringify()).pipe(res);
       return;
     }
+
     const result = Controller.handleResponse(req, res.locals.entityType, axiosResult.data, transformers);
 
     res.status(axiosResult.status).set(axiosResult.headers).send(result);
@@ -93,22 +95,6 @@ class Controller {
     return Boolean(expanded) && ![config.entitiesType.role, config.entitiesType.group].includes(entityType)
   }
 }
-
-const documentHandler = (docs: any | any[], scopes: string[], req: Request, res: Response) => {
-  if (
-    Boolean(req.query.expanded) &&
-    (res.locals.entityType !== config.entitiesType.role || res.locals.entityType !== config.entitiesType.group)
-  ) {
-    docs = handleExpandedResult(docs, res.locals.entityType, scopes);
-  } else if (Array.isArray(docs)) {
-    docs = docs.map((dataObj) => applyTransform(dataObj, scopes, res.locals.entityType));
-  } else {
-    docs = applyTransform(docs, scopes, res.locals.entityType);
-  }
-  return docs
-}
-
-
 
 
 /**
