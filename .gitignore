@@ -11,3 +11,4 @@ npm-debug.log
 !example.env
 
 /access.log
+package-lock.json

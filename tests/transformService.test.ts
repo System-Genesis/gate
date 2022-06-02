@@ -1,5 +1,6 @@
-import { applyTransform } from '../src/transformService';
+import { applyTransformers } from '../src/transformService';
 import { EntityDTO } from '../src/types';
+import { extractRulesFromScopes } from '../src/utils/extractRules';
 
 const person: EntityDTO = {
     firstName: 'yuu',
@@ -34,7 +35,8 @@ describe('test transformer removing needed stuff', () => {
     test('remove sex', async () => {
         const scopes = ['a'];
 
-        const moddedPerson = applyTransform(person, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, person);
 
         expect(moddedPerson).not.toHaveProperty('sex');
     });
@@ -42,7 +44,8 @@ describe('test transformer removing needed stuff', () => {
     test('undo remove sex', async () => {
         const scopes = ['a', 'undo_a'];
 
-        const moddedPerson = applyTransform(person, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, person);
 
         expect(moddedPerson).toHaveProperty('sex');
     });
@@ -51,7 +54,8 @@ describe('test transformer removing needed stuff', () => {
         const scopes = ['a', 'undo_a_add_b'];
         const entity = { ...person, hierarchy: 'root/sensitive2' }
 
-        const moddedPerson = applyTransform(entity, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, entity);
 
         expect(moddedPerson).toHaveProperty('sex');
         expect(moddedPerson).not.toHaveProperty('hierarchy');
@@ -61,7 +65,8 @@ describe('test transformer removing needed stuff', () => {
         const scopes = ['undo_a', 'b'];
         const entity = { ...person, hierarchy: 'root/sensitive2' }
 
-        const moddedPerson = applyTransform(entity, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, entity);
 
         expect(moddedPerson).toHaveProperty('sex');
         expect(moddedPerson).not.toHaveProperty('hierarchy');
@@ -70,7 +75,8 @@ describe('test transformer removing needed stuff', () => {
     test('undo remove sex (two scope want to remove)', async () => {
         const scopes = ['a', 'undo_a', 'a'];
 
-        const moddedPerson = applyTransform(person, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, person);
 
         expect(moddedPerson).toHaveProperty('sex');
     });
@@ -79,7 +85,8 @@ describe('test transformer removing needed stuff', () => {
         const scopes = ['f'];
         const entity = { ...person, hierarchy: 'es_name/lol' }
 
-        const moddedPerson = applyTransform(entity, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, entity);
 
         expect(moddedPerson).not.toHaveProperty('jobTitle');
     });
@@ -88,7 +95,8 @@ describe('test transformer removing needed stuff', () => {
         const scopes = ['f'];
         const entity = { ...person, hierarchy: 'no_es_name/lol' }
 
-        const moddedPerson = applyTransform(entity, scopes, 'entity');
+        const { transformers } = extractRulesFromScopes(scopes, 'entity')
+        const moddedPerson = applyTransformers(transformers, entity);
 
         expect(moddedPerson).toHaveProperty('jobTitle');
     });

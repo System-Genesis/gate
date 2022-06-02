@@ -6,6 +6,7 @@ const { rules, scopes } = scopesConfig;
 
 const config = {
   web: {
+    isApm: env.get('APM_ON').default('true').asBool(),
     port: env.get('PORT').required().asPortNumber(),
     isAuth: env.get('IS_AUTH').required().asBool(),
     requiredScopes: env.get('REQUIRED_SCOPES').required().asArray(),

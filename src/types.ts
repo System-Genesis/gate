@@ -76,4 +76,25 @@ type ProfilePictureData = {
 
 type typesOfEntities = 'entity' | 'digitalIdentity' | 'role' | 'group';
 
-export { ProfilePictureData, RoleDTO, EntityDTO, QueryParams, DigitalIdentityDTO, typesOfEntities };
+type Filters = {
+  name: string;
+  field: string;
+  values: string[];
+}
+
+type Transformers = {
+  name: string;
+  method: string;
+  targetField: string;
+  conditions: {
+    method: string;
+    field: string;
+    value: string;
+  }[]
+}
+
+
+export {
+  ProfilePictureData, RoleDTO, EntityDTO, QueryParams, DigitalIdentityDTO, typesOfEntities, Filters
+  , Transformers
+};
