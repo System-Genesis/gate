@@ -36,7 +36,7 @@ class Controller {
     const axiosResult = await Controller.sendRequest(req, res, filters);
 
     if (req.query.stream) {
-      return Controller.handleStreamResponse(req, req, axiosResult, transformers);
+      return Controller.handleStreamResponse(req, res, axiosResult, transformers);
     }
 
     const result = Controller.handleResponse(req, res.locals.entityType, axiosResult.data, transformers);
