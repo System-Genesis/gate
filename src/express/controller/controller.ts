@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import * as JSONStream from 'JSONStream';
 
 import axios, { AxiosRequestConfig, Method } from 'axios';
-import { DigitalIdentityDTO, EntityDTO, filtersType, QueryParams, RoleDTO, transformersType, typesOfEntities } from '../../types';
+import { DigitalIdentityDTO, EntityDTO, Filters, QueryParams, RoleDTO, Transformers, typesOfEntities } from '../../types';
 import QueryString from 'qs';
 import config from '../../config';
 import { extractScopes } from '../../helpers';
@@ -53,7 +53,7 @@ class Controller {
     }
   }
 
-  private static async sendRequest(req: Request, res: Response, filters: filtersType[]) {
+  private static async sendRequest(req: Request, res: Response, filters: Filters[]) {
     let ruleFilters: QueryParams[] = [];
 
     if (req.method.toLowerCase() === 'get') {
@@ -69,18 +69,15 @@ class Controller {
       params: { ...req.query, ruleFilters },
       timeout: 1000 * 60 * 60, // 1 hour
     };
-    if (req.query.stream) {
 
+    if (req.query.stream) {
       options.responseType = 'stream';
     }
 
     return (await axios(options));
-
-
-
   }
 
-  private static handleResponse(req: Request, entityType: typesOfEntities, result, transformers: transformersType[]) {
+  private static handleResponse(req: Request, entityType: typesOfEntities, result, transformers: Transformers[]) {
     if (req.method.toLowerCase() === 'get') {
       if (Controller.isExpanded(req.query.expanded as string, entityType)) {
         result = handleExpandedResult(result, entityType, transformers);
@@ -109,10 +106,10 @@ class Controller {
  * 
  * @param {*} result data to manipulate
  * @param {typesOfEntities} entityType the type of the root data
- * @param {transformersType[]} transformers user's transformers
+ * @param {Transformers[]} transformers user's transformers
  * @returns transformed data
  */
-function handleExpandedResult(result: any, entityType: typesOfEntities, transformers: transformersType[]) {
+function handleExpandedResult(result: any, entityType: typesOfEntities, transformers: Transformers[]) {
   if (Array.isArray(result)) {
     return result.map((expandedItem) => transformExpandedRes(expandedItem, entityType, transformers));
   }
@@ -126,10 +123,10 @@ function handleExpandedResult(result: any, entityType: typesOfEntities, transfor
  * 
  * @param {*} result data to manipulate
  * @param {typesOfEntities} entityType the type of the root data
- * @param {transformersType[]} transformers user's transformers
+ * @param {Transformers[]} transformers user's transformers
  * @returns transformed data
  */
-function transformExpandedRes(result: any, entityType: typesOfEntities, transformers: transformersType[]) {
+function transformExpandedRes(result: any, entityType: typesOfEntities, transformers: Transformers[]) {
   return entityType === entitiesType.entity ? expandedEntity(result, transformers) : expandedDi(result, transformers);
 }
 
@@ -137,10 +134,10 @@ function transformExpandedRes(result: any, entityType: typesOfEntities, transfor
  * Handle transformation of an expanded result where the root type is 'Entity'
  * 
  * @param {*} result data to manipulate
- * @param {transformersType[]} transformers user's transformers
+ * @param {Transformers[]} transformers user's transformers
  * @returns transformed data
  */
-function expandedEntity(result: EntityDTO, transformers: transformersType[]) {
+function expandedEntity(result: EntityDTO, transformers: Transformers[]) {
   const transEntity = applyTransformers(transformers, result) as EntityDTO;
 
   if (transEntity.digitalIdentities) {
@@ -154,10 +151,10 @@ function expandedEntity(result: EntityDTO, transformers: transformersType[]) {
  * Handle transformation of an expanded result where the root type is 'DigitalIdentity'
  * 
  * @param {*} result data to manipulate
- * @param {transformersType[]} transformers user's transformers
+ * @param {Transformers[]} transformers user's transformers
  * @returns transformed data
  */
-function expandedDi(result: DigitalIdentityDTO, transformers: transformersType[]) {
+function expandedDi(result: DigitalIdentityDTO, transformers: Transformers[]) {
   const transDi = applyTransformers(transformers, result) as DigitalIdentityDTO;
 
   if (transDi.role) {

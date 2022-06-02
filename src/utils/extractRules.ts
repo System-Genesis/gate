@@ -1,5 +1,5 @@
 import config from "../config";
-import { filtersType, transformersType } from "../types";
+import { Filters, Transformers } from "../types";
 
 /**
  * 
@@ -23,15 +23,15 @@ export function getUserRulesNames(userScopes: string[], scopes: { [k: string]: {
  * 
  * @param userScopes - user scope titles to extract rule from
  * @param type - entity type to now relevant section in scope.json
- * @returns { filters: filtersType[]; transformers: transformersType[]; } - after filtering
+ * @returns { filters: Filters[]; transformers: Transformers[]; } - after filtering
  */
 export const extractRulesFromScopes = (userScopes: string[], type: string) => {
   const { spike: { rules, scopes, }, } = config;
 
   let userRulesNames = getUserRulesNames(userScopes, scopes);
 
-  const transformers: transformersType[] = rules.transformers[type].filter((transformer: transformersType) => userRulesNames.includes(transformer.name));
-  const filters: filtersType[] = rules.filters[type].filter((filter: filtersType) => userRulesNames.includes(filter.name));
+  const transformers: Transformers[] = rules.transformers[type].filter((transformer: Transformers) => userRulesNames.includes(transformer.name));
+  const filters: Filters[] = rules.filters[type].filter((filter: Filters) => userRulesNames.includes(filter.name));
 
   return { filters, transformers }
 }

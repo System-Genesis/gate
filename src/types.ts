@@ -76,13 +76,13 @@ type ProfilePictureData = {
 
 type typesOfEntities = 'entity' | 'digitalIdentity' | 'role' | 'group';
 
-type filtersType = {
+type Filters = {
   name: string;
   field: string;
   values: string[];
 }
 
-type transformersType = {
+type Transformers = {
   name: string;
   method: string;
   targetField: string;
@@ -95,6 +95,6 @@ type transformersType = {
 
 
 export {
-  ProfilePictureData, RoleDTO, EntityDTO, QueryParams, DigitalIdentityDTO, typesOfEntities, filtersType
-  , transformersType
+  ProfilePictureData, RoleDTO, EntityDTO, QueryParams, DigitalIdentityDTO, typesOfEntities, Filters
+  , Transformers
 };
