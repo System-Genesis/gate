@@ -8,11 +8,6 @@
           "values": ["root/sensitive", "granpa/son"]
         },
         {
-          "name": "removeFullClearance",
-          "method": "fieldExclude",
-          "targetField": "fullClearance"
-        },
-        {
           "name": "sourceFilter",
           "field": "source",
           "values": ["city_name"]
@@ -42,6 +37,11 @@
               "value": "sf_name"
             }
           ]
+        },
+        {
+          "name": "removeFullClearance",
+          "method": "fieldExclude",
+          "targetField": "fullClearance"
         },
         {
           "name": "removeHierarchy",
