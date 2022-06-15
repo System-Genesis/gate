@@ -15,7 +15,7 @@ service:
 
 volume:
   - name: gate-volume # name of the volume
-    mountPath: /dist/config/volume # where the folder is aloced in the pod
+    mountPath: /dist/config # where the folder is aloced in the pod
     secretName: azure-secret # dont touch
     shareName: system-genesis/gate # where the folder is aloced in the azure portal
     type: azurefile # dont touch
