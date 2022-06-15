@@ -8,6 +8,7 @@ RUN npm run build
 FROM node:13.12-alpine 
 WORKDIR /
 COPY --from=builder /dist ./dist
+COPY --from=builder /src/key ./dist/key
 COPY package*.json ./
 RUN npm install --production --silent
 
