@@ -8,6 +8,11 @@
           "values": ["root/sensitive", "granpa/son"]
         },
         {
+          "name": "removeFullClearance",
+          "method": "fieldExclude",
+          "targetField": "fullClearance"
+        },
+        {
           "name": "sourceFilter",
           "field": "source",
           "values": ["city_name"]
@@ -167,7 +172,13 @@
     "f.b": { "rules": ["sourceFilter"], "undoes": [""] },
     "f.undo_a": { "rules": [""], "undoes": ["hideSensitivePersons"] },
     "f.undo_a_add_b": { "rules": ["sourceFilter"], "undoes": ["hideSensitivePersons"] },
-    "read": { "rules": ["remove_sbt"], "undoes": [""] },
-    "lego": { "rules": [""], "undoes": ["remove_sbt"] }
+    "read": {
+      "rules": ["removeFullClearance"],
+      "undoes": []
+    },
+    "lego": {
+      "undoes": ["removeFullClearance"],
+      "rules": []
+    }
   }
 }
