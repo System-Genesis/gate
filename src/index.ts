@@ -1,7 +1,10 @@
 // Add this to the VERY top of the first 
 // file loaded in your app
 import apm from 'elastic-apm-node';
-export const apmAgent = apm.start({
+import config from './config';
+
+
+export const apmAgent = config.web.isApm ? apm.start({
     // Override service name from package.json
     // Allowed characters: a-z, A-Z, 0-9, -, _, 
     // and space
@@ -13,13 +16,15 @@ export const apmAgent = apm.start({
     // Set custom APM Server URL
     // Default: http://localhost:8200
     serverUrl: process.env['APM_SERVER'],
-});
+}) : undefined;
+
+
+
 
 import Server from './express';
-import config from './config';
 const { web } = config;
 
-!apmAgent.isStarted() || console.log('apm-agent is started');
+config.web.isApm ? (!apmAgent!.isStarted() || console.log('apm-agent is started')) : undefined;
 
 const main = async () => {
     await Server(web.port);

@@ -166,6 +166,8 @@
     "f.a": { "rules": ["hideSensitivePersons"], "undoes": [] },
     "f.b": { "rules": ["sourceFilter"], "undoes": [""] },
     "f.undo_a": { "rules": [""], "undoes": ["hideSensitivePersons"] },
-    "f.undo_a_add_b": { "rules": ["sourceFilter"], "undoes": ["hideSensitivePersons"] }
+    "f.undo_a_add_b": { "rules": ["sourceFilter"], "undoes": ["hideSensitivePersons"] },
+    "read": { "rules": ["remove_sbt"], "undoes": [""] },
+    "lego": { "rules": [""], "undoes": ["remove_sbt"] }
   }
 }

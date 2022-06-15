@@ -12,7 +12,7 @@ let server: Server;
 beforeAll(async () => {
   try {
     server = await start("3002");
-  } catch (err) {}
+  } catch (err) { }
 });
 afterAll(async () => {
   await server.close();
@@ -113,7 +113,7 @@ describe("Connect/Disconnect DI to entity", () => {
       .send(entitySoldierToCreate)
       .end((err: any, res: any) => {
         if (err) {
-          throw err;
+          return err;
         }
         entityId = res.body.id;
         request(app)
@@ -121,7 +121,7 @@ describe("Connect/Disconnect DI to entity", () => {
           .send(digitalIdToCreate)
           .end((err: any, res2: any) => {
             if (err) {
-              throw err;
+              return err;
             }
             return done();
           })
@@ -139,7 +139,7 @@ describe("Connect/Disconnect DI to entity", () => {
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
-          throw done(err);
+          return done(err);
         }
         return done();
       });
@@ -151,7 +151,7 @@ describe("Connect/Disconnect DI to entity", () => {
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
-          throw done(err);
+          return done(err);
         }
         expect(res.body.digitalIdentities[0].uniqueId).toBe(diId);
         return done();
@@ -164,10 +164,11 @@ describe("Connect/Disconnect DI to entity", () => {
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
-          throw done(err);
+          return done(err);
         }
         expect(res.body.digitalIdentities[0].uniqueId).toBe(diId);
         return done();
+
       });
   });
   it("should disconnect di from entity", async (done) => {
@@ -176,7 +177,7 @@ describe("Connect/Disconnect DI to entity", () => {
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
-          throw done(err);
+          return done(err);
         }
         return done();
       });
@@ -188,10 +189,54 @@ describe("Connect/Disconnect DI to entity", () => {
       .expect(200)
       .end(async (err: any, res: any) => {
         if (err) {
-          throw done(err);
+          return done(err);
         }
         expect(res.body.digitalIdentities).toStrictEqual([]);
         return done();
       });
   });
+  it(`it should stream`, async (done) => {
+    request(app).get(`/api/entities`)
+      .responseType("stream")
+      .query(qs.stringify({ stream: true }))
+      .expect('Content-Type', 'application/json')
+      .buffer()
+      .parse(binaryParser)
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
+
+        expect(JSON.parse(res.body)).toBeDefined()
+        return done()
+      })
+  });
+
+  it(`it should stream and return everything`, async (done) => {
+    request(app).get(`/api/entities`)
+      .query(qs.stringify({ stream: true }))
+      //.responseType("stream")
+      .expect('Content-Type', 'application/json')
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
+
+        expect(res.body).toBeDefined()
+        return done()
+      })
+  });
 });
+function binaryParser(res, callback) {
+  res.setEncoding('binary');
+  res.data = '';
+  res.on('data', function (chunk) {
+    res.data += chunk;
+
+  });
+  res.on('end', function () {
+    callback(null, new Buffer(res.data, 'binary'));
+  });
+}

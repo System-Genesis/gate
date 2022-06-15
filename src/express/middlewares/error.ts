@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import * as express from 'express';
 import { apmAgent } from '../..';
+import config from '../../config';
 
 export class ServiceError extends Error {
   public code;
@@ -29,11 +30,11 @@ export const errorMiddleware = (
 
   // Error with pictures || Error with axios req || other errors
   const resBody =
-  (error as AxiosError).response?.config?.responseType === 'stream'
+    (error as AxiosError).response?.config?.responseType === 'stream'
       ? { message: (error as AxiosError).response?.statusText }
       : (error as AxiosError).response?.data || { message: error.message };
 
-  apmAgent.captureError(resBody);
+  config.web.isApm ? apmAgent!.captureError(resBody) : undefined;
 
   res.status(parseInt(status)).json({
     ...resBody,
