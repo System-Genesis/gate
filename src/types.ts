@@ -82,7 +82,7 @@ type Filters = {
   values: string[];
 }
 
-type Transformers = {
+type Transform = {
   name: string;
   method: string;
   targetField: string;
@@ -93,8 +93,21 @@ type Transformers = {
   }[]
 }
 
+type Transformers = {
+  entity: Transform[],
+  digitalIdentity: Transform[],
+  role: Transform[],
+  group: Transform[],
+}
 
 export {
-  ProfilePictureData, RoleDTO, EntityDTO, QueryParams, DigitalIdentityDTO, typesOfEntities, Filters
-  , Transformers
+  ProfilePictureData,
+  RoleDTO,
+  EntityDTO,
+  QueryParams,
+  DigitalIdentityDTO,
+  typesOfEntities,
+  Filters,
+  Transformers,
+  Transform
 };
