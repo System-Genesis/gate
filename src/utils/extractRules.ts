@@ -1,5 +1,5 @@
 import config from "../config";
-import { Filters, Transformers } from "../types";
+import { Filters, Transform, Transformers } from "../types";
 
 /**
  * 
@@ -30,7 +30,13 @@ export const extractRulesFromScopes = (userScopes: string[], type: string) => {
 
   let userRulesNames = getUserRulesNames(userScopes, scopes);
 
-  const transformers: Transformers[] = rules.transformers[type].filter((transformer: Transformers) => userRulesNames.includes(transformer.name));
+  const transformers = <Transformers>{};
+  const entityTypes = Object.keys(rules.transformers);
+
+  for (const entityType of entityTypes) {
+    transformers[entityType] = rules.transformers[entityType].filter((transformer: Transform) => userRulesNames.includes(transformer.name));
+  }
+
   const filters: Filters[] = rules.filters[type].filter((filter: Filters) => userRulesNames.includes(filter.name));
 
   return { filters, transformers }

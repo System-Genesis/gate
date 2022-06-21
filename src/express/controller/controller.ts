@@ -77,14 +77,14 @@ class Controller {
     return (await axios(options));
   }
 
-  private static handleResponse(req: Request, entityType: typesOfEntities, result, transformers: Transformers[]) {
+  static handleResponse(req: Request, entityType: typesOfEntities, result, transformers: Transformers) {
     if (req.method.toLowerCase() === 'get') {
       if (Controller.isExpanded(req.query.expanded as string, entityType)) {
         result = handleExpandedResult(result, entityType, transformers);
       } else if (Array.isArray(result)) {
-        result = result.map((dataObj) => applyTransformers(transformers, dataObj));
+        result = result.map((dataObj) => applyTransformers(transformers[entityType], dataObj));
       } else {
-        result = applyTransformers(transformers, result);
+        result = applyTransformers(transformers[entityType], result);
       }
     }
 
@@ -106,10 +106,10 @@ class Controller {
  * 
  * @param {*} result data to manipulate
  * @param {typesOfEntities} entityType the type of the root data
- * @param {Transformers[]} transformers user's transformers
+ * @param {Transformers} transformers user's transformers
  * @returns transformed data
  */
-function handleExpandedResult(result: any, entityType: typesOfEntities, transformers: Transformers[]) {
+function handleExpandedResult(result: any, entityType: typesOfEntities, transformers: Transformers) {
   if (Array.isArray(result)) {
     return result.map((expandedItem) => transformExpandedRes(expandedItem, entityType, transformers));
   }
@@ -123,10 +123,10 @@ function handleExpandedResult(result: any, entityType: typesOfEntities, transfor
  * 
  * @param {*} result data to manipulate
  * @param {typesOfEntities} entityType the type of the root data
- * @param {Transformers[]} transformers user's transformers
+ * @param {Transformers} transformers user's transformers
  * @returns transformed data
  */
-function transformExpandedRes(result: any, entityType: typesOfEntities, transformers: Transformers[]) {
+function transformExpandedRes(result: any, entityType: typesOfEntities, transformers: Transformers) {
   return entityType === entitiesType.entity ? expandedEntity(result, transformers) : expandedDi(result, transformers);
 }
 
@@ -134,11 +134,11 @@ function transformExpandedRes(result: any, entityType: typesOfEntities, transfor
  * Handle transformation of an expanded result where the root type is 'Entity'
  * 
  * @param {*} result data to manipulate
- * @param {Transformers[]} transformers user's transformers
+ * @param {Transformers} transformers user's transformers
  * @returns transformed data
  */
-function expandedEntity(result: EntityDTO, transformers: Transformers[]) {
-  const transEntity = applyTransformers(transformers, result) as EntityDTO;
+function expandedEntity(result: EntityDTO, transformers: Transformers) {
+  const transEntity = applyTransformers(transformers.entity, result) as EntityDTO;
 
   if (transEntity.digitalIdentities) {
     transEntity.digitalIdentities = transEntity.digitalIdentities.map((di) => expandedDi(di, transformers));
@@ -151,14 +151,14 @@ function expandedEntity(result: EntityDTO, transformers: Transformers[]) {
  * Handle transformation of an expanded result where the root type is 'DigitalIdentity'
  * 
  * @param {*} result data to manipulate
- * @param {Transformers[]} transformers user's transformers
+ * @param {Transformers} transformers user's transformers
  * @returns transformed data
  */
-function expandedDi(result: DigitalIdentityDTO, transformers: Transformers[]) {
-  const transDi = applyTransformers(transformers, result) as DigitalIdentityDTO;
+function expandedDi(result: DigitalIdentityDTO, transformers: Transformers) {
+  const transDi = applyTransformers(transformers.digitalIdentity, result) as DigitalIdentityDTO;
 
   if (transDi.role) {
-    transDi.role = applyTransformers(transformers, transDi.role) as RoleDTO;
+    transDi.role = applyTransformers(transformers.role, transDi.role) as RoleDTO;
   }
 
   return transDi;

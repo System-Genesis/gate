@@ -138,6 +138,11 @@
               "value": "city_name"
             }
           ]
+        },
+        {
+          "name": "removeUpn",
+          "method": "fieldExclude",
+          "targetField": "upn"
         }
       ],
       "role": [
@@ -173,12 +178,23 @@
     "f.undo_a": { "rules": [""], "undoes": ["hideSensitivePersons"] },
     "f.undo_a_add_b": { "rules": ["sourceFilter"], "undoes": ["hideSensitivePersons"] },
     "read": {
-      "rules": ["removeFullClearance"],
+      "rules": ["removeFullClearance", "removeUpn"],
       "undoes": []
     },
     "lego": {
       "undoes": ["removeFullClearance"],
       "rules": []
+    },
+    "remove_upn_from_di": {
+      "rules": ["removeUpn"],
+      "undoes": []
+    },
+    "remove_fullClearance_undoes_upn": {
+      "rules": ["removeFullClearance"],
+      "undoes": ["removeUpn"]
+    },
+    "remove_di_sf": {
+      "rules": ["removeSensitiveDIs"]
     }
   }
 }
