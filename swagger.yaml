@@ -277,6 +277,12 @@ paths:
           name: pageSize
           required: false
           type: integer
+        - description: whether stream or pagination
+          in: query
+          name: stream
+          required: false
+          type: string
+          x-example: true
         - description: |
             filter from comma separated ids to get (id1,id2...)
           in: query
@@ -614,7 +620,7 @@ paths:
         Get one entity based on it's either personalNumber/identityCard/goalUserId/employeeId
         By passing the appropriate options, you can get an expanded entity
 
-      operationId: getEntityByIdentifier
+      operationId: getByOrgEmpNumber
       summary: Get entity by identifier
   "/entities/role/{roleId}":
     get:
@@ -661,7 +667,13 @@ paths:
         - description: search entities by part of a full name
           in: query
           name: fullName
-          required: true
+          required: false
+          type: string
+          x-example: John D
+        - description: search entities by part of digitalIdentity uniqueId
+          in: query
+          name: uniqueId
+          required: false
           type: string
           x-example: John D
         - description: search entities by fullName (returns the top 20 results)
@@ -811,7 +823,7 @@ paths:
           name: id
           required: true
           type: string
-        - description: Entity fields to update
+        - description: Entity fields to update (null for deletion)
           in: body
           name: body
           schema:
@@ -829,7 +841,8 @@ paths:
         Update an entity.<br>
 
         personalNumber, identityCard, sex, birthDate can be update only if not
-        already exists
+        already exists.<br>
+        Can use null value to delete some fields
       operationId: updateEntityById
       summary: Update entity by id
   "/entities/{id}/digitalIdentity/{uniqueId}":
