@@ -173,28 +173,29 @@
     "f": { "rules": ["removeJob"], "undoes": [""] },
     "undo_a": { "rules": [""], "undoes": ["removeSex"] },
     "undo_a_add_b": { "rules": ["removeSensitive2Hierarchy"], "undoes": ["removeSex"] },
-    "f.a": { "rules": ["hideSensitivePersons"], "undoes": [] },
+    "f.a": { "rules": ["hideSensitivePersons"], "undoes": [""] },
     "f.b": { "rules": ["sourceFilter"], "undoes": [""] },
     "f.undo_a": { "rules": [""], "undoes": ["hideSensitivePersons"] },
     "f.undo_a_add_b": { "rules": ["sourceFilter"], "undoes": ["hideSensitivePersons"] },
     "read": {
       "rules": ["removeFullClearance", "removeUpn"],
-      "undoes": []
+      "undoes": [""]
     },
     "lego": {
       "undoes": ["removeFullClearance"],
-      "rules": []
+      "rules": [""]
     },
     "remove_upn_from_di": {
       "rules": ["removeUpn"],
-      "undoes": []
+      "undoes": [""]
     },
     "remove_fullClearance_undoes_upn": {
       "rules": ["removeFullClearance"],
       "undoes": ["removeUpn"]
     },
     "remove_di_sf": {
-      "rules": ["removeSensitiveDIs"]
+      "rules": ["removeSensitiveDIs"],
+      "undoes": [""]
     }
   }
 }
